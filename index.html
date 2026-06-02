@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Poland's Home Without China</title>
+  <style>
+    :root {
+      --ink: #181818;
+      --muted: #5e625f;
+      --paper: #f6f3ea;
+      --panel: rgba(255, 255, 255, 0.91);
+      --panel-solid: #ffffff;
+      --line: rgba(24, 24, 24, 0.14);
+      --blue: #4d7f95;
+      --green: #8ba66f;
+      --gold: #d6a240;
+      --orange: #d9733f;
+      --red: #bf3d32;
+      --shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(246, 243, 234, 0.55), rgba(246, 243, 234, 0.95)),
+        var(--paper);
+    }
+
+    main {
+      width: 100%;
+      overflow: clip;
+    }
+
+    .scrolly {
+      position: relative;
+      min-height: 720vh;
+    }
+
+    .sticky-visual {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.72), transparent 28%),
+        linear-gradient(180deg, #f8f5ec, #ece5d8);
+    }
+
+    .house-wrap {
+      position: relative;
+      width: min(96vw, calc(92vh * 1.339), 1580px);
+      aspect-ratio: 2400 / 1792;
+      isolation: isolate;
+      --base-pan-x: 0px;
+      --pan-x: 0px;
+      --pan-y: 0px;
+      --zoom: 1;
+      transform: translate3d(calc(var(--base-pan-x) + var(--pan-x)), var(--pan-y), 0) scale(var(--zoom));
+      transform-origin: center center;
+      transition: transform 950ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .house-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: saturate(0.94) contrast(1.02);
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .image-dim {
+      position: absolute;
+      inset: 0;
+      background: rgba(248, 245, 236, 0.08);
+      pointer-events: none;
+      transition: background 420ms ease;
+      z-index: 1;
+    }
+
+    .focus-box {
+      position: absolute;
+      left: var(--focus-left, 0%);
+      top: var(--focus-top, 0%);
+      width: var(--focus-width, 100%);
+      height: var(--focus-height, 100%);
+      border: 2px solid rgba(191, 61, 50, 0.72);
+      background: rgba(255, 255, 255, 0.18);
+      opacity: 0;
+      transform: scale(0.985);
+      transition:
+        left 420ms ease,
+        top 420ms ease,
+        width 420ms ease,
+        height 420ms ease,
+        opacity 260ms ease,
+        transform 420ms ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .focus-box.is-visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .pin-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .pin {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.92);
+      transition:
+        opacity 240ms ease,
+        transform 240ms ease,
+        filter 240ms ease;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .pin.is-visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .pin.is-muted {
+      opacity: 0.28;
+      filter: grayscale(0.45);
+      z-index: 1;
+    }
+
+    .pin-dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(255, 255, 255, 0.96);
+      background: var(--pin-color);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+      color: #111;
+      font: 700 11px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: 0;
+    }
+
+    .pin-card {
+      position: absolute;
+      left: 42px;
+      top: 50%;
+      width: 156px;
+      transform: translateY(-50%);
+      padding: 7px 8px 8px;
+      border: 1px solid rgba(0, 0, 0, 0.13);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      line-height: 1.17;
+    }
+
+    .pin[data-snap="w"] .pin-card {
+      left: auto;
+      right: 42px;
+    }
+
+    .pin[data-snap="n"] .pin-card {
+      left: 50%;
+      top: auto;
+      bottom: 42px;
+      transform: translateX(-50%);
+    }
+
+    .pin[data-snap="s"] .pin-card {
+      left: 50%;
+      top: 42px;
+      transform: translateX(-50%);
+    }
+
+    .pin[data-snap="ne"] .pin-card {
+      left: 34px;
+      top: auto;
+      bottom: 24px;
+      transform: none;
+    }
+
+    .pin[data-snap="nw"] .pin-card {
+      left: auto;
+      right: 34px;
+      top: auto;
+      bottom: 24px;
+      transform: none;
+    }
+
+    .pin[data-snap="sw"] .pin-card {
+      left: auto;
+      right: 34px;
+      top: 24px;
+      transform: none;
+    }
+
+    .pin-kicker {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 3px;
+    }
+
+    .pin-name {
+      display: block;
+      font-weight: 700;
+    }
+
+    .legend {
+      position: absolute;
+      right: 1.8%;
+      bottom: 2.2%;
+      z-index: 4;
+      width: min(290px, 34vw);
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.11);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .legend-title {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .legend-scale {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      height: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+    }
+
+    .legend-scale span:nth-child(1) { background: var(--blue); }
+    .legend-scale span:nth-child(2) { background: var(--green); }
+    .legend-scale span:nth-child(3) { background: var(--gold); }
+    .legend-scale span:nth-child(4) { background: var(--orange); }
+    .legend-scale span:nth-child(5) { background: var(--red); }
+
+    .legend-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .steps {
+      position: relative;
+      margin-top: -100vh;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .step {
+      min-height: 105vh;
+      display: flex;
+      align-items: center;
+      padding: 8vh max(20px, 6vw);
+    }
+
+    .step:nth-child(even) {
+      justify-content: flex-end;
+    }
+
+    .step-card {
+      width: min(390px, calc(100vw - 40px));
+      padding: 20px 22px 22px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .step-card.hero {
+      width: min(520px, calc(100vw - 40px));
+      padding: 26px 28px 28px;
+      background: rgba(255, 255, 255, 0.76);
+    }
+
+    .eyebrow {
+      display: block;
+      margin-bottom: 12px;
+      color: #7a3029;
+      font: 700 12px/1.2 Arial, Helvetica, sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      text-wrap: balance;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 76px);
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: clamp(25px, 3vw, 42px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .dek,
+    .step-card p {
+      margin: 14px 0 0;
+      color: #30302d;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .placeholder {
+      min-height: 5.8rem;
+      border-left: 3px solid rgba(191, 61, 50, 0.45);
+      padding-left: 13px;
+    }
+
+    .meta-line {
+      margin-top: 16px;
+      color: var(--muted);
+      font: 13px/1.35 Arial, Helvetica, sans-serif;
+    }
+
+    .table-section {
+      position: relative;
+      z-index: 6;
+      padding: 80px max(20px, 7vw) 100px;
+      background: #f8f7f2;
+      border-top: 1px solid var(--line);
+    }
+
+    .table-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .table-section h2 {
+      max-width: 760px;
+    }
+
+    .table-note {
+      max-width: 760px;
+      color: var(--muted);
+      font: 15px/1.45 Arial, Helvetica, sans-serif;
+    }
+
+    .table-wrap {
+      margin-top: 28px;
+      overflow-x: auto;
+      border-top: 1px solid #222;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      background: var(--panel-solid);
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.11);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: #222;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #efede6;
+    }
+
+    td.number,
+    th.number {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .share-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: flex-end;
+      min-width: 86px;
+    }
+
+    .share-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--pin-color);
+      border: 1px solid rgba(0, 0, 0, 0.14);
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 760px) {
+      .sticky-visual {
+        align-items: start;
+        padding-top: 7vh;
+      }
+
+      .house-wrap {
+        width: min(114vw, calc(74vh * 1.339));
+        --base-pan-x: -3vw;
+      }
+
+      .legend {
+        left: 20px;
+        right: auto;
+        bottom: 18px;
+        width: calc(100vw - 40px);
+      }
+
+      .step {
+        align-items: end;
+        justify-content: center;
+        min-height: 112vh;
+        padding: 12vh 20px 11vh;
+      }
+
+      .step:nth-child(even) {
+        justify-content: center;
+      }
+
+      .step-card,
+      .step-card.hero {
+        width: 100%;
+      }
+
+      .pin-dot {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+      }
+
+      .pin-card {
+        display: none;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="scrolly" aria-label="Scrollytelling draft">
+      <div class="sticky-visual">
+        <div class="house-wrap" id="houseWrap">
+          <img class="house-image" src="v1.jpeg" alt="Illustrated home interior">
+          <div class="image-dim" aria-hidden="true"></div>
+          <div class="focus-box" id="focusBox" aria-hidden="true"></div>
+          <div class="pin-layer" id="pinLayer" aria-hidden="true"></div>
+          <div class="legend" aria-hidden="true">
+            <p class="legend-title">China share of Polish apparent market</p>
+            <div class="legend-scale">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="legend-labels">
+              <span>0%</span>
+              <span>25%</span>
+              <span>50%</span>
+              <span>75%</span>
+              <span>100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps" id="steps">
+        <section class="step" data-room="top">
+          <div class="step-card hero">
+            <span class="eyebrow">Draft scrolly</span>
+            <h1>Poland's home without China</h1>
+            <p class="dek">A first layout draft using only categories where the market-share metric is plausible for visual use.</p>
+            <p class="meta-line">Replace this intro with final reporting copy.</p>
+          </div>
+        </section>
+
+        <section class="step" data-room="Kitchen & Dining">
+          <div class="step-card">
+            <span class="eyebrow">Kitchen and dining</span>
+            <h2>Kitchen objects carry some of the highest China shares.</h2>
+            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+          </div>
+        </section>
+
+        <section class="step" data-room="Home Improvement,Heating & Home Systems">
+          <div class="step-card">
+            <span class="eyebrow">Fixtures and systems</span>
+            <h2>Not every visible part of the home has the same dependence.</h2>
+            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed posuere consectetur est at lobortis. Donec sed odio dui.</p>
+          </div>
+        </section>
+
+        <section class="step" data-room="Bedroom & Textiles">
+          <div class="step-card">
+            <span class="eyebrow">Bedroom and textiles</span>
+            <h2>Textiles are present, but the safe market-share rows are more limited.</h2>
+            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas faucibus mollis interdum. Cras mattis consectetur purus.</p>
+          </div>
+        </section>
+
+        <section class="step" data-room="Outdoor & Garden">
+          <div class="step-card">
+            <span class="eyebrow">Outside the house</span>
+            <h2>The basket also includes a small number of outdoor household goods.</h2>
+            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur.</p>
+          </div>
+        </section>
+
+        <section class="step" data-room="all">
+          <div class="step-card">
+            <span class="eyebrow">All safe products</span>
+            <h2>Twenty-six product categories are ready for this version.</h2>
+            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <div class="table-inner">
+        <h2>Products available for the first visual version</h2>
+        <p class="table-note">These rows are filtered to <strong>market_share_visual_status = market_share_plausible_for_visual</strong>. The percentage is China imports divided by Polish apparent market for the mapped product category.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Room</th>
+                <th class="number">China share</th>
+                <th class="number">China imports, EUR m</th>
+              </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const products = [
+      { code: "25991225", name: "Stainless steel kitchenware", room: "Kitchen & Dining", share: 77, value: 72.57, x: 56.2, y: 29.0, snap: "e" },
+      { code: "16291200", name: "Wooden tableware", room: "Kitchen & Dining", share: 60, value: 6.10, x: 47.2, y: 42.8, snap: "w" },
+      { code: "25991217", name: "Cast iron kitchen articles", room: "Kitchen & Dining", share: 58, value: 4.12, x: 48.5, y: 31.4, snap: "w" },
+      { code: "23411230", name: "Stoneware tableware", room: "Kitchen & Dining", share: 50, value: 15.63, x: 58.1, y: 20.4, snap: "n" },
+      { code: "23411210", name: "Common pottery tableware", room: "Kitchen & Dining", share: 39, value: 2.73, x: 61.5, y: 21.5, snap: "e" },
+      { code: "25991245", name: "Iron or steel household articles", room: "Kitchen & Dining", share: 23, value: 33.99, x: 52.7, y: 33.4, snap: "w" },
+      { code: "13921353", name: "Cotton table linen", room: "Kitchen & Dining", share: 14, value: 0.70, x: 50.0, y: 44.3, snap: "s" },
+      { code: "25991253", name: "Copper kitchen articles", room: "Kitchen & Dining", share: 6, value: 0.02, x: 60.6, y: 34.2, snap: "e" },
+      { code: "23131220", name: "Lead crystal drinking glasses", room: "Kitchen & Dining", share: 0, value: 0.03, x: 52.8, y: 38.4, snap: "s" },
+
+      { code: "25941136", name: "High-tensile hexagon bolts", room: "Home Improvement", share: 39, value: 5.77, x: 67.8, y: 31.0, snap: "e" },
+      { code: "25941134", name: "Hexagon bolts", room: "Home Improvement", share: 17, value: 3.49, x: 53.4, y: 18.8, snap: "n" },
+      { code: "25941138", name: "Iron or steel bolts", room: "Home Improvement", share: 8, value: 9.82, x: 42.8, y: 31.7, snap: "w" },
+      { code: "16231900", name: "Wood builders' joinery", room: "Home Improvement", share: 2, value: 0.99, x: 30.8, y: 39.9, snap: "w" },
+      { code: "16231110", name: "Wood windows", room: "Home Improvement", share: 1, value: 0.18, x: 37.0, y: 30.9, snap: "nw" },
+      { code: "23311000", name: "Ceramic tiles", room: "Home Improvement", share: 0, value: 0.63, x: 68.0, y: 63.0, snap: "s" },
+      { code: "16231150", name: "Wood doors and frames", room: "Home Improvement", share: 0, value: 0.34, x: 42.8, y: 36.2, snap: "w" },
+      { code: "23321270", name: "Clay construction products", room: "Home Improvement", share: 0, value: 0.03, x: 75.4, y: 29.0, snap: "e" },
+      { code: "16221030", name: "Mosaic parquet panels", room: "Home Improvement", share: 0, value: 0.00, x: 45.2, y: 57.3, snap: "s" },
+
+      { code: "27521270", name: "Solid fuel home heaters", room: "Heating & Home Systems", share: 23, value: 5.33, x: 60.5, y: 47.1, snap: "e" },
+      { code: "27521400", name: "Non-electric water heaters", room: "Heating & Home Systems", share: 11, value: 5.08, x: 70.2, y: 36.2, snap: "e" },
+      { code: "27521234", name: "Gas domestic heaters", room: "Heating & Home Systems", share: 9, value: 5.01, x: 66.5, y: 42.2, snap: "e" },
+      { code: "25211100", name: "Central-heating radiators", room: "Heating & Home Systems", share: 5, value: 6.71, x: 57.8, y: 45.5, snap: "w" },
+
+      { code: "13921530", name: "Curtains and interior blinds", room: "Bedroom & Textiles", share: 9, value: 0.08, x: 79.8, y: 47.2, snap: "e" },
+      { code: "13921253", name: "Cotton bed linen", room: "Bedroom & Textiles", share: 3, value: 3.81, x: 80.6, y: 52.5, snap: "e" },
+      { code: "13921660", name: "Cushion and furnishing covers", room: "Bedroom & Textiles", share: 1, value: 3.48, x: 31.0, y: 48.2, snap: "w" },
+
+      { code: "13922230", name: "Tents and awnings", room: "Outdoor & Garden", share: 39, value: 26.52, x: 18.6, y: 70.6, snap: "w" }
+    ];
+
+    const roomFocus = {
+      "Kitchen & Dining": { left: 40, top: 13, width: 30, height: 34, zoom: 1.55, mobileZoom: 1.85 },
+      "Home Improvement,Heating & Home Systems": { left: 25, top: 11, width: 58, height: 57, zoom: 1.22, mobileZoom: 1.45 },
+      "Bedroom & Textiles": { left: 26, top: 38, width: 62, height: 34, zoom: 1.3, mobileZoom: 1.55 },
+      "Outdoor & Garden": { left: 6, top: 46, width: 24, height: 32, zoom: 1.86, mobileZoom: 2.1 },
+      all: { left: 6, top: 4, width: 88, height: 84, zoom: 1.02, mobileZoom: 1.12 },
+      top: { left: 0, top: 0, width: 100, height: 100, zoom: 0.94, mobileZoom: 1 }
+    };
+
+    const houseWrap = document.getElementById("houseWrap");
+    const pinLayer = document.getElementById("pinLayer");
+    const focusBox = document.getElementById("focusBox");
+    const productTable = document.getElementById("productTable");
+    const mobileQuery = window.matchMedia("(max-width: 760px)");
+    let activeStep = null;
+
+    function colorForShare(share) {
+      if (share >= 65) return "#bf3d32";
+      if (share >= 40) return "#d9733f";
+      if (share >= 18) return "#d6a240";
+      if (share >= 5) return "#8ba66f";
+      return "#4d7f95";
+    }
+
+    function formatShare(share) {
+      return `${Math.round(share)}%`;
+    }
+
+    function roomsForStep(roomValue) {
+      if (roomValue === "all" || roomValue === "top") return [];
+      return roomValue.split(",").map((room) => room.trim());
+    }
+
+    function productIsVisible(product, roomValue) {
+      if (roomValue === "all") return true;
+      if (roomValue === "top") return product.share >= 39;
+      return roomsForStep(roomValue).includes(product.room);
+    }
+
+    function productIsMuted(product, roomValue) {
+      return roomValue === "all" && product.share < 14;
+    }
+
+    function renderPins() {
+      pinLayer.innerHTML = products.map((product) => `
+        <div class="pin" data-code="${product.code}" data-room="${product.room}" data-snap="${product.snap}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
+          <div class="pin-dot">${formatShare(product.share)}</div>
+          <div class="pin-card">
+            <span class="pin-kicker">${formatShare(product.share)} from China</span>
+            <span class="pin-name">${product.name}</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderTable() {
+      const rows = [...products].sort((a, b) => b.share - a.share || b.value - a.value);
+      productTable.innerHTML = rows.map((product) => `
+        <tr>
+          <td>${product.name}</td>
+          <td>${product.room}</td>
+          <td class="number">
+            <span class="share-cell">
+              <span class="share-swatch" style="--pin-color:${colorForShare(product.share)}"></span>
+              ${formatShare(product.share)}
+            </span>
+          </td>
+          <td class="number">${product.value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        </tr>
+      `).join("");
+    }
+
+    function setFocus(roomValue) {
+      const focus = roomFocus[roomValue] || roomFocus.all;
+      focusBox.style.setProperty("--focus-left", `${focus.left}%`);
+      focusBox.style.setProperty("--focus-top", `${focus.top}%`);
+      focusBox.style.setProperty("--focus-width", `${focus.width}%`);
+      focusBox.style.setProperty("--focus-height", `${focus.height}%`);
+      focusBox.classList.toggle("is-visible", roomValue !== "top");
+      moveCameraToFocus(focus);
+    }
+
+    function moveCameraToFocus(focus) {
+      const zoom = mobileQuery.matches && focus.mobileZoom ? focus.mobileZoom : focus.zoom || 1;
+      const centerX = focus.left + focus.width / 2;
+      const centerY = focus.top + focus.height / 2;
+      const panX = -((centerX - 50) / 100) * houseWrap.offsetWidth * zoom;
+      const panY = -((centerY - 50) / 100) * houseWrap.offsetHeight * zoom;
+
+      houseWrap.style.setProperty("--zoom", zoom.toFixed(3));
+      houseWrap.style.setProperty("--pan-x", `${panX.toFixed(1)}px`);
+      houseWrap.style.setProperty("--pan-y", `${panY.toFixed(1)}px`);
+    }
+
+    function activateStep(step) {
+      activeStep = step;
+      const roomValue = step.dataset.room || "top";
+      setFocus(roomValue);
+      steps.forEach((item) => item.classList.toggle("is-active", item === step));
+      document.querySelectorAll(".pin").forEach((pin) => {
+        const product = products.find((item) => item.code === pin.dataset.code);
+        const visible = productIsVisible(product, roomValue);
+        pin.classList.toggle("is-visible", visible);
+        pin.classList.toggle("is-muted", visible && productIsMuted(product, roomValue));
+      });
+    }
+
+    renderPins();
+    renderTable();
+
+    const steps = [...document.querySelectorAll(".step")];
+    const observer = new IntersectionObserver((entries) => {
+      const visibleEntries = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      if (visibleEntries[0]) activateStep(visibleEntries[0].target);
+    }, {
+      root: null,
+      threshold: [0.35, 0.55, 0.75]
+    });
+
+    steps.forEach((step) => observer.observe(step));
+    activateStep(steps[0]);
+
+    window.addEventListener("resize", () => {
+      if (!activeStep) return;
+      const focus = roomFocus[activeStep.dataset.room || "top"] || roomFocus.all;
+      moveCameraToFocus(focus);
+    });
+  </script>
+</body>
+</html>
