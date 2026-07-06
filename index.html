@@ -1,25 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="pl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Poland's Home Without China</title>
+  <title>Dom z Chin. Od drzwi po śrubkę</title>
   <style>
     :root {
-      --ink: #181818;
-      --muted: #5e625f;
-      --paper: #f6f3ea;
-      --panel: rgba(255, 255, 255, 0.91);
-      --panel-solid: #ffffff;
-      --line: rgba(24, 24, 24, 0.14);
+      --ink: #171717;
+      --muted: #575a56;
+      --paper: #f4f1e9;
+      --panel: rgba(255, 255, 255, 0.8);
+      --line: rgba(23, 23, 23, 0.15);
       --blue: #4d7f95;
       --green: #8ba66f;
       --gold: #d6a240;
       --orange: #d9733f;
       --red: #bf3d32;
       --shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
-      font-family: Georgia, "Times New Roman", serif;
       color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
       background: var(--paper);
     }
 
@@ -29,9 +28,7 @@
 
     body {
       margin: 0;
-      background:
-        linear-gradient(180deg, rgba(246, 243, 234, 0.55), rgba(246, 243, 234, 0.95)),
-        var(--paper);
+      background: var(--paper);
     }
 
     main {
@@ -41,7 +38,8 @@
 
     .scrolly {
       position: relative;
-      min-height: 720vh;
+      min-height: 0;
+      overflow-anchor: none;
     }
 
     .sticky-visual {
@@ -51,15 +49,14 @@
       display: grid;
       place-items: center;
       overflow: hidden;
-      background:
-        radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.72), transparent 28%),
-        linear-gradient(180deg, #f8f5ec, #ece5d8);
+      background: #f7f5ee;
+      overflow-anchor: none;
     }
 
     .house-wrap {
       position: relative;
-      width: min(96vw, calc(92vh * 1.339), 1580px);
-      aspect-ratio: 2400 / 1792;
+      width: min(98vw, calc(92vh * 1.792), 1900px);
+      aspect-ratio: 5504 / 3072;
       isolation: isolate;
       --base-pan-x: 0px;
       --pan-x: 0px;
@@ -71,10 +68,11 @@
       transform-origin: center center;
       transition: none;
       will-change: transform;
+      overflow-anchor: none;
     }
 
     .house-wrap.is-camera-ready {
-      transition: transform 3000ms cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 2800ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .house-image {
@@ -83,44 +81,27 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: saturate(0.94) contrast(1.02);
+      filter: saturate(0.96) contrast(1.02);
+      transition: filter 360ms ease;
       user-select: none;
       -webkit-user-drag: none;
+    }
+
+    .sticky-visual.is-image-blurred .house-image {
+      filter: blur(5px) saturate(0.88) contrast(1.02);
     }
 
     .image-dim {
       position: absolute;
       inset: 0;
-      background: rgba(248, 245, 236, 0.08);
-      pointer-events: none;
-      transition: background 420ms ease;
       z-index: 1;
-    }
-
-    .focus-box {
-      position: absolute;
-      left: var(--focus-left, 0%);
-      top: var(--focus-top, 0%);
-      width: var(--focus-width, 100%);
-      height: var(--focus-height, 100%);
-      border: 2px solid rgba(191, 61, 50, 0.72);
-      background: rgba(255, 255, 255, 0.18);
-      opacity: 0;
-      transform: scale(0.985);
-      transition:
-        left 420ms ease,
-        top 420ms ease,
-        width 420ms ease,
-        height 420ms ease,
-        opacity 260ms ease,
-        transform 420ms ease;
+      background: rgba(255, 255, 255, 0.03);
       pointer-events: none;
-      z-index: 2;
+      transition: background 320ms ease;
     }
 
-    .focus-box.is-visible {
-      opacity: 1;
-      transform: scale(1);
+    .sticky-visual.is-panel-article .image-dim {
+      background: rgba(255, 255, 255, 0.7);
     }
 
     .pin-layer {
@@ -135,7 +116,7 @@
       left: var(--x);
       top: var(--y);
       opacity: 0;
-      transform: translate(-50%, -50%) scale(0.92);
+      transform: translate(-50%, -50%) scale(0.9);
       transition:
         opacity 240ms ease,
         transform 240ms ease,
@@ -150,7 +131,7 @@
     }
 
     .pin.is-muted {
-      opacity: 0.28;
+      opacity: 0.24;
       filter: grayscale(0.45);
       z-index: 1;
     }
@@ -169,11 +150,19 @@
       letter-spacing: 0;
     }
 
+    .sticky-visual[data-current-room="kitchen"] .pin-dot,
+    .sticky-visual[data-current-room="kitchenClose"] .pin-dot {
+      width: 26px;
+      height: 26px;
+      border-width: 1.5px;
+      font-size: 9px;
+    }
+
     .pin-card {
       position: absolute;
       left: 42px;
       top: 50%;
-      width: 156px;
+      width: 168px;
       --label-shift-x: 0;
       --label-shift-y: -50%;
       --label-origin: left center;
@@ -187,7 +176,8 @@
         transform 220ms ease;
       padding: 7px 8px 8px;
       border: 1px solid rgba(0, 0, 0, 0.13);
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.86);
+      border-radius: 8px;
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
       font-family: Arial, Helvetica, sans-serif;
       font-size: 12px;
@@ -245,21 +235,11 @@
       --label-origin: right bottom;
     }
 
-    .pin[data-snap="sw"] .pin-card {
-      left: auto;
-      right: 34px;
-      top: 24px;
-      --label-shift-x: 0;
-      --label-shift-y: 0;
-      --label-origin: right top;
-    }
-
     .pin-kicker {
       display: block;
       color: var(--muted);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      font-size: 11px;
+      letter-spacing: 0;
       margin-bottom: 3px;
     }
 
@@ -270,27 +250,48 @@
 
     .legend {
       position: absolute;
-      right: 1.8%;
-      bottom: 2.2%;
-      z-index: 4;
-      width: min(290px, 34vw);
-      padding: 10px 12px;
-      background: rgba(255, 255, 255, 0.86);
+      right: max(20px, 3vw);
+      bottom: max(18px, 3vh);
+      z-index: 8;
+      width: min(340px, 38vw);
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.96);
       border: 1px solid var(--line);
+      border-radius: 8px;
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.11);
       font-family: Arial, Helvetica, sans-serif;
+      color: #111;
+      transition:
+        opacity 220ms ease,
+        left 220ms ease,
+        right 220ms ease;
+    }
+
+    .sticky-visual.legend-left .legend {
+      left: max(20px, 3vw);
+      right: auto;
+    }
+
+    .sticky-visual.legend-right .legend {
+      left: auto;
+      right: max(20px, 3vw);
+    }
+
+    .sticky-visual.legend-hidden .legend {
+      opacity: 0;
+      pointer-events: none;
     }
 
     .legend-title {
       margin: 0 0 8px;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
     }
 
     .legend-scale {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      height: 10px;
+      height: 13px;
       border: 1px solid rgba(0, 0, 0, 0.12);
       overflow: hidden;
     }
@@ -306,198 +307,165 @@
       justify-content: space-between;
       margin-top: 5px;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 12px;
+    }
+
+    .title-lockup {
+      position: absolute;
+      left: max(24px, 5vw);
+      top: max(24px, 5vh);
+      z-index: 7;
+      width: min(520px, calc(100vw - 48px));
+      opacity: 0;
+      transform: translateY(-10px);
+      transition:
+        opacity 280ms ease,
+        transform 280ms ease;
+      pointer-events: none;
+    }
+
+    .sticky-visual.is-panel-title .title-lockup {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .title-lockup h1 {
+      margin: 0;
+      max-width: 500px;
+      font-size: clamp(30px, 3.6vw, 54px);
+      line-height: 1;
+      letter-spacing: 0;
+      text-wrap: balance;
+      text-shadow: 0 2px 16px rgba(255, 255, 255, 0.9);
+    }
+
+    .byline {
+      margin: 12px 0 0;
+      color: #2c2c2c;
+      font: 700 13px/1.35 Arial, Helvetica, sans-serif;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
 
     .steps {
       position: relative;
       margin-top: -100vh;
-      z-index: 5;
+      z-index: 9;
       pointer-events: none;
     }
 
     .step {
-      min-height: 105vh;
+      min-height: 108vh;
       display: flex;
       align-items: center;
       padding: 8vh max(20px, 6vw);
+      pointer-events: none;
     }
 
-    .step:nth-child(even) {
+    .step[data-side="right"] {
       justify-content: flex-end;
     }
 
+    .step[data-side="left"] {
+      justify-content: flex-start;
+    }
+
+    .step[data-side="center"],
+    .step[data-panel="article"] {
+      justify-content: center;
+      min-height: 100vh;
+      padding-top: 8vh;
+      padding-bottom: 8vh;
+    }
+
+    .step[data-panel="title"] {
+      pointer-events: none;
+    }
+
+    .step[data-blur="true"] {
+      min-height: 90vh;
+    }
+
+    .step:last-child {
+      min-height: 86vh;
+    }
+
     .step-card {
-      width: min(390px, calc(100vw - 40px));
+      width: min(430px, calc(100vw - 40px));
       padding: 20px 22px 22px;
       background: var(--panel);
       border: 1px solid var(--line);
+      border-radius: 8px;
       box-shadow: var(--shadow);
       pointer-events: auto;
       backdrop-filter: blur(8px);
     }
 
-    .step-card.hero {
-      width: min(520px, calc(100vw - 40px));
-      padding: 26px 28px 28px;
-      background: rgba(255, 255, 255, 0.76);
-    }
-
-    .eyebrow {
-      display: block;
-      margin-bottom: 12px;
-      color: #7a3029;
-      font: 700 12px/1.2 Arial, Helvetica, sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    h1,
-    h2 {
-      margin: 0;
-      text-wrap: balance;
-    }
-
-    h1 {
-      font-size: clamp(38px, 6vw, 76px);
-      line-height: 0.94;
-      letter-spacing: 0;
-    }
-
-    h2 {
-      font-size: clamp(25px, 3vw, 42px);
-      line-height: 1.02;
-      letter-spacing: 0;
-    }
-
-    .dek,
     .step-card p {
-      margin: 14px 0 0;
-      color: #30302d;
-      font-size: 18px;
+      margin: 0;
+      color: #242421;
+      font-size: 18.5px;
       line-height: 1.45;
     }
 
-    .placeholder {
-      min-height: 5.8rem;
-      border-left: 3px solid rgba(191, 61, 50, 0.45);
-      padding-left: 13px;
+    .step-card p + p {
+      margin-top: 14px;
     }
 
-    .meta-line {
-      margin-top: 16px;
-      color: var(--muted);
-      font: 13px/1.35 Arial, Helvetica, sans-serif;
+    .step[data-panel="article"] .step-card {
+      width: min(720px, calc(100vw - 44px));
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
     }
 
-    .table-section {
+    .step[data-panel="article"] .step-card p {
+      color: #171717;
+      font-size: clamp(22px, 2.4vw, 31px);
+      line-height: 1.42;
+    }
+
+    .methodology-section {
       position: relative;
-      z-index: 6;
+      z-index: 10;
       padding: 80px max(20px, 7vw) 100px;
       background: #f8f7f2;
       border-top: 1px solid var(--line);
     }
 
-    .table-inner {
-      max-width: 1120px;
-      margin: 0 auto;
-    }
-
-    .table-section h2 {
-      max-width: 760px;
-    }
-
-    .table-note {
-      max-width: 760px;
-      color: var(--muted);
-      font: 15px/1.45 Arial, Helvetica, sans-serif;
-    }
-
-    .methodology {
-      margin-top: 42px;
+    .methodology-inner {
       max-width: 820px;
-      padding-top: 28px;
-      border-top: 1px solid var(--line);
+      margin: 0 auto;
       font-family: Arial, Helvetica, sans-serif;
       color: #2d2d2a;
     }
 
-    .methodology h3 {
-      margin: 0 0 14px;
-      font-size: 18px;
-      line-height: 1.25;
+    .methodology-inner h2 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(28px, 3.4vw, 44px);
+      line-height: 1.04;
       letter-spacing: 0;
+      text-wrap: balance;
     }
 
-    .methodology p {
-      margin: 0 0 13px;
-      font-size: 14px;
+    .methodology-inner p {
+      margin: 16px 0 0;
+      font-size: 16px;
       line-height: 1.5;
     }
 
-    .methodology .formula {
+    .methodology-inner .formula {
       display: inline-block;
-      margin: 3px 0;
-      padding: 8px 10px;
+      margin: 4px 0;
+      padding: 9px 11px;
       background: #efede6;
       border: 1px solid rgba(0, 0, 0, 0.1);
       font-family: "Courier New", Courier, monospace;
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .table-wrap {
-      margin-top: 28px;
-      overflow-x: auto;
-      border-top: 1px solid #222;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 760px;
-      font-family: Arial, Helvetica, sans-serif;
       font-size: 14px;
-      background: var(--panel-solid);
-    }
-
-    th,
-    td {
-      padding: 11px 12px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.11);
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      color: #222;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      background: #efede6;
-    }
-
-    td.number,
-    th.number {
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .share-cell {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      justify-content: flex-end;
-      min-width: 86px;
-    }
-
-    .share-swatch {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--pin-color);
-      border: 1px solid rgba(0, 0, 0, 0.14);
-      flex: 0 0 auto;
+      line-height: 1.4;
     }
 
     @media (max-width: 760px) {
@@ -507,11 +475,13 @@
       }
 
       .house-wrap {
-        width: min(114vw, calc(74vh * 1.339));
-        --base-pan-x: -3vw;
+        width: min(142vw, calc(77vh * 1.792));
+        --base-pan-x: -10vw;
       }
 
-      .legend {
+      .legend,
+      .sticky-visual.legend-left .legend,
+      .sticky-visual.legend-right .legend {
         left: 20px;
         right: auto;
         bottom: 18px;
@@ -525,13 +495,30 @@
         padding: 12vh 20px 11vh;
       }
 
-      .step:nth-child(even) {
+      .step[data-side="right"],
+      .step[data-side="left"],
+      .step[data-side="center"],
+      .step[data-panel="article"] {
         justify-content: center;
       }
 
+      .step[data-panel="article"] {
+        min-height: 100vh;
+        padding: 8vh 20px;
+      }
+
+      .step[data-blur="true"] {
+        min-height: 90vh;
+      }
+
       .step-card,
-      .step-card.hero {
+      .step[data-panel="article"] .step-card {
         width: 100%;
+      }
+
+      .step[data-panel="article"] .step-card p {
+        font-size: 21px;
+        line-height: 1.45;
       }
 
       .pin-dot {
@@ -544,170 +531,317 @@
         display: none;
       }
 
-      h1 {
-        font-size: 42px;
+      .title-lockup {
+        left: 22px;
+        right: 22px;
+        top: 22px;
+        width: auto;
+      }
+
+      .title-lockup h1 {
+        max-width: 340px;
+        font-size: 34px;
       }
     }
   </style>
 </head>
 <body>
   <main>
-    <section class="scrolly" aria-label="Scrollytelling draft">
-      <div class="sticky-visual">
+    <section class="scrolly" aria-label="Dom z Chin">
+      <div class="sticky-visual legend-right" id="stickyVisual">
         <div class="house-wrap" id="houseWrap">
-          <img class="house-image" src="v1.jpeg" alt="Illustrated home interior">
+          <img class="house-image" src="mieszkanie.png" alt="Ilustracja przekrojowa domu i ogrodu">
           <div class="image-dim" aria-hidden="true"></div>
-          <div class="focus-box" id="focusBox" aria-hidden="true"></div>
           <div class="pin-layer" id="pinLayer" aria-hidden="true"></div>
-          <div class="legend" aria-hidden="true">
-            <p class="legend-title">China share of Polish apparent market</p>
-            <div class="legend-scale">
-              <span></span><span></span><span></span><span></span><span></span>
-            </div>
-            <div class="legend-labels">
-              <span>0%</span>
-              <span>25%</span>
-              <span>50%</span>
-              <span>75%</span>
-              <span>100%</span>
-            </div>
+        </div>
+        <div class="title-lockup" aria-hidden="true">
+          <h1>Dom z Chin. Od drzwi po śrubkę</h1>
+          <p class="byline">Onet</p>
+        </div>
+        <div class="legend" aria-hidden="true">
+          <p class="legend-title">Udział Chin w polskim imporcie</p>
+          <div class="legend-scale">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="legend-labels">
+            <span>0%</span>
+            <span>25%</span>
+            <span>50%</span>
+            <span>75%</span>
+            <span>100%</span>
           </div>
         </div>
       </div>
 
       <div class="steps" id="steps">
-        <section class="step" data-room="top">
-          <div class="step-card hero">
-            <span class="eyebrow">Draft scrolly</span>
-            <h1>Poland's home without China</h1>
-            <p class="dek">A first layout draft using only categories where the market-share metric is plausible for visual use.</p>
-            <p class="meta-line">Replace this intro with final reporting copy.</p>
+        <section class="step" data-panel="title" data-room="top" data-legend="right"></section>
+
+        <section class="step" data-panel="article" data-room="top" data-legend="none">
+          <div class="step-card">
+            <p>Państwo Środka wprowadziło się do naszych domów na dobre. Pytanie nie brzmi już „czy”, ale jak bardzo jesteśmy od niego uzależnieni. Nasi analitycy przeanalizowali dane importowe dotyczące przedmiotów, z których korzystamy na co dzień. Zobacz, czy jesteś w stanie urządzić swoje mieszkanie bez produktów z Chin i z jakimi konsekwencjami się to wiąże.</p>
           </div>
         </section>
 
-        <section class="step" data-room="Kitchen & Dining">
+        <section class="step" data-panel="article" data-room="top" data-legend="none" data-blur="true">
           <div class="step-card">
-            <span class="eyebrow">Kitchen and dining</span>
-            <h2>Kitchen objects carry some of the highest China shares.</h2>
-            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
+            <p>Zapraszamy na spacer po naszym wirtualnym domu. Zobaczmy, skąd najprawdopodobniej pochodzą przedmioty, które do niego kupiliśmy.</p>
           </div>
         </section>
 
-        <section class="step" data-room="Home Improvement,Heating & Home Systems">
+        <section class="step" data-panel="card" data-room="front yard" data-layers="1" data-side="right" data-legend="right">
           <div class="step-card">
-            <span class="eyebrow">Fixtures and systems</span>
-            <h2>Not every visible part of the home has the same dependence.</h2>
-            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed posuere consectetur est at lobortis. Donec sed odio dui.</p>
+            <p>Już przed budynkiem możemy zobaczyć sprowadzany z Chin sprzęt ogrodowy. W produkcji tego typu dóbr wyspecjalizowały się zakłady z dwóch najbogatszych prowincji: Guangdong oraz Zhejiang. Chińczycy oferują nam wszystko: od grilli i hamaków, przez meble ogrodowe, systemy kompostowania odpadów, sprzęt do zraszania roślin, solarne oświetlenie ogrodowe, po duże i małe zabawki dziecięce, które stoją na trawnikach czy leżą w piaskownicach.</p>
           </div>
         </section>
 
-        <section class="step" data-room="Bedroom & Textiles">
+        <section class="step" data-panel="card" data-room="overview" data-products="drzwi wewnętrzne drewniane" data-side="right" data-legend="right">
           <div class="step-card">
-            <span class="eyebrow">Bedroom and textiles</span>
-            <h2>Textiles are present, but the safe market-share rows are more limited.</h2>
-            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas faucibus mollis interdum. Cras mattis consectetur purus.</p>
+            <p>Wchodząc do środka domu, możemy dosłownie zderzyć się z kolejnym chińskim produktem. Drzwi wejściowe. Od kilku lat wzrasta liczba importowanych z Państwa Środka drzwi stalowych. W 2023 roku co piąty importowany produkt tego typu pochodził z Chin. W 2024 roku do Polski trafiło ich blisko 105 tysięcy sztuk. Import w stosunku do roku 2023 wzrósł o ponad 15 tysięcy egzemplarzy, jak donosi portal forumbranzowe.com.</p>
+            <p>Ale z Chin importujemy także drzwi wewnętrzne, przesuwne, a także okna. Chińskie są nawet te, które noszą nazwę „francuskie”. Okna w naszym domu zapewne są przesłonięte chińskimi roletami elastycznymi, czyli wewnętrznymi, albo zasłonami wyprodukowanymi w Państwie Środka.</p>
           </div>
         </section>
 
-        <section class="step" data-room="Outdoor & Garden">
+        <section class="step" data-panel="article" data-room="overview" data-legend="none">
           <div class="step-card">
-            <span class="eyebrow">Outside the house</span>
-            <h2>The basket also includes a small number of outdoor household goods.</h2>
-            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur.</p>
+            <p>Informacje o jakości wspomnianych produktów nie są łatwo dostępne. Testów konsumenckich w Polsce nie było, można jednak oprzeć się na opiniach tych, którzy te produkty nabyli lub znają sekrety produkcji.</p>
           </div>
         </section>
 
-        <section class="step" data-room="all">
+        <section class="step" data-panel="article" data-room="overview" data-legend="none">
           <div class="step-card">
-            <span class="eyebrow">All safe products</span>
-            <h2>Twenty-six product categories are ready for this version.</h2>
-            <p class="placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+            <p>Użytkownicy serwisu społecznościowego Reddit zdecydowanie potwierdzają konkurencyjność pod względem ceny. Jeden z nich zastanawiał się, czy nie warto sprowadzić z Chin przesuwanych drzwi. Producenci z USA proponowali mu pięć sztuk za 12 tys. dolarów, a podobne drzwi sprowadzone z Chin kosztowałyby dosłownie jedną dziesiątą tej kwoty. Tylko czy warto?</p>
+            <p>Na to pytanie odpowiedział użytkownik o pseudonimie Guangzhouagent, który, jak twierdził, prowadzi biuro w Foshan, gdzie kupuje aluminiowe okna i drzwi na zlecenie deweloperów oraz architektów wnętrz z innych państw. Produkty chińskie ocenił dobrze, ale radził, aby najpierw dokładnie sprawdzać rozmiary profili aluminiowych, z których będą wykonane drzwi. Chińczycy lubią oszczędzać na grubości, tym samym skracając żywotność produktu.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="overview" data-legend="none">
+          <div class="step-card">
+            <p>Sugerował także, aby unikać tamtejszych okuć, zawiasów oraz klamek, ponieważ te mają słabszą jakość. Radził, aby zamawiając drzwi czy okna, prosić o użycie części importowanych. Problemem może okazać się także samo wykończenie, bo jak zaznaczył, „chińskie standardy izolacji i wykończenia znacznie różnią się od zachodnich”.</p>
+            <p>Dodał: „Ogólnie rzecz biorąc, ceny chińskich aluminiowych okien i drzwi są bardzo przystępne. Współpracując z najlepszym dostawcą, można uzyskać niesamowitą jakość, ale cena to odzwierciedli”. A zatem lepsza jakość oznacza wyższą cenę produktu. To odnosi się nie tylko do okien i drzwi, ale do większości towarów zamawianych w Chinach.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="overview" data-legend="none">
+          <div class="step-card">
+            <p>W zależności od kwoty, jaką jesteśmy gotowi zapłacić, możemy uzyskać produkt o skrajnie różnej jakości: od najniższej do najwyższej. Wystarczy zaznaczyć zapotrzebowanie przy składaniu zamówienia, a producent użyje innych materiałów lub podzespołów do produkcji tego samego przedmiotu.</p>
+            <p>Co ciekawe, bazując na doświadczeniu użytkowników Reddita, nawet przy produktach wyższej jakości, a więc droższych, nadal opłaca się złożyć zamówienie w Chinach. Za cenę jednych drzwi w USA można kupić tam kilka par.</p>
+            <p>Co więcej, Chińczycy przekonują, że są w stanie dostarczyć produkt szybciej niż zakłady w Polsce. U nas po złożeniu zamówienia przeciętnie czeka się około dwóch, trzech tygodni, a w sezonie nawet dłużej. Na produkt z Państwa Środka, jak obiecują strony internetowe producentów, trzeba czekać od 10 do 15 dni od momentu ustalenia szczegółów i wykonania przelewu, czyli oszczędza się około jedną trzecią czasu.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="bathroom" data-side="right" data-legend="right" data-show-pins="false">
+          <div class="step-card">
+            <p>Po przekroczeniu progu domu otoczą nas przedmioty z Chin. I nie jest to przenośnia, bo podłogi i ściany często są wykonane ze sprowadzanych z Państwa Środka płytek. Skoro Chiny od wieków słyną z ceramiki, to nic dziwnego, że są liderem w jej eksporcie. I nie chodzi o naczynia, a o płytki gresowe, terakotowe i porcelanowe.</p>
+            <p>Importowane wyroby są nawet o jedną czwartą tańsze niż te produkowane w Polsce. Jednak w 2008 roku, jak informowała Gazeta Prawna, jedna z partii sprowadzona na prywatne zlecenie zagrażała życiu i zdrowiu użytkowników. Wykryte promieniowanie potasu 40, radu 226 i toru 228, pierwiastków badanych sumarycznie, było nawet dwukrotnie większe od dopuszczalnego.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="bedroomFloor" data-products="podłoga parkiet drewniany" data-side="right" data-legend="right">
+          <div class="step-card">
+            <p>Jeśli ktoś nie decydował się na ceramikę, może chodzić po parkietach drewnianych, również sprowadzanych z Chin.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="roof" data-products="panele fotowoltaiczne" data-side="left" data-legend="left">
+          <div class="step-card">
+            <p>Jeśli w domu mamy fotowoltaikę, to prawie na pewno korzystamy ze sprzętu wyprodukowanego w prowincjach Zhejiang, Jiangsu i Guangdong. W Państwie Środka powstaje ponad 80 proc. globalnej produkcji paneli fotowoltaicznych. Jak podaje portal Wysokie Napięcie, ponad 95 proc. instalowanych w Unii paneli PV jest importowanych z Chin. Ich niskie ceny zachęcają do inwestowania w fotowoltaikę. Podobnie jest z osprzętem.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="storage" data-layers="1" data-side="left" data-legend="left">
+          <div class="step-card">
+            <p>Zajrzyjmy na chwilę do pomieszczenia gospodarczego. Żeby korzystać z prądu produkowanego przez panele, potrzebne są falowniki. Według portalu Wysokie Napięcie w 2024 roku aż 80 proc. nowo instalowanych falowników w Europie pochodziło z Chin. Choć to może się niedługo zmienić, ponieważ Komisja Europejska chce ograniczyć liczbę chińskich inwerterów. Powodem jest bezpieczeństwo europejskich sieci energetycznych.</p>
+            <p>Stojące w pomieszczeniu bojlery czy podgrzewacze wody również mogą być wyprodukowane w Chinach. Stamtąd sprowadzamy również grzejniki.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="all" data-rooms="bedroom,kitchen,bathroom,salon,storage" data-layers="2" data-side="right" data-legend="right">
+          <div class="step-card">
+            <p>Wszystkie meble, takie jak szafa w przedpokoju, stół w salonie, krzesła, wyposażenie garderoby, łóżka w sypialni, szafki w kuchni oraz łazience, to wszystko z wysokim prawdopodobieństwem pochodzi z Chin.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="all" data-legend="none">
+          <div class="step-card">
+            <p>Według raportu Departamentu Analiz Ekonomicznych banku PKO BP w 2024 roku niemal co drugi importowany do Polski mebel, dokładnie 41,6 proc., pochodził z Chin. Produkuje się tam wszystko: stoły, krzesła, łóżka, szafy, meble tapicerowane, dziecięce, ogrodowe, kuchenne, regały garażowe i inne. Na specjalne zamówienie można również dostać reprodukcje mebli zabytkowych lub stylizowanych na zabytkowe.</p>
+            <p>Chcesz mieć meble à la Ludwik XIV czy XVI? Zrobią je chińscy robotnicy, którzy nie mają pojęcia, gdzie dokładnie leży Francja, nie znają historii jej władców i nie wiedzą, czym są barok, rokoko i klasycyzm.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="all" data-legend="none">
+          <div class="step-card">
+            <p>Do niedawna była pewna szansa, że w tym produkcie jest polski element. Jeszcze dwa lata temu prawie jedna piąta eksportowanego z Polski drewna trafiała do Chin. W trzech pierwszych kwartałach zeszłego roku ta liczba spadła o połowę, a tym samym szansa, że nasze drewno wróci akurat do Polski w formie mebla, jest już znikoma.</p>
+            <p>Cena? Znowu zależy od jakości, ale może być nawet o połowę niższa niż u krajowych czy europejskich producentów.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="kitchen" data-layers="2" data-side="left" data-legend="left">
+          <div class="step-card">
+            <p>Stoły w salonie czy w jadalni są przykryte zapewne obrusami z Chin. Poza nimi z Państwa Środka importujemy także serwetki, bieżniki na stół i temu podobne produkty.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="bedroom" data-layers="2" data-side="left" data-legend="left">
+          <div class="step-card">
+            <p>Przejdźmy do sypialni. Zaglądając do środka naszych chińskich mebli, znajdziemy tam chińskie tekstylia domowe: ręczniki, prześcieradła, pościel, koce. To jedne z produktów o najwyższym procencie importu.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="kitchen" data-legend="none">
+          <div class="step-card">
+            <p>A jak jest z jakością chińskich mebli? Tym razem użytkownicy zwracają uwagę, że zależy to nie tylko od ceny, ale i odrobiny szczęścia. Na forum Reddit z Australii konsumenci omawiający chińskie meble kuchenne robione na zamówienie informowali, że mogą pojawiać się problemy z serwisem w razie wad produktu.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="kitchen" data-legend="none">
+          <div class="step-card">
+            <p>Użytkownik russellFIXA, który importował do Australii z Chin różne towary, ostrzegał: „Jeśli wystąpi wada, Chińczycy najpierw spróbują zwrócić ci pieniądze tylko za tę uszkodzoną część. A potem obciążą cię kosztami transportu za odesłanie tej części do naprawy. (...) Nie lubią też robić pojedynczych, małych części, za które nie dostają zapłaty, więc czas oczekiwania na naprawę może być długi”.</p>
+            <p>Ponadto użytkownik GruffCassquatch, pracujący w firmie zajmującej się załatwianiem spraw celnych przy imporcie towarów z Chin, ostrzegał, że meble kuchenne z Państwa Środka dość często przekraczają normy chemikaliów, w tym trującego formaldehydu służącego do klejenia płyt meblowych czy używanego do impregnacji drewna difluorku amonu. Jak twierdził, w chińskich meblach kuchennych bywa wykorzystywany także rakotwórczy azbest.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="all" data-legend="none">
+          <div class="step-card">
+            <p>Przyjrzyjmy się teraz AGD. W naszym otoczeniu jest znacznie więcej chińskich produktów tej kategorii, niż się spodziewamy. Nieświadomie taki towar można też kupić od naszych rodzimych firm, ukryty pod ich marką. W Polsce w ten sposób działa kilku producentów. Zasada jest następująca: w kraju tworzy się logo, projektuje opakowanie, a produkty z wymalowaną na nich nazwą zamawia się w Chinach. Jedynie wnikliwi zobaczą napisane na spodzie małymi literkami „made in China”.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="all" data-legend="none">
+          <div class="step-card">
+            <p>Dodatkowo proces wsparła globalizacja. Przykładem jest słoweńska marka AGD Gorenje, która produkuje blisko jedną czwartą sprzętu w Europie. Osiem lat temu przeszła w ręce Chińczyków i obecnie należy do koncernu Hisense Group z siedzibą w Qingdao, w prowincji Szantung, znanego producenta telewizorów, już pod oryginalnym logo.</p>
+            <p>Przebojem weszła do Europy i tu stworzyła swoje fabryki chińska firma Haier, również mająca główną siedzibę w Qingdao. Firma kiedyś kupowała licencje od niemieckiego producenta lodówek, potem go wykupiła, aż w końcu zdobyła szturmem świat. Ma swoje fabryki nie tylko w Europie. W 2011 roku wykupiła od przeżywającej kłopoty firmy Panasonic markę Sanyo, w tym jej zakłady produkcyjne oraz centra badawcze.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="office" data-side="right" data-legend="right" data-show-pins="false">
+          <div class="step-card">
+            <p>Zerknijmy jeszcze na telefon i tablet leżący na naszym chińskim biurku. Załóżmy, że chcemy uniknąć typowo chińskiego produktu jak Xiaomi albo Huawei, kupując nowy smartfon Motoroli, czyli amerykańskiego pioniera technologii telekomunikacji bezprzewodowej. Tymczasem od kilku lat firma i jej logo są w posiadaniu Chińczyków. Tak samo jak odkupiona od IBM marka notebooków ThinkPad.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="kitchenClose" data-rooms="kitchen" data-layers="3" data-side="right" data-legend="right">
+          <div class="step-card">
+            <p>Z wrażenia w kuchni chcesz napić się szklanki zimnej wody. Uważaj, w rękach możesz trzymać produkt z Chin. Z Państwa Środka importujemy nie tylko naczynia emaliowane, z których jeszcze niedawno słynął nasz przemysł. Sprowadzamy także garnki stalowe, patelnie, deski do krojenia, sztućce, talerze, kubki i szklanki.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="kitchen" data-legend="none">
+          <div class="step-card">
+            <p>Jakość tych produktów bywa niepewna. Tylko w pierwszym półroczu 2026 roku Główny Inspektor Sanitarny dwukrotnie ostrzegał przed wyrobami sprowadzanymi z Chin i nakazywał natychmiastowe wycofanie ich ze sprzedaży. W pierwszym przypadku chodziło o pięć rodzajów szklanek wyprodukowanych w Chinach, a sprzedawanych w znanej duńskiej sieci sklepów. Podczas ich użytkowania mogły przenikać do organizmu toksyczne metale ciężkie: ołów i kadm. W drugim wypadku GIS stwierdził obecność tych samych metali ciężkich na obrzeżu chińskich szklanek sprzedawanych w jednej z sieci dyskontowych należących do niemieckiego właściciela.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="kitchen" data-legend="none">
+          <div class="step-card">
+            <p>Warto też spojrzeć na badania przeprowadzone pod koniec 2025 roku przez niezależną organizację konsumentów Pro Test. Sprawdzono 162 produkty sprzedawane na platformach Temu i Shein. Wynik: aż 110 z nich nie spełnia unijnych norm. To oznacza, że dwa na trzy produkty posiadały wady lub były niebezpieczne dla użytkowników. Podobne wyniki wykazały testy przeprowadzone na zlecenie belgijskiej organizacji Testachats. W tym wypadku 70 proc. produktów kupionych na obu platformach nie spełniało norm bezpieczeństwa. Problemy zwykle były podobne: ładowarki do telefonów niebezpiecznie się przegrzewały, ozdoby i ubrania zawierały niebezpieczne metale lub trujące substancje.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="all" data-legend="none">
+          <div class="step-card">
+            <p>Radosław Pyffel, analityk, ekspert do spraw Azji, komentuje dla Onetu: „Chiny jako kraj, w którym tanio produkuje się słabszej jakości dobra, nie odchodzi do przeszłości. Jednak w planach pięcioletnich władze stawiają na rozwój technologiczny samochodów elektrycznych, AI, robotyki oraz samowystarczalność technologiczną i surowcową. To oznacza, że wzrasta także jakość produkowanych przez nich towarów, zwłaszcza że zwracają się ku nowym rynkom tak zwanego globalnego południa, gdzie powstaje nowa klasa średnia, która będzie ich klientem”.</p>
+            <p>„Powodem pozycji Chin paradoksalnie jest chciwość koncernów zarówno amerykańskich, jak i europejskich. Jest takie chińskie przysłowie: dobry królik ma trzy nory. Koncerny amerykańskie i europejskie w pogoni za zyskiem z marży z taniej produkcji praktycznie zrezygnowały z dywersyfikacji źródeł wytwarzania dóbr. Korporacje przez dekady kierowały się wyłącznie kwestią zysku tu i teraz. Nie budowano kolejnych nor. W efekcie Chiny mają na pewne sprawy monopol lub prawie monopol. Teraz, żeby nadrobić stracony czas, koncerny będą potrzebowały minimum 15 lat na rozwój nowych fabryk i technologii do nich, a w tym czasie Chińczycy będą parli do przodu” - dodaje Pyffel.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="article" data-room="all" data-legend="none">
+          <div class="step-card">
+            <p>Zapytany przez Onet ekspert zwraca uwagę, że proces ulepszania jakości produktów, przez który przechodzą Chiny, już się w światowej gospodarce wydarzył: „Elektronika z Japonii po II wojnie światowej była synonimem słabej jakości. Potem Japończycy rozwinęli swój przemysł i wysuwali się na pozycję lidera. Ten proces zatrzymali Amerykanie. Chiny idą dokładnie tą samą drogą, od sprzętu słabej jakości do hi-tech. Ale różnica polega na tym, że nie dali się zatrzymać Amerykanom. Rozwijają się dalej i wysuwają na światową czołówkę” - ocenia Pyffel.</p>
+          </div>
+        </section>
+
+        <section class="step" data-panel="card" data-room="all" data-products="śruby" data-side="right" data-legend="right">
+          <div class="step-card">
+            <p>Jeśli komuś to nie odpowiada i będzie próbował zbudować dom i zakupić meble jedynie z polskiego drewna, a elektronikę z zachodnich części, to może i tak mieć chiński komponent: śruby i wkręty. Je również importujemy z Państwa Środka.</p>
           </div>
         </section>
       </div>
     </section>
 
-    <section class="table-section">
-      <div class="table-inner">
-        <h2>Products available for the first visual version</h2>
-        <p class="table-note">These rows are filtered to <strong>market_share_visual_status = market_share_plausible_for_visual</strong>. The percentage is China imports divided by Polish apparent market for the mapped product category.</p>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Room</th>
-                <th class="number">China share</th>
-                <th class="number">China imports, EUR m</th>
-              </tr>
-            </thead>
-            <tbody id="productTable"></tbody>
-          </table>
-        </div>
-
-        <div class="methodology">
-          <h3>Metodologia</h3>
-          <p>Pokazujemy udział importu z Chin w szacowanym polskim rynku danej kategorii produktu w 2024 r. Dla każdej kategorii używamy wzoru:</p>
-          <p><span class="formula">import z Chin / (produkcja sprzedana w Polsce + import ogółem - eksport ogółem) * 100</span></p>
-          <p>Dane o imporcie z Chin, imporcie ogółem i eksporcie ogółem pochodzą z Eurostatu, z bazy Comext. Dane o wartości produkcji sprzedanej w Polsce pochodzą z Eurostatu, z bazy Prodcom. Kody handlowe CN8 zostały połączone z kategoriami Prodcom na podstawie tabeli zgodności Prodcom 2024.</p>
-          <p>Do wizualizacji trafiły tylko te kategorie, dla których udało się policzyć dodatni mianownik oraz przypisać handel do kategorii Prodcom bez niejednoznacznego mapowania. Kategorie bez wartości produkcji, z ujemnym lub zerowym mianownikiem albo z wynikiem powyżej 100 proc. zostały pominięte w tej wersji.</p>
-          <p>Wartości procentowe są zaokrąglone do pełnych procentów. Wynik należy czytać jako przybliżony udział Chin w rynku konkretnej kategorii produktu, a nie jako dokładny odsetek wszystkich przedmiotów znajdujących się w polskich domach.</p>
-        </div>
+    <section class="methodology-section">
+      <div class="methodology-inner">
+        <h2>Jak liczyliśmy?</h2>
+        <p>Pokazujemy udział Chin w polskim imporcie danej kategorii produktu. Dla każdej kategorii używamy wzoru:</p>
+        <p><span class="formula">import z Chin / import ogółem * 100</span></p>
+        <p>Dane o imporcie pochodzą z Eurostatu, z bazy Comext. Kody produktów zostały dobrane do przedmiotów widocznych na ilustracji, a wartości procentowe zaokrąglamy na etykietach do pełnych procentów.</p>
+        <p>Wynik należy czytać jako udział Chin w imporcie konkretnej kategorii, a nie jako udział w całym polskim rynku ani jako dokładny odsetek przedmiotów znajdujących się w polskich domach.</p>
       </div>
     </section>
   </main>
 
   <script>
     const products = [
-      { code: "25991225", name: "Stainless steel kitchenware", room: "Kitchen & Dining", share: 77, value: 72.57, x: 56.2, y: 29.0, snap: "e" },
-      { code: "16291200", name: "Wooden tableware", room: "Kitchen & Dining", share: 60, value: 6.10, x: 47.2, y: 42.8, snap: "w" },
-      { code: "25991217", name: "Cast iron kitchen articles", room: "Kitchen & Dining", share: 58, value: 4.12, x: 48.5, y: 31.4, snap: "w" },
-      { code: "23411230", name: "Stoneware tableware", room: "Kitchen & Dining", share: 50, value: 15.63, x: 58.1, y: 20.4, snap: "n" },
-      { code: "23411210", name: "Common pottery tableware", room: "Kitchen & Dining", share: 39, value: 2.73, x: 61.5, y: 21.5, snap: "e" },
-      { code: "25991245", name: "Iron or steel household articles", room: "Kitchen & Dining", share: 23, value: 33.99, x: 52.7, y: 33.4, snap: "w" },
-      { code: "13921353", name: "Cotton table linen", room: "Kitchen & Dining", share: 14, value: 0.70, x: 50.0, y: 44.3, snap: "s" },
-      { code: "25991253", name: "Copper kitchen articles", room: "Kitchen & Dining", share: 6, value: 0.02, x: 60.6, y: 34.2, snap: "e" },
-      { code: "23131220", name: "Lead crystal drinking glasses", room: "Kitchen & Dining", share: 0, value: 0.03, x: 52.8, y: 38.4, snap: "s" },
-
-      { code: "25941136", name: "High-tensile hexagon bolts", room: "Home Improvement", share: 39, value: 5.77, x: 67.8, y: 31.0, snap: "e" },
-      { code: "25941134", name: "Hexagon bolts", room: "Home Improvement", share: 17, value: 3.49, x: 53.4, y: 18.8, snap: "n" },
-      { code: "25941138", name: "Iron or steel bolts", room: "Home Improvement", share: 8, value: 9.82, x: 42.8, y: 31.7, snap: "w" },
-      { code: "16231900", name: "Wood builders' joinery", room: "Home Improvement", share: 2, value: 0.99, x: 30.8, y: 39.9, snap: "w" },
-      { code: "16231110", name: "Wood windows", room: "Home Improvement", share: 1, value: 0.18, x: 37.0, y: 30.9, snap: "nw" },
-      { code: "23311000", name: "Ceramic tiles", room: "Home Improvement", share: 0, value: 0.63, x: 68.0, y: 63.0, snap: "s" },
-      { code: "16231150", name: "Wood doors and frames", room: "Home Improvement", share: 0, value: 0.34, x: 42.8, y: 36.2, snap: "w" },
-      { code: "23321270", name: "Clay construction products", room: "Home Improvement", share: 0, value: 0.03, x: 75.4, y: 29.0, snap: "e" },
-      { code: "16221030", name: "Mosaic parquet panels", room: "Home Improvement", share: 0, value: 0.00, x: 45.2, y: 57.3, snap: "s" },
-
-      { code: "27521270", name: "Solid fuel home heaters", room: "Heating & Home Systems", share: 23, value: 5.33, x: 60.5, y: 47.1, snap: "e" },
-      { code: "27521400", name: "Non-electric water heaters", room: "Heating & Home Systems", share: 11, value: 5.08, x: 70.2, y: 36.2, snap: "e" },
-      { code: "27521234", name: "Gas domestic heaters", room: "Heating & Home Systems", share: 9, value: 5.01, x: 66.5, y: 42.2, snap: "e" },
-      { code: "25211100", name: "Central-heating radiators", room: "Heating & Home Systems", share: 5, value: 6.71, x: 57.8, y: 45.5, snap: "w" },
-
-      { code: "13921530", name: "Curtains and interior blinds", room: "Bedroom & Textiles", share: 9, value: 0.08, x: 79.8, y: 47.2, snap: "e" },
-      { code: "13921253", name: "Cotton bed linen", room: "Bedroom & Textiles", share: 3, value: 3.81, x: 80.6, y: 52.5, snap: "e" },
-      { code: "13921660", name: "Cushion and furnishing covers", room: "Bedroom & Textiles", share: 1, value: 3.48, x: 31.0, y: 48.2, snap: "w" },
-
-      { code: "13922230", name: "Tents and awnings", room: "Outdoor & Garden", share: 39, value: 26.52, x: 18.6, y: 70.6, snap: "w" }
+      { id: "bed", name: "łóżko", source: "Łóżko drewniane w sypialni", room: "bedroom", layer: 2, share: 21.1, x: 33.6, y: 44.6, snap: "s" },
+      { id: "bedding", name: "pościel", source: "Bawełniana pościel", room: "bedroom", layer: 3, share: 3.6, x: 33.8, y: 45.8, snap: "s" },
+      { id: "pillows", name: "poduszki dekoracyjne", source: "Pokrowce dekoracyjne i meblowe z włókien syntetycznych", room: "bedroom", layer: 3, share: 46.2, x: 32.1, y: 44.0, snap: "n" },
+      { id: "bedroom-wardrobe", name: "szafa drewniana", source: "Szafy drewniane sypialniane", room: "bedroom", layer: 2, share: 21.1, x: 26.3, y: 37.6, snap: "w" },
+      { id: "kitchen-cabinets", name: "szafki", source: "Szafki kuchenne drewniane", room: "kitchen", layer: 2, share: 6.1, x: 54.0, y: 36.8, snap: "n" },
+      { id: "napkins", name: "serwetki", source: "Bawełniane obrusy i serwety", room: "kitchen", layer: 3, share: 8.0, x: 53.6, y: 48.0, snap: "s" },
+      { id: "fridge", name: "lodówka", source: "Lodówka domowa sprężarkowa", room: "kitchen", layer: 3, share: 47.0, x: 45.4, y: 38.5, snap: "w" },
+      { id: "freezer", name: "zamrażarka", source: "Zamrażarka szafowa", room: "kitchen", layer: 3, share: 43.2, x: 46.2, y: 43.0, snap: "w" },
+      { id: "hob", name: "płyta indukcyjna", source: "Płyta indukcyjna", room: "kitchen", layer: 3, share: 18.2, x: 50.9, y: 39.0, snap: "n" },
+      { id: "cooker", name: "kuchenka", source: "Kuchenka elektryczna", room: "kitchen", layer: 3, share: 18.2, x: 51.0, y: 43.0, snap: "w" },
+      { id: "pots", name: "garnki", source: "Garnki stalowe nierdzewne", room: "kitchen", layer: 3, share: 41.5, x: 59.5, y: 36.6, snap: "n" },
+      { id: "pans", name: "patelnie", source: "Patelnie aluminiowe", room: "kitchen", layer: 3, share: 51.7, x: 51.9, y: 36.4, snap: "n" },
+      { id: "boards", name: "deski do krojenia", source: "Deski do krojenia drewniane", room: "kitchen", layer: 3, share: 34.3, x: 51.6, y: 32.9, snap: "n" },
+      { id: "cutlery", name: "sztućce", source: "Sztućce w zestawach", room: "kitchen", layer: 3, share: 56.7, x: 53.0, y: 46.7, snap: "s" },
+      { id: "plates", name: "talerze", source: "Talerze ceramiczne nieporcelanowe", room: "kitchen", layer: 3, share: 43.1, x: 56.2, y: 45.4, snap: "s" },
+      { id: "mugs", name: "kubki", source: "Kubki ceramiczne nieporcelanowe", room: "kitchen", layer: 3, share: 43.1, x: 49.0, y: 70.0, snap: "s" },
+      { id: "glasses", name: "szklanki", source: "Szklanki do picia", room: "kitchen", layer: 3, share: 27.7, x: 55.0, y: 45.7, snap: "s" },
+      { id: "grill", name: "grill", source: "Artykuły domowe z żelaza lub stali", room: "front yard", layer: 1, share: 18.1, x: 7.6, y: 55.7, snap: "e" },
+      { id: "garden-furniture", name: "meble ogrodowe", source: "Meble ogrodowe metalowe", room: "front yard", layer: 1, share: 47.1, x: 18.2, y: 59.5, snap: "e" },
+      { id: "bathroom-door", name: "drzwi wewnętrzne drewniane", source: "Drewniane drzwi i ramy", room: "bathroom", layer: 1, share: 5.8, x: 66.9, y: 51.2, snap: "w" },
+      { id: "screws", name: "śruby", source: "Śruby z żelaza lub stali", room: "general", layer: 1, share: 10.9, x: 78.0, y: 42.0, snap: "e" },
+      { id: "bathroom-cabinet", name: "szafki", source: "Szafki łazienkowe drewniane", room: "bathroom", layer: 2, share: 17.7, x: 72.5, y: 58.5, snap: "e" },
+      { id: "washing-machine", name: "pralka", source: "Pralka automatyczna do 10 kg", room: "bathroom", layer: 3, share: 45.0, x: 69.0, y: 56.8, snap: "w" },
+      { id: "living-table", name: "stół w salonie", source: "Stoły drewniane", room: "salon", layer: 2, share: 17.7, x: 49.0, y: 66.3, snap: "s" },
+      { id: "parquet", name: "podłoga parkiet drewniany", source: "Drewniane panele parkietowe", room: "general", layer: 1, share: 97.1, x: 31.0, y: 52.8, snap: "s" },
+      { id: "living-table-chairs", name: "stół i krzesła w salonie", source: "Stół w salonie drewniany", room: "salon", layer: 2, share: 17.7, x: 55.8, y: 48.8, snap: "n" },
+      { id: "tv", name: "telewizor", source: "Telewizor kolorowy", room: "salon", layer: 3, share: 3.9, x: 44.5, y: 70.5, snap: "w" },
+      { id: "sofa", name: "sofa / fotel tapicerowany", source: "Meble tapicerowane z drewnianą ramą", room: "salon", layer: 2, share: 40.9, x: 56.9, y: 66.0, snap: "e" },
+      { id: "speaker", name: "głośnik", source: "Głośnik pojedynczy", room: "salon", layer: 3, share: 20.1, x: 65.7, y: 72.5, snap: "e" },
+      { id: "pv", name: "panele fotowoltaiczne", source: "z tekstu", room: "roof", layer: 1, share: 95.0, x: 55.0, y: 10.4, snap: "s" },
+      { id: "boiler", name: "bojler", source: "Nieelektryczne gazowe podgrzewacze wody", room: "storage", layer: 1, share: 12.1, x: 75.0, y: 39.8, snap: "e" },
+      { id: "radiator", name: "grzejnik stalowy", source: "Grzejniki centralnego ogrzewania stalowe", room: "storage", layer: 1, share: 13.1, x: 70.0, y: 49.1, snap: "w" },
+      { id: "metal-shelf", name: "metalowy regał", source: "Regały garażowe metalowe", room: "storage", layer: 1, share: 47.1, x: 89.2, y: 46.8, snap: "w" },
+      { id: "storage-cabinet", name: "szafka", source: "Szafa w przedpokoju drewniana", room: "storage", layer: 2, share: 17.7, x: 88.8, y: 39.6, snap: "w" }
     ];
 
     const roomFocus = {
-      "Kitchen & Dining": { left: 60, top: 13, width: 40, height: 34, zoom: 4, mobileZoom: 4 },
-      "Home Improvement,Heating & Home Systems": { left: 25, top: 11, width: 58, height: 57, zoom: 1.22, mobileZoom: 1.45 },
-      "Bedroom & Textiles": { left: 26, top: 38, width: 62, height: 34, zoom: 1.3, mobileZoom: 1.55 },
-      "Outdoor & Garden": { left: 6, top: 46, width: 24, height: 32, zoom: 1.86, mobileZoom: 2.1 },
-      all: { left: 6, top: 4, width: 88, height: 84, zoom: 1.02, mobileZoom: 1.12 },
-      top: { left: 0, top: 0, width: 100, height: 100, zoom: 0.94, mobileZoom: 1 }
+      top: { left: 0, top: 0, width: 100, height: 100, zoom: 0.94, mobileZoom: 1 },
+      overview: { left: 17, top: 17, width: 72, height: 65, zoom: 1.12, mobileZoom: 1.28 },
+      "front yard": { left: 0, top: 42, width: 31, height: 45, zoom: 1.85, mobileZoom: 2.25 },
+      bathroom: { left: 62, top: 38, width: 22, height: 33, zoom: 2.1, mobileZoom: 2.45 },
+      salon: { left: 37, top: 49, width: 33, height: 32, zoom: 1.75, mobileZoom: 2.05 },
+      roof: { left: 37, top: 0, width: 38, height: 20, zoom: 1.95, mobileZoom: 2.35 },
+      storage: { left: 70, top: 25, width: 26, height: 35, zoom: 1.95, mobileZoom: 2.35 },
+      kitchen: { left: 41, top: 25, width: 30, height: 34, zoom: 1.95, mobileZoom: 2.35 },
+      kitchenClose: { left: 44, top: 28, width: 25, height: 26, zoom: 2.45, mobileZoom: 2.85 },
+      bedroom: { left: 20, top: 27, width: 25, height: 30, zoom: 2.05, mobileZoom: 2.45 },
+      bedroomFloor: { left: 22, top: 42, width: 21, height: 19, zoom: 2.65, mobileZoom: 3.05 },
+      office: { left: 55, top: 66, width: 28, height: 27, zoom: 2.05, mobileZoom: 2.45 },
+      all: { left: 2, top: 8, width: 96, height: 84, zoom: 0.98, mobileZoom: 1.15 }
     };
 
+    const roomLabels = {
+      bedroom: "Sypialnia",
+      kitchen: "Kuchnia",
+      "front yard": "Ogródek",
+      bathroom: "Łazienka",
+      salon: "Salon",
+      general: "Widok ogólny",
+      roof: "Dach",
+      storage: "Pomieszczenie techniczne"
+    };
+
+    const stickyVisual = document.getElementById("stickyVisual");
     const houseWrap = document.getElementById("houseWrap");
     const pinLayer = document.getElementById("pinLayer");
-    const focusBox = document.getElementById("focusBox");
-    const productTable = document.getElementById("productTable");
     const mobileQuery = window.matchMedia("(max-width: 760px)");
     let activeStep = null;
     let labelTimer = null;
     let labelPulseId = 0;
+    let lastCameraState = "";
 
     function colorForShare(share) {
       if (share >= 65) return "#bf3d32";
@@ -717,61 +851,79 @@
       return "#4d7f95";
     }
 
-    function formatShare(share) {
-      return `${Math.round(share)}%`;
+    function formatShare(share, decimals = 0) {
+      return `${share.toLocaleString("pl-PL", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}%`;
     }
 
-    function roomsForStep(roomValue) {
-      if (roomValue === "all" || roomValue === "top") return [];
-      return roomValue.split(",").map((room) => room.trim());
+    function normalize(value) {
+      return String(value || "").trim().toLocaleLowerCase("pl-PL");
     }
 
-    function productIsVisible(product, roomValue) {
-      if (roomValue === "all") return true;
-      if (roomValue === "top") return product.share >= 39;
-      return roomsForStep(roomValue).includes(product.room);
+    function capitalizeFirst(value) {
+      const text = String(value || "").trim();
+      if (!text) return "";
+      return text.charAt(0).toLocaleUpperCase("pl-PL") + text.slice(1);
     }
 
-    function productIsMuted(product, roomValue) {
-      return roomValue === "all" && product.share < 14;
+    function metricLabel(product) {
+      const marker = normalize(product.metric || product.sourceDocument || product.sourceFile || product.source || "");
+      const isMarketShare = marker.includes("polskim rynku") || marker.includes("market");
+      if (isMarketShare) return `${formatShare(product.share, 1)} na polskim rynku pochodzi z Chin`;
+      return `${formatShare(product.share, 1)} importu do Polski pochodzi z Chin`;
+    }
+
+    function parseList(value) {
+      return String(value || "")
+        .split(",")
+        .map((item) => normalize(item))
+        .filter(Boolean);
     }
 
     function renderPins() {
       pinLayer.innerHTML = products.map((product) => `
-        <div class="pin" data-code="${product.code}" data-room="${product.room}" data-snap="${product.snap}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
+        <div class="pin" data-id="${product.id}" data-room="${product.room}" data-snap="${product.snap}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
           <div class="pin-dot">${formatShare(product.share)}</div>
           <div class="pin-card">
-            <span class="pin-kicker">${formatShare(product.share)} from China</span>
-            <span class="pin-name">${product.name}</span>
+            <span class="pin-kicker">${metricLabel(product)}</span>
+            <span class="pin-name">${capitalizeFirst(product.name)}</span>
           </div>
         </div>
       `).join("");
     }
 
-    function renderTable() {
-      const rows = [...products].sort((a, b) => b.share - a.share || b.value - a.value);
-      productTable.innerHTML = rows.map((product) => `
-        <tr>
-          <td>${product.name}</td>
-          <td>${product.room}</td>
-          <td class="number">
-            <span class="share-cell">
-              <span class="share-swatch" style="--pin-color:${colorForShare(product.share)}"></span>
-              ${formatShare(product.share)}
-            </span>
-          </td>
-          <td class="number">${product.value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-        </tr>
-      `).join("");
+    function productMatchesStep(product, step) {
+      if (step.dataset.showPins === "false") return false;
+      if (step.dataset.panel === "article" || step.dataset.panel === "title") return false;
+
+      const productNames = parseList(step.dataset.products);
+      if (productNames.length) {
+        return productNames.includes(normalize(product.name)) || productNames.includes(normalize(product.source));
+      }
+
+      const rooms = parseList(step.dataset.rooms || step.dataset.room);
+      const roomMatches = rooms.includes("all") || rooms.includes(normalize(product.room));
+      if (!roomMatches) return false;
+
+      const layers = parseList(step.dataset.layers);
+      if (!layers.length) return true;
+      return layers.includes(String(product.layer));
+    }
+
+    function setVisualMode(step) {
+      const panel = step.dataset.panel || "card";
+      const legend = step.dataset.legend || "right";
+      const roomValue = step.dataset.room || "top";
+      stickyVisual.dataset.currentRoom = roomValue;
+      stickyVisual.classList.toggle("is-panel-title", panel === "title");
+      stickyVisual.classList.toggle("is-panel-article", panel === "article");
+      stickyVisual.classList.toggle("is-image-blurred", panel === "article" || step.dataset.blur === "true");
+      stickyVisual.classList.toggle("legend-hidden", legend === "none");
+      stickyVisual.classList.toggle("legend-left", legend === "left");
+      stickyVisual.classList.toggle("legend-right", legend !== "left");
     }
 
     function setFocus(roomValue) {
       const focus = roomFocus[roomValue] || roomFocus.all;
-      focusBox.style.setProperty("--focus-left", `${focus.left}%`);
-      focusBox.style.setProperty("--focus-top", `${focus.top}%`);
-      focusBox.style.setProperty("--focus-width", `${focus.width}%`);
-      focusBox.style.setProperty("--focus-height", `${focus.height}%`);
-      focusBox.classList.toggle("is-visible", roomValue !== "top");
       moveCameraToFocus(focus);
     }
 
@@ -781,6 +933,10 @@
       const centerY = focus.top + focus.height / 2;
       const panX = -((centerX - 50) / 100) * houseWrap.offsetWidth * zoom;
       const panY = -((centerY - 50) / 100) * houseWrap.offsetHeight * zoom;
+      const cameraState = `${zoom.toFixed(3)}|${panX.toFixed(1)}|${panY.toFixed(1)}`;
+
+      if (cameraState === lastCameraState) return;
+      lastCameraState = cameraState;
 
       houseWrap.style.setProperty("--zoom", zoom.toFixed(3));
       houseWrap.style.setProperty("--pan-x", `${panX.toFixed(1)}px`);
@@ -797,9 +953,9 @@
       });
     }
 
-    function pulseStepLabels(roomValue) {
+    function pulseStepLabels(step) {
       clearLabels();
-      if (roomValue === "top" || roomValue === "all" || mobileQuery.matches) return;
+      if (step.dataset.panel === "article" || step.dataset.panel === "title" || mobileQuery.matches) return;
 
       const pulseId = labelPulseId;
       const visiblePins = [...document.querySelectorAll(".pin.is-visible:not(.is-muted)")];
@@ -809,7 +965,7 @@
         labelTimer = window.setTimeout(() => {
           if (pulseId !== labelPulseId) return;
           visiblePins.forEach((pin) => pin.classList.remove("is-label-visible"));
-        }, 2200);
+        }, 2300);
       });
     }
 
@@ -817,20 +973,20 @@
       if (activeStep === step) return;
       activeStep = step;
       const roomValue = step.dataset.room || "top";
+      setVisualMode(step);
       setFocus(roomValue);
       steps.forEach((item) => item.classList.toggle("is-active", item === step));
       document.querySelectorAll(".pin").forEach((pin) => {
-        const product = products.find((item) => item.code === pin.dataset.code);
-        const visible = productIsVisible(product, roomValue);
+        const product = products.find((item) => item.id === pin.dataset.id);
+        const visible = productMatchesStep(product, step);
         pin.classList.remove("is-label-visible");
         pin.classList.toggle("is-visible", visible);
-        pin.classList.toggle("is-muted", visible && productIsMuted(product, roomValue));
+        pin.classList.toggle("is-muted", false);
       });
-      pulseStepLabels(roomValue);
+      pulseStepLabels(step);
     }
 
     renderPins();
-    renderTable();
 
     const steps = [...document.querySelectorAll(".step")];
     let scrollTicking = false;
@@ -868,7 +1024,7 @@
       window.requestAnimationFrame(updateStepFromScroll);
     }
 
-    activateStep(steps[0]);
+    activateStep(getStepAtActivationLine());
     window.requestAnimationFrame(() => {
       houseWrap.classList.add("is-camera-ready");
       window.addEventListener("scroll", requestStepUpdate, { passive: true });
