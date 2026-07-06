@@ -26,6 +26,27 @@
       box-sizing: border-box;
     }
 
+    html {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    html::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0;
+      background: #ffd200;
+      z-index: 100;
+      transition: width 0.05s linear;
+      pointer-events: none;
+    }
+
     body {
       margin: 0;
       background: var(--paper);
@@ -146,7 +167,7 @@
       background: var(--pin-color);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
       color: #111;
-      font: 700 11px/1 Arial, Helvetica, sans-serif;
+      font: 700 11px/1 "Fira Sans", sans-serif;
       letter-spacing: 0;
     }
 
@@ -179,7 +200,7 @@
       background: rgba(255, 255, 255, 0.86);
       border-radius: 8px;
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: "Fira Sans", sans-serif;
       font-size: 12px;
       line-height: 1.17;
       pointer-events: none;
@@ -546,6 +567,7 @@
   </style>
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
   <main>
     <section class="scrolly" aria-label="Dom z Chin">
       <div class="sticky-visual legend-right" id="stickyVisual">
@@ -1013,9 +1035,18 @@
       return nearestStep;
     }
 
+    const scrollProgress = document.getElementById("scrollProgress");
+
+    function updateScrollProgress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = max > 0 ? window.scrollY / max : 0;
+      scrollProgress.style.width = (Math.min(Math.max(ratio, 0), 1) * 100).toFixed(2) + "%";
+    }
+
     function updateStepFromScroll() {
       scrollTicking = false;
       activateStep(getStepAtActivationLine());
+      updateScrollProgress();
     }
 
     function requestStepUpdate() {
@@ -1032,6 +1063,7 @@
     });
 
     window.addEventListener("resize", () => {
+      updateScrollProgress();
       if (!activeStep) return;
       const focus = roomFocus[activeStep.dataset.room || "top"] || roomFocus.all;
       moveCameraToFocus(focus);
