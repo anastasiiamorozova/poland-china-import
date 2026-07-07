@@ -560,7 +560,7 @@
       padding: 14px 16px;
       background: rgba(255, 255, 255, 0.96);
       border: 1px solid var(--line);
-      border-radius: 0 8px 8px 0;
+      border-radius: 0;
     }
 
     .sticky-visual.legend-hidden .legend {
@@ -599,12 +599,12 @@
     .title-lockup {
       position: absolute;
       left: 50%;
-      top: 50%;
+      top: max(72px, 9vh);
       z-index: 7;
       width: min(520px, calc(100vw - 48px));
       text-align: center;
       opacity: 0;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       transition: opacity 280ms ease;
       pointer-events: none;
     }
@@ -628,7 +628,7 @@
 
     .hero-tytul {
       display: block;
-      width: min(460px, 100%);
+      width: min(360px, 100%);
       height: auto;
       margin: 0 auto;
     }
@@ -894,7 +894,7 @@
       }
 
       .hero-tytul {
-        width: min(300px, 100%);
+        width: min(240px, 100%);
       }
 
       .hero-scroll {
@@ -1646,11 +1646,12 @@
 
     function updateTitleCover() {
       if (!redSlide) return;
-      const center = window.innerHeight / 2;
+      const titleEl = document.querySelector(".title-lockup");
+      const threshold = titleEl ? titleEl.getBoundingClientRect().top : window.innerHeight / 2;
       const rect = redSlide.getBoundingClientRect();
-      // Hide the title once the red slide's top has risen to the viewport centre
-      // (i.e. it is covering the title) and keep it hidden afterwards.
-      stickyVisual.classList.toggle("is-title-covered", rect.top <= center);
+      // Hide the title once the red slide's top has risen above the title
+      // (i.e. it is covering it) and keep it hidden afterwards.
+      stickyVisual.classList.toggle("is-title-covered", rect.top <= threshold);
     }
 
     function updateStepFromScroll() {
