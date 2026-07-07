@@ -508,16 +508,18 @@
       width: min(520px, calc(100vw - 48px));
       text-align: center;
       opacity: 0;
-      transform: translate(-50%, calc(-50% - 10px));
-      transition:
-        opacity 280ms ease,
-        transform 280ms ease;
+      transform: translate(-50%, -50%);
+      transition: opacity 280ms ease;
       pointer-events: none;
     }
 
-    .sticky-visual.is-panel-title .title-lockup {
+    .sticky-visual.is-panel-title .title-lockup,
+    .sticky-visual.is-panel-red .title-lockup {
       opacity: 1;
-      transform: translate(-50%, -50%);
+    }
+
+    .sticky-visual.is-title-covered .title-lockup {
+      opacity: 0;
     }
 
     .byline {
@@ -649,6 +651,30 @@
 
     .step[data-panel="article"] .step-card p {
       color: #171717;
+      font-size: clamp(22px, 2.4vw, 31px);
+      line-height: 1.42;
+    }
+
+    .step.step-red {
+      justify-content: center;
+      align-items: center;
+      min-height: 0;
+      padding: 12vh max(20px, 6vw);
+      background: #f0202b;
+      pointer-events: auto;
+    }
+
+    .step-red .step-card {
+      width: min(720px, calc(100vw - 44px));
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .step-red .step-card p {
+      color: #ffffff;
       font-size: clamp(22px, 2.4vw, 31px);
       line-height: 1.42;
     }
@@ -863,13 +889,13 @@
       <div class="steps" id="steps">
         <section class="step" data-panel="title" data-room="top" data-legend="none" data-image-layer="start"></section>
 
-        <section class="step" data-panel="article" data-room="top" data-legend="none" data-image-layer="0">
+        <section class="step step-red" data-panel="redslide" data-room="top" data-legend="none">
           <div class="step-card">
             <p>Państwo Środka wprowadziło się do naszych domów na dobre. Pytanie nie brzmi już „czy”, ale jak bardzo jesteśmy od niego uzależnieni. Nasi analitycy przeanalizowali dane importowe dotyczące przedmiotów, z których korzystamy na co dzień. Zobacz, czy jesteś w stanie urządzić swoje mieszkanie bez produktów z Chin i z jakimi konsekwencjami się to wiąże.</p>
           </div>
         </section>
 
-        <section class="step" data-panel="article" data-room="top" data-legend="none" data-blur="true">
+        <section class="step" data-panel="article" data-room="top" data-legend="none" data-blur="true" data-image-layer="0">
           <div class="step-card">
             <p>Zapraszamy na spacer po naszym wirtualnym domu. Zobaczmy, skąd najprawdopodobniej pochodzą przedmioty, które do niego kupiliśmy.</p>
           </div>
@@ -1212,8 +1238,9 @@
       const roomValue = step.dataset.room || "top";
       stickyVisual.dataset.currentRoom = roomValue;
       stickyVisual.classList.toggle("is-panel-title", panel === "title");
+      stickyVisual.classList.toggle("is-panel-red", panel === "redslide");
       stickyVisual.classList.toggle("is-panel-article", panel === "article");
-      stickyVisual.classList.toggle("is-image-blurred", panel === "article" || step.dataset.blur === "true");
+      stickyVisual.classList.toggle("is-image-blurred", panel === "article" || panel === "redslide" || step.dataset.blur === "true");
       stickyVisual.classList.toggle("legend-hidden", legend === "none");
       stickyVisual.classList.toggle("legend-left", legend === "left");
       stickyVisual.classList.toggle("legend-right", legend !== "left");
@@ -1334,9 +1361,21 @@
       scrollProgress.style.width = (Math.min(Math.max(ratio, 0), 1) * 100).toFixed(2) + "%";
     }
 
+    const redSlide = document.querySelector(".step-red");
+
+    function updateTitleCover() {
+      if (!redSlide) return;
+      const center = window.innerHeight / 2;
+      const rect = redSlide.getBoundingClientRect();
+      // Hide the title once the red slide's top has risen to the viewport centre
+      // (i.e. it is covering the title) and keep it hidden afterwards.
+      stickyVisual.classList.toggle("is-title-covered", rect.top <= center);
+    }
+
     function updateStepFromScroll() {
       scrollTicking = false;
       activateStep(getStepAtActivationLine());
+      updateTitleCover();
       updateScrollProgress();
     }
 
