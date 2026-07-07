@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dom z Chin. Od drzwi po śrubkę</title>
+  <script defer src="https://cdn.raspaid.pl/script/paywall.embed.boot.js"></script>
   <style>
     :root {
       --ink: #171717;
@@ -11,11 +12,11 @@
       --paper: #f4f1e9;
       --panel: rgba(255, 255, 255, 0.8);
       --line: rgba(23, 23, 23, 0.15);
-      --blue: #4d7f95;
-      --green: #8ba66f;
-      --gold: #d6a240;
-      --orange: #d9733f;
-      --red: #bf3d32;
+      --scale-1: #ffd200;
+      --scale-2: #fba60b;
+      --scale-3: #f87916;
+      --scale-4: #f44d20;
+      --scale-5: #f0202b;
       --shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
       color: var(--ink);
       font-family: Georgia, "Times New Roman", serif;
@@ -85,6 +86,16 @@
     html.app-loading,
     html.app-loading body {
       overflow: hidden;
+    }
+
+    html.paywall-locked,
+    html.paywall-locked body {
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .step-paywall-gate {
+      min-height: 60vh;
     }
 
     .app-loader {
@@ -425,46 +436,131 @@
       --label-origin: right bottom;
     }
 
-    .pin-kicker {
-      display: block;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 0;
-      margin-bottom: 3px;
+    /* Tooltip pointer toward the pin — default (card to the right, points left) */
+    .pin-card::after {
+      content: "";
+      position: absolute;
+      left: -7px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-style: solid;
+      border-width: 6px 7px 6px 0;
+      border-color: transparent rgba(255, 255, 255, 0.86) transparent transparent;
+    }
+
+    .pin[data-snap="w"] .pin-card::after {
+      left: auto;
+      right: -7px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 6px 0 6px 7px;
+      border-color: transparent transparent transparent rgba(255, 255, 255, 0.86);
+    }
+
+    .pin[data-snap="n"] .pin-card::after {
+      left: 50%;
+      right: auto;
+      top: auto;
+      bottom: -7px;
+      transform: translateX(-50%);
+      border-width: 7px 6px 0 6px;
+      border-color: rgba(255, 255, 255, 0.86) transparent transparent transparent;
+    }
+
+    .pin[data-snap="s"] .pin-card::after {
+      left: 50%;
+      right: auto;
+      top: -7px;
+      bottom: auto;
+      transform: translateX(-50%);
+      border-width: 0 6px 7px 6px;
+      border-color: transparent transparent rgba(255, 255, 255, 0.86) transparent;
+    }
+
+    .pin[data-snap="ne"] .pin-card::after {
+      left: 16px;
+      right: auto;
+      top: auto;
+      bottom: -7px;
+      transform: none;
+      border-width: 7px 6px 0 6px;
+      border-color: rgba(255, 255, 255, 0.86) transparent transparent transparent;
+    }
+
+    .pin[data-snap="nw"] .pin-card::after {
+      left: auto;
+      right: 16px;
+      top: auto;
+      bottom: -7px;
+      transform: none;
+      border-width: 7px 6px 0 6px;
+      border-color: rgba(255, 255, 255, 0.86) transparent transparent transparent;
     }
 
     .pin-name {
       display: block;
       font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .pin-kicker {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0;
     }
 
     .legend {
       position: absolute;
-      right: max(20px, 3vw);
-      bottom: max(18px, 3vh);
-      z-index: 8;
-      width: min(340px, 38vw);
+      top: max(16px, 2.5vh);
+      right: 0;
+      z-index: 12;
+      display: flex;
+      align-items: stretch;
+      width: min(340px, 74vw);
+      font-family: "Fira Sans", sans-serif;
+      color: #111;
+      pointer-events: auto;
+      transition: transform 260ms ease, opacity 220ms ease;
+    }
+
+    .legend.is-collapsed {
+      transform: translateX(calc(100% - 32px));
+    }
+
+    .legend-toggle {
+      flex: 0 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--line);
+      border-right: 0;
+      border-radius: 8px 0 0 8px;
+      color: #111;
+      cursor: pointer;
+    }
+
+    .legend-arrow {
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(-45deg);
+      transition: transform 200ms ease;
+    }
+
+    .legend.is-collapsed .legend-arrow {
+      transform: rotate(135deg);
+    }
+
+    .legend-body {
+      flex: 1 1 auto;
       padding: 14px 16px;
       background: rgba(255, 255, 255, 0.96);
       border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.11);
-      font-family: "Fira Sans", sans-serif;
-      color: #111;
-      transition:
-        opacity 220ms ease,
-        left 220ms ease,
-        right 220ms ease;
-    }
-
-    .sticky-visual.legend-left .legend {
-      left: max(20px, 3vw);
-      right: auto;
-    }
-
-    .sticky-visual.legend-right .legend {
-      left: auto;
-      right: max(20px, 3vw);
+      border-radius: 0 8px 8px 0;
     }
 
     .sticky-visual.legend-hidden .legend {
@@ -486,11 +582,11 @@
       overflow: hidden;
     }
 
-    .legend-scale span:nth-child(1) { background: var(--blue); }
-    .legend-scale span:nth-child(2) { background: var(--green); }
-    .legend-scale span:nth-child(3) { background: var(--gold); }
-    .legend-scale span:nth-child(4) { background: var(--orange); }
-    .legend-scale span:nth-child(5) { background: var(--red); }
+    .legend-scale span:nth-child(1) { background: var(--scale-1); }
+    .legend-scale span:nth-child(2) { background: var(--scale-2); }
+    .legend-scale span:nth-child(3) { background: var(--scale-3); }
+    .legend-scale span:nth-child(4) { background: var(--scale-4); }
+    .legend-scale span:nth-child(5) { background: var(--scale-5); }
 
     .legend-labels {
       display: flex;
@@ -613,12 +709,11 @@
     .step-card {
       width: min(430px, calc(100vw - 40px));
       padding: 20px 22px 22px;
-      background: var(--panel);
+      background: #ffffff;
       border: 1px solid var(--line);
       border-radius: 8px;
-      box-shadow: var(--shadow);
+      box-shadow: none;
       pointer-events: auto;
-      backdrop-filter: blur(8px);
     }
 
     .step-card p {
@@ -744,13 +839,11 @@
         --base-pan-x: -10vw;
       }
 
-      .legend,
-      .sticky-visual.legend-left .legend,
-      .sticky-visual.legend-right .legend {
-        left: 20px;
-        right: auto;
-        bottom: 18px;
-        width: calc(100vw - 40px);
+      .legend {
+        top: max(12px, 2vh);
+        right: 0;
+        left: auto;
+        width: min(320px, 88vw);
       }
 
       .step {
@@ -968,17 +1061,22 @@
             <span class="hero-scroll-arrow"></span>
           </div>
         </div>
-        <div class="legend" aria-hidden="true">
-          <p class="legend-title">Udział Chin w polskim imporcie</p>
-          <div class="legend-scale">
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <div class="legend-labels">
-            <span>0%</span>
-            <span>25%</span>
-            <span>50%</span>
-            <span>75%</span>
-            <span>100%</span>
+        <div class="legend" id="legend">
+          <button type="button" class="legend-toggle" id="legendToggle" aria-expanded="true" aria-label="Zwiń legendę">
+            <span class="legend-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="legend-body">
+            <p class="legend-title">Udział Chin w polskim imporcie</p>
+            <div class="legend-scale">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="legend-labels">
+              <span>0%</span>
+              <span>25%</span>
+              <span>50%</span>
+              <span>75%</span>
+              <span>100%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -998,11 +1096,13 @@
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="front yard" data-layers="1" data-side="right" data-legend="right" data-image-layer="1">
+        <section class="step" id="frontYardStep" data-panel="card" data-room="front yard" data-layers="1" data-side="right" data-legend="right" data-image-layer="1">
           <div class="step-card">
             <p>Już przed budynkiem możemy zobaczyć sprowadzany z Chin <mark class="product-highlight">sprzęt ogrodowy</mark>. W produkcji tego typu dóbr wyspecjalizowały się zakłady z dwóch najbogatszych prowincji: Guangdong oraz Zhejiang. Chińczycy oferują nam wszystko: od <mark class="product-highlight">grilli</mark> i <mark class="product-highlight">hamaków</mark>, przez <mark class="product-highlight">meble ogrodowe</mark>, <mark class="product-highlight">systemy kompostowania odpadów</mark>, <mark class="product-highlight">sprzęt do zraszania roślin</mark>, <mark class="product-highlight">solarne oświetlenie ogrodowe</mark>, po duże i małe <mark class="product-highlight">zabawki dziecięce</mark>, które stoją na trawnikach czy leżą w piaskownicach.</p>
           </div>
         </section>
+
+        <section class="step step-paywall-gate" data-paywall="gate" data-room="front yard" data-layers="1" data-side="right" data-legend="right" data-image-layer="1" aria-hidden="true"></section>
 
         <section class="step" data-panel="card" data-room="overview" data-products="drzwi wewnętrzne drewniane" data-side="right" data-legend="right">
           <div class="step-card">
@@ -1182,26 +1282,24 @@
       <div class="authors-title">Autorzy:</div>
       <div class="stopka-profiles">
         <div class="profile">
+          <img src="https://ocdn.eu/pulscms/MDA_/845a330681253b68581e7f0da9e6beeb.png" alt="Anastasiia Morozova">
+          <div class="name"><span>Anastasiia</span><span>Morozova</span></div>
+        </div>
+        <div class="profile">
           <a href="https://www.onet.pl/autorzy/grupa-onet/michal-rogalski" target="_blank">
-            <img src="https://ocdn.eu/pulscms/MDA_/dfcfff76a02f4561c940928ad887bf33.png">
+            <img src="https://ocdn.eu/pulscms/MDA_/dfcfff76a02f4561c940928ad887bf33.png" alt="Michał Rogalski">
             <div class="name"><span>Michał</span><span>Rogalski</span></div>
           </a>
         </div>
         <div class="profile">
-          <a href="https://podroze.onet.pl/autorzy/paulina-ermel" target="_blank">
-            <img src="https://ocdn.eu/pulscms/MDA_/d8221a126349c9c2b878e23507cae13c.png">
-            <div class="name"><span>Paulina</span><span>Ermel</span></div>
-          </a>
-        </div>
-        <div class="profile">
-          <a href="https://www.fakt.pl/autorzy/maja-moscicka" target="_blank">
-            <img src="https://ocdn.eu/pulscms/MDA_/1a3dec0e09bc51b382ebc40969b0780d.png">
-            <div class="name"><span>Maja</span><span>Mościcka</span></div>
-          </a>
+          <!-- TODO: podmień src na URL zdjęcia Jana Osieckiego -->
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%23d9d9d9'/%3E%3C/svg%3E" alt="Jan Osiecki">
+          <div class="name"><span>Jan</span><span>Osiecki</span></div>
         </div>
       </div>
       <div class="credits">
-<b>Podziękowania:</b> Marcin Marczak, Marcin Mroczko, Anastasiia Morozova, Przemysław Gryń, Alina Żakowska, Karolina Walczowska, Magdalena Tymicka, Monika Marczyńska<br>
+<b>Opieka redakcyjna:</b> Karolina Drogowska, Marcin Marczak<br>
+<b>Podziękowania:</b> Vadim Makarenko<br>
       </div>
     </div>
   </main>
@@ -1290,11 +1388,11 @@
     let lastCameraState = "";
 
     function colorForShare(share) {
-      if (share >= 65) return "#bf3d32";
-      if (share >= 40) return "#d9733f";
-      if (share >= 18) return "#d6a240";
-      if (share >= 5) return "#8ba66f";
-      return "#4d7f95";
+      if (share >= 65) return "#f0202b";
+      if (share >= 40) return "#f44d20";
+      if (share >= 18) return "#f87916";
+      if (share >= 5) return "#fba60b";
+      return "#ffd200";
     }
 
     function formatShare(share, decimals = 0) {
@@ -1331,8 +1429,8 @@
 	        <div class="pin" data-id="${product.id}" data-room="${product.room}" data-snap="${product.snap}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
           <div class="pin-dot">${formatShare(product.share)}</div>
           <div class="pin-card">
-            <span class="pin-kicker">${metricLabel(product)}</span>
             <span class="pin-name">${capitalizeFirst(product.name)}</span>
+            <span class="pin-kicker">${metricLabel(product)}</span>
           </div>
         </div>
       `).join("");
@@ -1448,12 +1546,71 @@
         pin.classList.toggle("is-muted", false);
       });
       pulseStepLabels(step);
+      if (step.dataset.paywall === "gate") triggerPaywall("brama: przed 'Wchodząc do środka'");
+      // Auto-zwiń legendę raz, po pierwszym slajdzie z punktami (front yard).
+      if (!legendAutoCollapsed && frontYardStepIndex >= 0 && steps.indexOf(step) > frontYardStepIndex) {
+        legendAutoCollapsed = true;
+        const lg = document.getElementById("legend");
+        const lgBtn = document.getElementById("legendToggle");
+        if (lg) {
+          lg.classList.add("is-collapsed");
+          if (lgBtn) {
+            lgBtn.setAttribute("aria-expanded", "false");
+            lgBtn.setAttribute("aria-label", "Rozwiń legendę");
+          }
+        }
+      }
+    }
+
+    // --- Paywall (Embed SDK) ---
+    // Cała integracja siedzi w embedzie (iframe). showOfferModal jest spustem;
+    // matka bluruje wizualnie, ale NIE blokuje wewn. scrolla — dlatego sami
+    // dokładamy html.paywall-locked (overflow:hidden).
+    let paywallFired = false;
+
+    function getEmbedSdk() {
+      window.paywallEmbed ??= {};
+      window.paywallEmbed.cmd ??= [];
+      return new Promise((resolve) => window.paywallEmbed.cmd.push(resolve));
+    }
+
+    const embedSdkReady = getEmbedSdk().then((sdk) => {
+      console.log("[paywall] SDK ready");
+      sdk.init().then(
+        () => console.log("[paywall] init OK"),
+        (err) => console.warn("[paywall] init failed", err)
+      );
+      return sdk;
+    });
+
+    function triggerPaywall(reason) {
+      if (paywallFired) return;
+      paywallFired = true;
+      console.log("[paywall] trigger:", reason);
+      embedSdkReady
+        .then((sdk) => sdk.pianoFeatures.showOfferModal({ lockScroll: true }))
+        .then(
+          (shown) => {
+            console.log("[paywall] showOfferModal ->", shown);
+            if (shown) document.documentElement.classList.add("paywall-locked");
+          },
+          (err) => {
+            paywallFired = false;
+            console.warn("[paywall] showOfferModal error", err);
+          }
+        );
+    }
+
+    if (new URLSearchParams(location.search).has("paywallTest")) {
+      embedSdkReady.then(() => triggerPaywall("?paywallTest"));
     }
 
     renderPins();
 
     const steps = [...document.querySelectorAll(".step")];
     let scrollTicking = false;
+    let legendAutoCollapsed = false;
+    const frontYardStepIndex = steps.findIndex((s) => s.id === "frontYardStep");
 
     function getStepAtActivationLine() {
       const activationY = window.innerHeight * 0.56;
@@ -1522,6 +1679,16 @@
       const focus = roomFocus[activeStep.dataset.room || "top"] || roomFocus.all;
       moveCameraToFocus(focus);
     });
+
+    const legendEl = document.getElementById("legend");
+    const legendToggle = document.getElementById("legendToggle");
+    if (legendEl && legendToggle) {
+      legendToggle.addEventListener("click", () => {
+        const collapsed = legendEl.classList.toggle("is-collapsed");
+        legendToggle.setAttribute("aria-expanded", String(!collapsed));
+        legendToggle.setAttribute("aria-label", collapsed ? "Rozwiń legendę" : "Zwiń legendę");
+      });
+    }
   </script>
 </body>
 </html>
