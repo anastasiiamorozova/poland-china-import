@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dom z Chin. Od drzwi po śrubkę</title>
-  <script defer src="https://cdn.raspaid.pl/script/paywall.embed.boot.js"></script>
+  <link rel="preload" as="image" href="m3_red%20min.png" fetchpriority="high">
+  <link rel="preload" as="image" href="logo_w_min.png" fetchpriority="high">
   <style>
     :root {
       --ink: #171717;
@@ -238,13 +239,13 @@
       --label-pop-scale: 0.96;
       transform: translate3d(calc(var(--base-pan-x) + var(--pan-x)), var(--pan-y), 0) scale(var(--zoom));
       transform-origin: center center;
-      transition: filter 360ms ease;
+      transition: filter 180ms ease;
       will-change: transform;
       overflow-anchor: none;
     }
 
     .house-wrap.is-camera-ready {
-      transition: transform 2800ms cubic-bezier(0.22, 1, 0.36, 1), filter 360ms ease;
+      transition: transform 2800ms cubic-bezier(0.22, 1, 0.36, 1), filter 180ms ease;
     }
 
     .house-image {
@@ -746,8 +747,8 @@
 
     .step[data-panel="article"] .step-card p {
       color: #171717;
-      font-size: clamp(22px, 2.4vw, 31px);
-      line-height: 1.42;
+      font-size: 18.5px;
+      line-height: 1.45;
     }
 
     .step.step-red {
@@ -783,8 +784,8 @@
 
     .step-red .step-card p {
       color: #ffffff;
-      font-size: clamp(22px, 2.4vw, 31px);
-      line-height: 1.42;
+      font-size: 18.5px;
+      line-height: 1.45;
     }
 
     .methodology-section {
@@ -875,7 +876,7 @@
       }
 
       .step[data-panel="article"] .step-card p {
-        font-size: 21px;
+        font-size: 18.5px;
         line-height: 1.45;
       }
 
@@ -1003,9 +1004,9 @@
     </svg>
   </div>
   <div class="app-loader" id="appLoader" role="status" aria-label="Ładowanie">
-    <img class="app-loader-house" src="m3_red%20min.png" alt="" aria-hidden="true">
+    <img class="app-loader-house" src="m3_red%20min.png" alt="" aria-hidden="true" fetchpriority="high">
     <div class="app-loader-box">
-      <img class="app-loader-logo" src="logo_w_min.png" alt="">
+      <img class="app-loader-logo" src="logo_w_min.png" alt="" fetchpriority="high">
       <div class="app-loader-bar"><span class="app-loader-fill"></span></div>
     </div>
   </div>
@@ -1017,15 +1018,129 @@
 
       document.documentElement.classList.add("app-loading");
 
-      // TODO: na razie stały czas ~1s. Później dodamy warunki (preload assetów, fonts.ready itd.).
-      window.setTimeout(function () {
+      window.mainVisualLoadingLocked = true;
+
+      var requiredSlideImages = [
+        "m3_white.png",
+        "tytul.png",
+        "m0.png"
+      ];
+      var loaderImageElements = [
+        document.querySelector(".app-loader-house"),
+        document.querySelector(".app-loader-logo")
+      ].filter(Boolean);
+
+      function waitForImageElement(image) {
+        return new Promise(function (resolve) {
+          if (!image || image.complete) {
+            resolve();
+            return;
+          }
+          image.addEventListener("load", resolve, { once: true });
+          image.addEventListener("error", function () {
+            console.warn("[loader] image failed:", image.currentSrc || image.src);
+            resolve();
+          }, { once: true });
+        });
+      }
+
+      var preloadPromises = {};
+
+      function preloadImage(src) {
+        if (preloadPromises[src]) return preloadPromises[src];
+        preloadPromises[src] = new Promise(function (resolve) {
+          var image = new Image();
+          image.decoding = "async";
+          if ("fetchPriority" in image) image.fetchPriority = "high";
+          image.onload = resolve;
+          image.onerror = function () {
+            console.warn("[loader] image failed:", src);
+            resolve();
+          };
+          image.src = src;
+          if (image.complete) resolve();
+        });
+        return preloadPromises[src];
+      }
+
+      function whenDomReady() {
+        return new Promise(function (resolve) {
+          if (document.readyState !== "loading") {
+            resolve();
+            return;
+          }
+          document.addEventListener("DOMContentLoaded", resolve, { once: true });
+        });
+      }
+
+      function loadDeferredImage(image) {
+        if (!image || !image.dataset.src || image.getAttribute("src")) return;
+        if (image.dataset.fetchpriority && "fetchPriority" in image) {
+          image.fetchPriority = image.dataset.fetchpriority;
+        }
+        image.src = image.dataset.src;
+        image.removeAttribute("data-src");
+        image.removeAttribute("data-fetchpriority");
+      }
+
+      window.loadDeferredImage = function (image) {
+        if (window.mainVisualLoadingLocked) return;
+        loadDeferredImage(image);
+      };
+
+      function loadRequiredSlideImages() {
+        var required = new Set(requiredSlideImages);
+        document.querySelectorAll("img[data-src]").forEach(function (image) {
+          if (required.has(image.dataset.src)) loadDeferredImage(image);
+        });
+      }
+
+      function loadPaywallBootScript() {
+        if (document.querySelector("script[data-paywall-boot]")) return;
+        var script = document.createElement("script");
+        script.src = "https://cdn.raspaid.pl/script/paywall.embed.boot.js";
+        script.async = true;
+        script.dataset.paywallBoot = "true";
+        document.head.appendChild(script);
+      }
+
+      function hideLoader() {
         loader.classList.add("is-hidden");
         window.setTimeout(function () {
           document.documentElement.classList.remove("app-loading");
           loader.style.display = "none";
           if (banner) banner.style.display = "none";
+          loadPaywallBootScript();
         }, 700);
-      }, 1000);
+      }
+
+      var minimumLoaderTime = new Promise(function (resolve) {
+        window.setTimeout(resolve, 1000);
+      });
+      var loaderImagesReady = Promise.all(loaderImageElements.map(waitForImageElement));
+      var requiredSlideImagesReady = loaderImagesReady.then(function () {
+        var requiredPreloads = requiredSlideImages.map(function (src) {
+          var ready = preloadImage(src);
+          if (src === "m0.png") {
+            ready
+              .then(function () { return preloadImage("m1.png"); })
+              .then(function () { return preloadImage("m2.png"); })
+              .then(function () { return preloadImage("m3.png"); });
+          }
+          return ready;
+        });
+        return Promise.all(requiredPreloads);
+      });
+
+      Promise.all([
+        requiredSlideImagesReady,
+        minimumLoaderTime,
+        whenDomReady()
+      ]).then(function () {
+        window.mainVisualLoadingLocked = false;
+        loadRequiredSlideImages();
+        window.requestAnimationFrame(hideLoader);
+      });
     })();
   </script>
   <div class="premium-banner" aria-hidden="true">
@@ -1046,16 +1161,16 @@
     <section class="scrolly" aria-label="Dom z Chin">
       <div class="sticky-visual legend-right" id="stickyVisual">
         <div class="house-wrap" id="houseWrap">
-          <img class="house-image is-active" data-image-layer="start" src="m3_white.png" alt="Ilustracja przekrojowa domu z Chin" aria-hidden="true">
-          <img class="house-image" data-image-layer="0" src="m0.png" alt="Ilustracja przekrojowa domu i ogrodu">
-          <img class="house-image" data-image-layer="1" src="m1.png" alt="" aria-hidden="true">
-          <img class="house-image" data-image-layer="2" src="m2.png" alt="" aria-hidden="true">
-          <img class="house-image" data-image-layer="3" src="m3.png" alt="" aria-hidden="true">
+          <img class="house-image is-active" data-image-layer="start" data-src="m3_white.png" data-fetchpriority="high" alt="Ilustracja przekrojowa domu z Chin" aria-hidden="true">
+          <img class="house-image" data-image-layer="0" data-src="m0.png" data-fetchpriority="high" alt="Ilustracja przekrojowa domu i ogrodu">
+          <img class="house-image" data-image-layer="1" data-src="m1.png" alt="" aria-hidden="true">
+          <img class="house-image" data-image-layer="2" data-src="m2.png" alt="" aria-hidden="true">
+          <img class="house-image" data-image-layer="3" data-src="m3.png" alt="" aria-hidden="true">
           <div class="image-dim" aria-hidden="true"></div>
           <div class="pin-layer" id="pinLayer" aria-hidden="true"></div>
         </div>
         <div class="title-lockup" aria-hidden="true">
-          <img class="hero-tytul" src="tytul.png" alt="Dom z Chin. Od drzwi po śrubkę — Onet">
+          <img class="hero-tytul" data-src="tytul.png" data-fetchpriority="high" alt="Dom z Chin. Od drzwi po śrubkę — Onet">
           <div class="hero-scroll">
             <span class="hero-scroll-label"><b>Przesuwaj w dół</b></span>
             <span class="hero-scroll-arrow"></span>
@@ -1090,7 +1205,7 @@
           </div>
         </section>
 
-        <section class="step" data-panel="article" data-room="top" data-legend="none" data-blur="true" data-image-layer="0">
+        <section class="step" data-panel="card" data-room="top" data-legend="none" data-side="center" data-blur="true" data-image-layer="0">
           <div class="step-card">
             <p>Zapraszamy na spacer po naszym wirtualnym domu. Zobaczmy, skąd najprawdopodobniej pochodzą przedmioty, które do niego kupiliśmy.</p>
           </div>
@@ -1282,12 +1397,12 @@
       <div class="authors-title">Autorzy:</div>
       <div class="stopka-profiles">
         <div class="profile">
-          <img src="https://ocdn.eu/pulscms/MDA_/845a330681253b68581e7f0da9e6beeb.png" alt="Anastasiia Morozova">
+          <img src="https://ocdn.eu/pulscms/MDA_/845a330681253b68581e7f0da9e6beeb.png" alt="Anastasiia Morozova" loading="lazy" decoding="async">
           <div class="name"><span>Anastasiia</span><span>Morozova</span></div>
         </div>
         <div class="profile">
           <a href="https://www.onet.pl/autorzy/grupa-onet/michal-rogalski" target="_blank">
-            <img src="https://ocdn.eu/pulscms/MDA_/dfcfff76a02f4561c940928ad887bf33.png" alt="Michał Rogalski">
+            <img src="https://ocdn.eu/pulscms/MDA_/dfcfff76a02f4561c940928ad887bf33.png" alt="Michał Rogalski" loading="lazy" decoding="async">
             <div class="name"><span>Michał</span><span>Rogalski</span></div>
           </a>
         </div>
@@ -1479,7 +1594,9 @@
       }
 
       houseImages.forEach((image) => {
-        image.classList.toggle("is-active", image.dataset.imageLayer === layer);
+        const isActive = image.dataset.imageLayer === layer;
+        if (isActive && window.loadDeferredImage) window.loadDeferredImage(image);
+        image.classList.toggle("is-active", isActive);
       });
     }
 
