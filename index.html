@@ -102,10 +102,17 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      opacity: 0;
       filter: saturate(0.96) contrast(1.02);
-      transition: filter 360ms ease;
+      transition:
+        opacity 320ms ease,
+        filter 360ms ease;
       user-select: none;
       -webkit-user-drag: none;
+    }
+
+    .house-image.is-active {
+      opacity: 1;
     }
 
     .sticky-visual.is-image-blurred .house-image {
@@ -433,6 +440,14 @@
       margin-top: 14px;
     }
 
+    .product-highlight {
+      padding: 0 0.14em;
+      border-radius: 4px;
+      background: rgba(217, 115, 63, 0.24);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
     .step[data-panel="article"] .step-card {
       width: min(720px, calc(100vw - 44px));
       padding: 0;
@@ -572,7 +587,10 @@
     <section class="scrolly" aria-label="Dom z Chin">
       <div class="sticky-visual legend-right" id="stickyVisual">
         <div class="house-wrap" id="houseWrap">
-          <img class="house-image" src="mieszkanie.png" alt="Ilustracja przekrojowa domu i ogrodu">
+          <img class="house-image is-active" data-image-layer="0" src="m0.png" alt="Ilustracja przekrojowa domu i ogrodu">
+          <img class="house-image" data-image-layer="1" src="m1.png" alt="" aria-hidden="true">
+          <img class="house-image" data-image-layer="2" src="m2.png" alt="" aria-hidden="true">
+          <img class="house-image" data-image-layer="3" src="m3.png" alt="" aria-hidden="true">
           <div class="image-dim" aria-hidden="true"></div>
           <div class="pin-layer" id="pinLayer" aria-hidden="true"></div>
         </div>
@@ -596,7 +614,7 @@
       </div>
 
       <div class="steps" id="steps">
-        <section class="step" data-panel="title" data-room="top" data-legend="right"></section>
+        <section class="step" data-panel="title" data-room="top" data-legend="right" data-image-layer="0"></section>
 
         <section class="step" data-panel="article" data-room="top" data-legend="none">
           <div class="step-card">
@@ -610,16 +628,16 @@
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="front yard" data-layers="1" data-side="right" data-legend="right">
+        <section class="step" data-panel="card" data-room="front yard" data-layers="1" data-side="right" data-legend="right" data-image-layer="1">
           <div class="step-card">
-            <p>Już przed budynkiem możemy zobaczyć sprowadzany z Chin sprzęt ogrodowy. W produkcji tego typu dóbr wyspecjalizowały się zakłady z dwóch najbogatszych prowincji: Guangdong oraz Zhejiang. Chińczycy oferują nam wszystko: od grilli i hamaków, przez meble ogrodowe, systemy kompostowania odpadów, sprzęt do zraszania roślin, solarne oświetlenie ogrodowe, po duże i małe zabawki dziecięce, które stoją na trawnikach czy leżą w piaskownicach.</p>
+            <p>Już przed budynkiem możemy zobaczyć sprowadzany z Chin <mark class="product-highlight">sprzęt ogrodowy</mark>. W produkcji tego typu dóbr wyspecjalizowały się zakłady z dwóch najbogatszych prowincji: Guangdong oraz Zhejiang. Chińczycy oferują nam wszystko: od <mark class="product-highlight">grilli</mark> i <mark class="product-highlight">hamaków</mark>, przez <mark class="product-highlight">meble ogrodowe</mark>, <mark class="product-highlight">systemy kompostowania odpadów</mark>, <mark class="product-highlight">sprzęt do zraszania roślin</mark>, <mark class="product-highlight">solarne oświetlenie ogrodowe</mark>, po duże i małe <mark class="product-highlight">zabawki dziecięce</mark>, które stoją na trawnikach czy leżą w piaskownicach.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="overview" data-products="drzwi wewnętrzne drewniane" data-side="right" data-legend="right">
           <div class="step-card">
-            <p>Wchodząc do środka domu, możemy dosłownie zderzyć się z kolejnym chińskim produktem. Drzwi wejściowe. Od kilku lat wzrasta liczba importowanych z Państwa Środka drzwi stalowych. W 2023 roku co piąty importowany produkt tego typu pochodził z Chin. W 2024 roku do Polski trafiło ich blisko 105 tysięcy sztuk. Import w stosunku do roku 2023 wzrósł o ponad 15 tysięcy egzemplarzy, jak donosi portal forumbranzowe.com.</p>
-            <p>Ale z Chin importujemy także drzwi wewnętrzne, przesuwne, a także okna. Chińskie są nawet te, które noszą nazwę „francuskie”. Okna w naszym domu zapewne są przesłonięte chińskimi roletami elastycznymi, czyli wewnętrznymi, albo zasłonami wyprodukowanymi w Państwie Środka.</p>
+            <p>Wchodząc do środka domu, możemy dosłownie zderzyć się z kolejnym chińskim produktem. <mark class="product-highlight">Drzwi wejściowe</mark>. Od kilku lat wzrasta liczba importowanych z Państwa Środka <mark class="product-highlight">drzwi stalowych</mark>. W 2023 roku co piąty importowany produkt tego typu pochodził z Chin. W 2024 roku do Polski trafiło ich blisko 105 tysięcy sztuk. Import w stosunku do roku 2023 wzrósł o ponad 15 tysięcy egzemplarzy, jak donosi portal forumbranzowe.com.</p>
+            <p>Ale z Chin importujemy także <mark class="product-highlight">drzwi wewnętrzne</mark>, <mark class="product-highlight">drzwi przesuwne</mark>, a także <mark class="product-highlight">okna</mark>. Chińskie są nawet te, które noszą nazwę „francuskie”. Okna w naszym domu zapewne są przesłonięte chińskimi <mark class="product-highlight">roletami elastycznymi</mark>, czyli wewnętrznymi, albo <mark class="product-highlight">zasłonami</mark> wyprodukowanymi w Państwie Środka.</p>
           </div>
         </section>
 
@@ -653,33 +671,33 @@
 
         <section class="step" data-panel="card" data-room="bathroom" data-side="right" data-legend="right" data-show-pins="false">
           <div class="step-card">
-            <p>Po przekroczeniu progu domu otoczą nas przedmioty z Chin. I nie jest to przenośnia, bo podłogi i ściany często są wykonane ze sprowadzanych z Państwa Środka płytek. Skoro Chiny od wieków słyną z ceramiki, to nic dziwnego, że są liderem w jej eksporcie. I nie chodzi o naczynia, a o płytki gresowe, terakotowe i porcelanowe.</p>
-            <p>Importowane wyroby są nawet o jedną czwartą tańsze niż te produkowane w Polsce. Jednak w 2008 roku, jak informowała Gazeta Prawna, jedna z partii sprowadzona na prywatne zlecenie zagrażała życiu i zdrowiu użytkowników. Wykryte promieniowanie potasu 40, radu 226 i toru 228, pierwiastków badanych sumarycznie, było nawet dwukrotnie większe od dopuszczalnego.</p>
+            <p>Po przekroczeniu progu domu otoczą nas przedmioty z Chin. I nie jest to przenośnia, bo <mark class="product-highlight">podłogi</mark> i <mark class="product-highlight">ściany</mark> często są wykonane ze sprowadzanych z Państwa Środka <mark class="product-highlight">płytek</mark>. Skoro Chiny od wieków słyną z ceramiki, to nic dziwnego, że są liderem w jej eksporcie. I nie chodzi o naczynia, a o <mark class="product-highlight">płytki gresowe</mark>, <mark class="product-highlight">terakotowe</mark> i <mark class="product-highlight">porcelanowe</mark>.</p>
+            <p>Importowane <mark class="product-highlight">wyroby ceramiczne</mark> są nawet o jedną czwartą tańsze niż te produkowane w Polsce. Jednak w 2008 roku, jak informowała Gazeta Prawna, jedna z partii sprowadzona na prywatne zlecenie zagrażała życiu i zdrowiu użytkowników. Wykryte promieniowanie potasu 40, radu 226 i toru 228, pierwiastków badanych sumarycznie, było nawet dwukrotnie większe od dopuszczalnego.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="bedroomFloor" data-products="podłoga parkiet drewniany" data-side="right" data-legend="right">
           <div class="step-card">
-            <p>Jeśli ktoś nie decydował się na ceramikę, może chodzić po parkietach drewnianych, również sprowadzanych z Chin.</p>
+            <p>Jeśli ktoś nie decydował się na ceramikę, może chodzić po <mark class="product-highlight">parkietach drewnianych</mark>, również sprowadzanych z Chin.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="roof" data-products="panele fotowoltaiczne" data-side="left" data-legend="left">
           <div class="step-card">
-            <p>Jeśli w domu mamy fotowoltaikę, to prawie na pewno korzystamy ze sprzętu wyprodukowanego w prowincjach Zhejiang, Jiangsu i Guangdong. W Państwie Środka powstaje ponad 80 proc. globalnej produkcji paneli fotowoltaicznych. Jak podaje portal Wysokie Napięcie, ponad 95 proc. instalowanych w Unii paneli PV jest importowanych z Chin. Ich niskie ceny zachęcają do inwestowania w fotowoltaikę. Podobnie jest z osprzętem.</p>
+            <p>Jeśli w domu mamy <mark class="product-highlight">fotowoltaikę</mark>, to prawie na pewno korzystamy ze sprzętu wyprodukowanego w prowincjach Zhejiang, Jiangsu i Guangdong. W Państwie Środka powstaje ponad 80 proc. globalnej produkcji <mark class="product-highlight">paneli fotowoltaicznych</mark>. Jak podaje portal Wysokie Napięcie, ponad 95 proc. instalowanych w Unii <mark class="product-highlight">paneli PV</mark> jest importowanych z Chin. Ich niskie ceny zachęcają do inwestowania w fotowoltaikę. Podobnie jest z <mark class="product-highlight">osprzętem</mark>.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="storage" data-layers="1" data-side="left" data-legend="left">
           <div class="step-card">
-            <p>Zajrzyjmy na chwilę do pomieszczenia gospodarczego. Żeby korzystać z prądu produkowanego przez panele, potrzebne są falowniki. Według portalu Wysokie Napięcie w 2024 roku aż 80 proc. nowo instalowanych falowników w Europie pochodziło z Chin. Choć to może się niedługo zmienić, ponieważ Komisja Europejska chce ograniczyć liczbę chińskich inwerterów. Powodem jest bezpieczeństwo europejskich sieci energetycznych.</p>
-            <p>Stojące w pomieszczeniu bojlery czy podgrzewacze wody również mogą być wyprodukowane w Chinach. Stamtąd sprowadzamy również grzejniki.</p>
+            <p>Zajrzyjmy na chwilę do pomieszczenia gospodarczego. Żeby korzystać z prądu produkowanego przez panele, potrzebne są <mark class="product-highlight">falowniki</mark>. Według portalu Wysokie Napięcie w 2024 roku aż 80 proc. nowo instalowanych <mark class="product-highlight">falowników</mark> w Europie pochodziło z Chin. Choć to może się niedługo zmienić, ponieważ Komisja Europejska chce ograniczyć liczbę chińskich <mark class="product-highlight">inwerterów</mark>. Powodem jest bezpieczeństwo europejskich sieci energetycznych.</p>
+            <p>Stojące w pomieszczeniu <mark class="product-highlight">bojlery</mark> czy <mark class="product-highlight">podgrzewacze wody</mark> również mogą być wyprodukowane w Chinach. Stamtąd sprowadzamy również <mark class="product-highlight">grzejniki</mark>.</p>
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="all" data-rooms="bedroom,kitchen,bathroom,salon,storage" data-layers="2" data-side="right" data-legend="right">
+        <section class="step" data-panel="card" data-room="all" data-rooms="bedroom,kitchen,bathroom,salon,storage" data-layers="2" data-side="right" data-legend="right" data-image-layer="2">
           <div class="step-card">
-            <p>Wszystkie meble, takie jak szafa w przedpokoju, stół w salonie, krzesła, wyposażenie garderoby, łóżka w sypialni, szafki w kuchni oraz łazience, to wszystko z wysokim prawdopodobieństwem pochodzi z Chin.</p>
+            <p>Wszystkie <mark class="product-highlight">meble</mark>, takie jak <mark class="product-highlight">szafa w przedpokoju</mark>, <mark class="product-highlight">stół w salonie</mark>, <mark class="product-highlight">krzesła</mark>, <mark class="product-highlight">wyposażenie garderoby</mark>, <mark class="product-highlight">łóżka w sypialni</mark>, <mark class="product-highlight">szafki w kuchni</mark> oraz <mark class="product-highlight">szafki w łazience</mark>, to wszystko z wysokim prawdopodobieństwem pochodzi z Chin.</p>
           </div>
         </section>
 
@@ -697,15 +715,15 @@
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="kitchen" data-layers="2" data-side="left" data-legend="left">
+        <section class="step" data-panel="card" data-room="kitchen" data-layers="2" data-side="left" data-legend="left" data-image-layer="3">
           <div class="step-card">
-            <p>Stoły w salonie czy w jadalni są przykryte zapewne obrusami z Chin. Poza nimi z Państwa Środka importujemy także serwetki, bieżniki na stół i temu podobne produkty.</p>
+            <p><mark class="product-highlight">Stoły</mark> w salonie czy w jadalni są przykryte zapewne <mark class="product-highlight">obrusami</mark> z Chin. Poza nimi z Państwa Środka importujemy także <mark class="product-highlight">serwetki</mark>, <mark class="product-highlight">bieżniki na stół</mark> i temu podobne produkty.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="bedroom" data-layers="2" data-side="left" data-legend="left">
           <div class="step-card">
-            <p>Przejdźmy do sypialni. Zaglądając do środka naszych chińskich mebli, znajdziemy tam chińskie tekstylia domowe: ręczniki, prześcieradła, pościel, koce. To jedne z produktów o najwyższym procencie importu.</p>
+            <p>Przejdźmy do sypialni. Zaglądając do środka naszych chińskich <mark class="product-highlight">mebli</mark>, znajdziemy tam chińskie <mark class="product-highlight">tekstylia domowe</mark>: <mark class="product-highlight">ręczniki</mark>, <mark class="product-highlight">prześcieradła</mark>, <mark class="product-highlight">pościel</mark>, <mark class="product-highlight">koce</mark>. To jedne z produktów o najwyższym procencie importu.</p>
           </div>
         </section>
 
@@ -737,13 +755,13 @@
 
         <section class="step" data-panel="card" data-room="office" data-side="right" data-legend="right" data-show-pins="false">
           <div class="step-card">
-            <p>Zerknijmy jeszcze na telefon i tablet leżący na naszym chińskim biurku. Załóżmy, że chcemy uniknąć typowo chińskiego produktu jak Xiaomi albo Huawei, kupując nowy smartfon Motoroli, czyli amerykańskiego pioniera technologii telekomunikacji bezprzewodowej. Tymczasem od kilku lat firma i jej logo są w posiadaniu Chińczyków. Tak samo jak odkupiona od IBM marka notebooków ThinkPad.</p>
+            <p>Zerknijmy jeszcze na <mark class="product-highlight">telefon</mark> i <mark class="product-highlight">tablet</mark> leżący na naszym chińskim <mark class="product-highlight">biurku</mark>. Załóżmy, że chcemy uniknąć typowo chińskiego produktu jak <mark class="product-highlight">Xiaomi</mark> albo <mark class="product-highlight">Huawei</mark>, kupując nowy <mark class="product-highlight">smartfon Motoroli</mark>, czyli amerykańskiego pioniera technologii telekomunikacji bezprzewodowej. Tymczasem od kilku lat firma i jej logo są w posiadaniu Chińczyków. Tak samo jak odkupiona od IBM marka notebooków <mark class="product-highlight">ThinkPad</mark>.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="kitchenClose" data-rooms="kitchen" data-layers="3" data-side="right" data-legend="right">
           <div class="step-card">
-            <p>Z wrażenia w kuchni chcesz napić się szklanki zimnej wody. Uważaj, w rękach możesz trzymać produkt z Chin. Z Państwa Środka importujemy nie tylko naczynia emaliowane, z których jeszcze niedawno słynął nasz przemysł. Sprowadzamy także garnki stalowe, patelnie, deski do krojenia, sztućce, talerze, kubki i szklanki.</p>
+            <p>Z wrażenia w kuchni chcesz napić się <mark class="product-highlight">szklanki</mark> zimnej wody. Uważaj, w rękach możesz trzymać produkt z Chin. Z Państwa Środka importujemy nie tylko <mark class="product-highlight">naczynia emaliowane</mark>, z których jeszcze niedawno słynął nasz przemysł. Sprowadzamy także <mark class="product-highlight">garnki stalowe</mark>, <mark class="product-highlight">patelnie</mark>, <mark class="product-highlight">deski do krojenia</mark>, <mark class="product-highlight">sztućce</mark>, <mark class="product-highlight">talerze</mark>, <mark class="product-highlight">kubki</mark> i <mark class="product-highlight">szklanki</mark>.</p>
           </div>
         </section>
 
@@ -761,20 +779,20 @@
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
-            <p>Radosław Pyffel, analityk, ekspert do spraw Azji, komentuje dla Onetu: „Chiny jako kraj, w którym tanio produkuje się słabszej jakości dobra, nie odchodzi do przeszłości. Jednak w planach pięcioletnich władze stawiają na rozwój technologiczny samochodów elektrycznych, AI, robotyki oraz samowystarczalność technologiczną i surowcową. To oznacza, że wzrasta także jakość produkowanych przez nich towarów, zwłaszcza że zwracają się ku nowym rynkom tak zwanego globalnego południa, gdzie powstaje nowa klasa średnia, która będzie ich klientem”.</p>
-            <p>„Powodem pozycji Chin paradoksalnie jest chciwość koncernów zarówno amerykańskich, jak i europejskich. Jest takie chińskie przysłowie: dobry królik ma trzy nory. Koncerny amerykańskie i europejskie w pogoni za zyskiem z marży z taniej produkcji praktycznie zrezygnowały z dywersyfikacji źródeł wytwarzania dóbr. Korporacje przez dekady kierowały się wyłącznie kwestią zysku tu i teraz. Nie budowano kolejnych nor. W efekcie Chiny mają na pewne sprawy monopol lub prawie monopol. Teraz, żeby nadrobić stracony czas, koncerny będą potrzebowały minimum 15 lat na rozwój nowych fabryk i technologii do nich, a w tym czasie Chińczycy będą parli do przodu” - dodaje Pyffel.</p>
+            <p>Radosław Pyffel, ekspert do spraw Azji i Chin, komentuje dla Onetu: „Chiny jako kraj, w którym tanio produkuje się słabszej jakości dobra, nie odchodzą całkiem do przeszłości. Jednak już w poprzednich planach pięcioletnich władze postawiły na rozwój technologiczny, tworzenie samochodów elektrycznych, AI, robotyki oraz samowystarczalność technologiczną i surowcową. To oznacza, że wzrasta jakość produkowanych przez nich towarów, ich miejsce w łańcuchu dostaw również, zwłaszcza że zwracają się ku nowym rynkom tak zwanego globalnego południa, gdzie powstaje nowa klasa średnia, która będzie ich klientem”.</p>
+            <p>„Powodem obecnej pozycji Chin jest paradoksalnie między innymi chciwość koncernów zarówno amerykańskich, jak i europejskich. Jest takie chińskie przysłowie: dobry królik ma trzy nory. Koncerny amerykańskie i europejskie w pogoni za zyskiem z marży z taniej produkcji w pewnym momencie praktycznie zrezygnowały z dywersyfikacji źródeł wytwarzania dóbr. Korporacje przez dekady kierowały się wyłącznie kwestią zysku tu i teraz. Nie budowano kolejnych nor. W efekcie Chiny mają w niektórych strategicznych sektorach monopol lub prawie monopol. Teraz, żeby nadrobić stracony czas, zachodnie gospodarki będą potrzebować około 15 lat na rozwój nowych fabryk, technologii, komponentów i surowców do nich, a w tym czasie Chińczycy będą parli do przodu” - dodaje Pyffel.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
-            <p>Zapytany przez Onet ekspert zwraca uwagę, że proces ulepszania jakości produktów, przez który przechodzą Chiny, już się w światowej gospodarce wydarzył: „Elektronika z Japonii po II wojnie światowej była synonimem słabej jakości. Potem Japończycy rozwinęli swój przemysł i wysuwali się na pozycję lidera. Ten proces zatrzymali Amerykanie. Chiny idą dokładnie tą samą drogą, od sprzętu słabej jakości do hi-tech. Ale różnica polega na tym, że nie dali się zatrzymać Amerykanom. Rozwijają się dalej i wysuwają na światową czołówkę” - ocenia Pyffel.</p>
+            <p>Zapytany przez Onet ekspert zwraca uwagę, że proces ulepszania jakości produktów, przez który przechodzą teraz Chiny, już się w światowej gospodarce wydarzył: „Elektronika z Japonii po II wojnie światowej była synonimem słabej jakości. Potem Japończycy rozwinęli swój przemysł i wysuwali się na pozycję lidera. Ten proces zatrzymali Amerykanie. Chiny idą dokładnie tą samą drogą, od sprzętu słabej jakości do hi-tech. Ale różnica polega na tym, że nie dają się zatrzymać Amerykanom, mimo że takie próby były podejmowane. Rozwijają się dalej i wysuwają na światową czołówkę technologiczną” - ocenia Pyffel.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="all" data-products="śruby" data-side="right" data-legend="right">
           <div class="step-card">
-            <p>Jeśli komuś to nie odpowiada i będzie próbował zbudować dom i zakupić meble jedynie z polskiego drewna, a elektronikę z zachodnich części, to może i tak mieć chiński komponent: śruby i wkręty. Je również importujemy z Państwa Środka.</p>
+            <p>Jeśli komuś to nie odpowiada i będzie próbował zbudować dom i zakupić <mark class="product-highlight">meble</mark> jedynie z polskiego drewna, a <mark class="product-highlight">elektronikę</mark> z zachodnich części, to może i tak mieć chiński komponent: <mark class="product-highlight">śruby</mark> i <mark class="product-highlight">wkręty</mark>. Je również importujemy z Państwa Środka.</p>
           </div>
         </section>
       </div>
@@ -791,8 +809,13 @@
     </section>
   </main>
 
-  <script>
-    const products = [
+	  <script>
+	    // Percentage circle positions:
+	    // Edit x and y below to move each circle on the image.
+	    // x is the horizontal position from the left edge, y is the vertical position from the top edge, both in %.
+	    // Example: x: 50, y: 50 places the circle in the middle of the image.
+	    // snap changes where the small hover label opens, but does not move the percentage circle itself.
+	    const products = [
       { id: "bed", name: "łóżko", source: "Łóżko drewniane w sypialni", room: "bedroom", layer: 2, share: 21.1, x: 33.6, y: 44.6, snap: "s" },
       { id: "bedding", name: "pościel", source: "Bawełniana pościel", room: "bedroom", layer: 3, share: 3.6, x: 33.8, y: 45.8, snap: "s" },
       { id: "pillows", name: "poduszki dekoracyjne", source: "Pokrowce dekoracyjne i meblowe z włókien syntetycznych", room: "bedroom", layer: 3, share: 46.2, x: 32.1, y: 44.0, snap: "n" },
@@ -829,6 +852,9 @@
       { id: "storage-cabinet", name: "szafka", source: "Szafa w przedpokoju drewniana", room: "storage", layer: 2, share: 17.7, x: 88.8, y: 39.6, snap: "w" }
     ];
 
+    // Camera controls:
+    // Edit left/top/width/height to move the framed image area, measured in % of the image.
+    // Edit zoom for desktop scale and mobileZoom for small-screen scale.
     const roomFocus = {
       top: { left: 0, top: 0, width: 100, height: 100, zoom: 0.94, mobileZoom: 1 },
       overview: { left: 17, top: 17, width: 72, height: 65, zoom: 1.12, mobileZoom: 1.28 },
@@ -858,6 +884,7 @@
 
     const stickyVisual = document.getElementById("stickyVisual");
     const houseWrap = document.getElementById("houseWrap");
+    const houseImages = [...document.querySelectorAll(".house-image")];
     const pinLayer = document.getElementById("pinLayer");
     const mobileQuery = window.matchMedia("(max-width: 760px)");
     let activeStep = null;
@@ -901,9 +928,10 @@
         .filter(Boolean);
     }
 
-    function renderPins() {
-      pinLayer.innerHTML = products.map((product) => `
-        <div class="pin" data-id="${product.id}" data-room="${product.room}" data-snap="${product.snap}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
+	    function renderPins() {
+	      pinLayer.innerHTML = products.map((product) => `
+	        <!-- Percentage circle position comes from product.x and product.y in the products array above. -->
+	        <div class="pin" data-id="${product.id}" data-room="${product.room}" data-snap="${product.snap}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
           <div class="pin-dot">${formatShare(product.share)}</div>
           <div class="pin-card">
             <span class="pin-kicker">${metricLabel(product)}</span>
@@ -942,6 +970,21 @@
       stickyVisual.classList.toggle("legend-hidden", legend === "none");
       stickyVisual.classList.toggle("legend-left", legend === "left");
       stickyVisual.classList.toggle("legend-right", legend !== "left");
+    }
+
+    function setImageLayer(step) {
+      let layer = step.dataset.imageLayer || "0";
+      const stepIndex = steps.indexOf(step);
+      for (let index = stepIndex; index >= 0; index -= 1) {
+        if (steps[index].dataset.imageLayer) {
+          layer = steps[index].dataset.imageLayer;
+          break;
+        }
+      }
+
+      houseImages.forEach((image) => {
+        image.classList.toggle("is-active", image.dataset.imageLayer === layer);
+      });
     }
 
     function setFocus(roomValue) {
@@ -996,6 +1039,7 @@
       activeStep = step;
       const roomValue = step.dataset.room || "top";
       setVisualMode(step);
+      setImageLayer(step);
       setFocus(roomValue);
       steps.forEach((item) => item.classList.toggle("is-active", item === step));
       document.querySelectorAll(".pin").forEach((pin) => {
