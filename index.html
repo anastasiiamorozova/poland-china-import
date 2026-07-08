@@ -1042,7 +1042,7 @@
       var requiredSlideImages = [
         "m3_white.png",
         "tytul.png",
-        "m0.png"
+	        "https://ocdn.eu/pulscms/MDA_/8a8e8d7895a7225aa169225891b29a17.png"
       ];
       var loaderImageElements = [
         document.querySelector(".app-loader-house"),
@@ -1177,11 +1177,11 @@
       var requiredSlideImagesReady = loaderImagesReady.then(function () {
         var requiredPreloads = requiredSlideImages.map(function (src) {
           var ready = preloadImage(src);
-          if (src === "m0.png") {
+	          if (src === "https://ocdn.eu/pulscms/MDA_/8a8e8d7895a7225aa169225891b29a17.png") {
             ready
-              .then(function () { return preloadImage("m1.png"); })
-              .then(function () { return preloadImage("m2.png"); })
-              .then(function () { return preloadImage("m3.png"); });
+	              .then(function () { return preloadImage("https://ocdn.eu/pulscms/MDA_/b6360ed918b62f667fa01fc68446ef42.png"); })
+	              .then(function () { return preloadImage("https://ocdn.eu/pulscms/MDA_/fcff00a9c86254e63874b87fb291a050.png"); })
+	              .then(function () { return preloadImage("https://ocdn.eu/pulscms/MDA_/3884479c7dfc6fe0183b12adc4cf650c.png"); });
           }
           return ready;
         });
@@ -1219,10 +1219,10 @@
       <div class="sticky-visual legend-right" id="stickyVisual">
         <div class="house-wrap" id="houseWrap">
           <img class="house-image is-active" data-image-layer="start" data-src="m3_white.png" data-fetchpriority="high" alt="Ilustracja przekrojowa domu z Chin" aria-hidden="true">
-          <img class="house-image" data-image-layer="0" data-src="m0.png" data-fetchpriority="high" alt="Ilustracja przekrojowa domu i ogrodu">
-          <img class="house-image" data-image-layer="1" data-src="m1.png" alt="" aria-hidden="true">
-          <img class="house-image" data-image-layer="2" data-src="m2.png" alt="" aria-hidden="true">
-          <img class="house-image" data-image-layer="3" data-src="m3.png" alt="" aria-hidden="true">
+          <img class="house-image" data-image-layer="0" data-src="https://ocdn.eu/pulscms/MDA_/8a8e8d7895a7225aa169225891b29a17.png" data-fetchpriority="high" alt="Ilustracja przekrojowa domu i ogrodu">
+          <img class="house-image" data-image-layer="1" data-src="https://ocdn.eu/pulscms/MDA_/b6360ed918b62f667fa01fc68446ef42.png" alt="" aria-hidden="true">
+          <img class="house-image" data-image-layer="2" data-src="https://ocdn.eu/pulscms/MDA_/fcff00a9c86254e63874b87fb291a050.png" alt="" aria-hidden="true">
+          <img class="house-image" data-image-layer="3" data-src="https://ocdn.eu/pulscms/MDA_/3884479c7dfc6fe0183b12adc4cf650c.png" alt="" aria-hidden="true">
           <div class="image-dim" aria-hidden="true"></div>
           <div class="pin-layer" id="pinLayer" aria-hidden="true"></div>
         </div>
