@@ -356,13 +356,19 @@
       letter-spacing: 0;
     }
 
-    .sticky-visual[data-current-room="kitchen"] .pin-dot,
-    .sticky-visual[data-current-room="kitchenClose"] .pin-dot {
-      width: 26px;
-      height: 26px;
-      border-width: 1.5px;
-      font-size: 9px;
-    }
+	    .sticky-visual[data-current-room="kitchen"] .pin-dot,
+	    .sticky-visual[data-current-room="kitchenClose"] .pin-dot {
+	      width: 17px;
+	      height: 17px;
+	      display: flex;
+	      align-items: center;
+	      justify-content: center;
+	      padding: 0;
+	      border-width: 1.5px;
+	      font: 700 6px/1 "Fira Sans", sans-serif;
+	      text-align: center;
+	      letter-spacing: 0;
+	    }
 
     .pin-card {
       position: absolute;
@@ -707,9 +713,16 @@
       min-height: 90vh;
     }
 
-    .step:last-child {
-      min-height: 86vh;
-    }
+	    .step-final-card {
+	      min-height: 145vh;
+	      align-items: start;
+	      padding-top: 18vh;
+	      padding-bottom: 52vh;
+	    }
+
+	    .step-final-overview {
+	      min-height: 92vh;
+	    }
 
     .step-card {
       width: min(430px, calc(100vw - 40px));
@@ -732,13 +745,14 @@
       margin-top: 14px;
     }
 
-    .product-highlight {
-      padding: 0 0.14em;
-      border-radius: 4px;
-      background: rgba(217, 115, 63, 0.24);
-      box-decoration-break: clone;
-      -webkit-box-decoration-break: clone;
-    }
+	    .product-highlight {
+	      padding: 0;
+	      border-radius: 0;
+	      background: transparent;
+	      color: inherit;
+	      box-decoration-break: clone;
+	      -webkit-box-decoration-break: clone;
+	    }
 
     .step[data-panel="article"] .step-card {
       width: min(720px, calc(100vw - 44px));
@@ -1316,14 +1330,14 @@
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="storage" data-layers="1" data-side="left" data-legend="left">
+        <section class="step" data-panel="card" data-room="storage" data-layers="1" data-side="left" data-legend="left" data-image-layer="3">
           <div class="step-card">
             <p>Zajrzyjmy na chwilę do pomieszczenia gospodarczego. Żeby korzystać z prądu produkowanego przez panele, potrzebne są <mark class="product-highlight">falowniki</mark>. Według portalu Wysokie Napięcie w 2024 roku aż 80 proc. nowo instalowanych <mark class="product-highlight">falowników</mark> w Europie pochodziło z Chin. Choć to może się niedługo zmienić, ponieważ Komisja Europejska chce ograniczyć liczbę chińskich <mark class="product-highlight">inwerterów</mark>. Powodem jest bezpieczeństwo europejskich sieci energetycznych.</p>
             <p>Stojące w pomieszczeniu <mark class="product-highlight">bojlery</mark> czy <mark class="product-highlight">podgrzewacze wody</mark> również mogą być wyprodukowane w Chinach. Stamtąd sprowadzamy również <mark class="product-highlight">grzejniki</mark>.</p>
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="all" data-rooms="bedroom,kitchen,bathroom,salon,storage" data-layers="2" data-side="right" data-legend="right" data-image-layer="2">
+        <section class="step" data-panel="card" data-room="all" data-rooms="bedroom,kitchen,bathroom,salon,storage" data-layers="2" data-side="right" data-legend="right" data-image-layer="3">
           <div class="step-card">
             <p>Wszystkie <mark class="product-highlight">meble</mark>, takie jak <mark class="product-highlight">szafa w przedpokoju</mark>, <mark class="product-highlight">stół w salonie</mark>, <mark class="product-highlight">krzesła</mark>, <mark class="product-highlight">wyposażenie garderoby</mark>, <mark class="product-highlight">łóżka w sypialni</mark>, <mark class="product-highlight">szafki w kuchni</mark> oraz <mark class="product-highlight">szafki w łazience</mark>, to wszystko z wysokim prawdopodobieństwem pochodzi z Chin.</p>
           </div>
@@ -1343,7 +1357,7 @@
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="kitchen" data-layers="2" data-side="left" data-legend="left" data-image-layer="3">
+        <section class="step" data-panel="card" data-room="salonTableTop" data-products="serwetki" data-side="left" data-legend="left" data-image-layer="3">
           <div class="step-card">
             <p><mark class="product-highlight">Stoły</mark> w salonie czy w jadalni są przykryte zapewne <mark class="product-highlight">obrusami</mark> z Chin. Poza nimi z Państwa Środka importujemy także <mark class="product-highlight">serwetki</mark>, <mark class="product-highlight">bieżniki na stół</mark> i temu podobne produkty.</p>
           </div>
@@ -1368,7 +1382,9 @@
           </div>
         </section>
 
-        <section class="step" data-panel="article" data-room="all" data-legend="none">
+        <section class="step" data-panel="visual" data-room="all" data-legend="none" data-image-layer="3" data-show-pins="false"></section>
+
+        <section class="step" data-panel="card" data-room="all" data-products="lodówka,zamrażarka,kuchenka,telewizor,głośnik" data-side="right" data-legend="right" data-image-layer="3">
           <div class="step-card">
             <p>Przyjrzyjmy się teraz AGD. W naszym otoczeniu jest znacznie więcej chińskich produktów tej kategorii, niż się spodziewamy. Nieświadomie taki towar można też kupić od naszych rodzimych firm, ukryty pod ich marką. W Polsce w ten sposób działa kilku producentów. Zasada jest następująca: w kraju tworzy się logo, projektuje opakowanie, a produkty z wymalowaną na nich nazwą zamawia się w Chinach. Jedynie wnikliwi zobaczą napisane na spodzie małymi literkami „made in China”.</p>
           </div>
@@ -1387,7 +1403,7 @@
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="kitchenClose" data-rooms="kitchen" data-layers="3" data-side="right" data-legend="right">
+        <section class="step" data-panel="card" data-room="kitchenClose" data-products="garnki stalowe,patelnie,deski do krojenia" data-side="right" data-legend="right">
           <div class="step-card">
             <p>Z wrażenia w kuchni chcesz napić się <mark class="product-highlight">szklanki</mark> zimnej wody. Uważaj, w rękach możesz trzymać produkt z Chin. Z Państwa Środka importujemy nie tylko <mark class="product-highlight">naczynia emaliowane</mark>, z których jeszcze niedawno słynął nasz przemysł. Sprowadzamy także <mark class="product-highlight">garnki stalowe</mark>, <mark class="product-highlight">patelnie</mark>, <mark class="product-highlight">deski do krojenia</mark>, <mark class="product-highlight">sztućce</mark>, <mark class="product-highlight">talerze</mark>, <mark class="product-highlight">kubki</mark> i <mark class="product-highlight">szklanki</mark>.</p>
           </div>
@@ -1418,11 +1434,13 @@
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="all" data-products="śruby" data-side="right" data-legend="right">
+        <section class="step step-final-card" data-panel="card" data-room="all" data-products="śruby" data-side="right" data-legend="right">
           <div class="step-card">
             <p>Jeśli komuś to nie odpowiada i będzie próbował zbudować dom i zakupić <mark class="product-highlight">meble</mark> jedynie z polskiego drewna, a <mark class="product-highlight">elektronikę</mark> z zachodnich części, to może i tak mieć chiński komponent: <mark class="product-highlight">śruby</mark> i <mark class="product-highlight">wkręty</mark>. Je również importujemy z Państwa Środka.</p>
           </div>
         </section>
+
+        <section class="step step-final-overview" data-panel="visual" data-room="all" data-legend="none" data-image-layer="3" data-show-pins="false"></section>
       </div>
     </section>
 
@@ -1474,14 +1492,14 @@
       { id: "pillows", name: "poduszki dekoracyjne", source: "Pokrowce dekoracyjne i meblowe z włókien syntetycznych", room: "bedroom", layer: 3, share: 46.2, x: 32.1, y: 44.0, snap: "n" },
       { id: "bedroom-wardrobe", name: "szafa drewniana", source: "Szafy drewniane sypialniane", room: "bedroom", layer: 2, share: 21.1, x: 26.3, y: 37.6, snap: "w" },
       { id: "kitchen-cabinets", name: "szafki", source: "Szafki kuchenne drewniane", room: "kitchen", layer: 2, share: 6.1, x: 54.0, y: 36.8, snap: "n" },
-      { id: "napkins", name: "serwetki", source: "Bawełniane obrusy i serwety", room: "kitchen", layer: 3, share: 8.0, x: 53.6, y: 48.0, snap: "s" },
+      { id: "napkins", name: "serwetki", source: "Bawełniane obrusy i serwety", room: "salon", layer: 3, share: 8.0, x: 49.0, y: 66.3, snap: "s" },
       { id: "fridge", name: "lodówka", source: "Lodówka domowa sprężarkowa", room: "kitchen", layer: 3, share: 47.0, x: 45.4, y: 38.5, snap: "w" },
       { id: "freezer", name: "zamrażarka", source: "Zamrażarka szafowa", room: "kitchen", layer: 3, share: 43.2, x: 46.2, y: 43.0, snap: "w" },
       { id: "hob", name: "płyta indukcyjna", source: "Płyta indukcyjna", room: "kitchen", layer: 3, share: 18.2, x: 50.9, y: 39.0, snap: "n" },
-      { id: "cooker", name: "kuchenka", source: "Kuchenka elektryczna", room: "kitchen", layer: 3, share: 18.2, x: 51.0, y: 43.0, snap: "w" },
-      { id: "pots", name: "garnki", source: "Garnki stalowe nierdzewne", room: "kitchen", layer: 3, share: 41.5, x: 59.5, y: 36.6, snap: "n" },
+      { id: "cooker", name: "kuchenka", source: "Kuchenka elektryczna", room: "kitchen", layer: 3, share: 18.2, x: 48.9, y: 41.0, snap: "w" },
+      { id: "pots", name: "garnki stalowe", source: "Garnki stalowe nierdzewne", room: "kitchen", layer: 3, share: 41.5, x: 55.0, y: 36.6, snap: "n" },
       { id: "pans", name: "patelnie", source: "Patelnie aluminiowe", room: "kitchen", layer: 3, share: 51.7, x: 51.9, y: 36.4, snap: "n" },
-      { id: "boards", name: "deski do krojenia", source: "Deski do krojenia drewniane", room: "kitchen", layer: 3, share: 34.3, x: 51.6, y: 32.9, snap: "n" },
+      { id: "boards", name: "deski do krojenia", source: "Deski do krojenia drewniane", room: "kitchen", layer: 3, share: 34.3, x: 50.3, y: 32.9, snap: "n" },
       { id: "cutlery", name: "sztućce", source: "Sztućce w zestawach", room: "kitchen", layer: 3, share: 56.7, x: 53.0, y: 46.7, snap: "s" },
       { id: "plates", name: "talerze", source: "Talerze ceramiczne nieporcelanowe", room: "kitchen", layer: 3, share: 43.1, x: 56.2, y: 45.4, snap: "s" },
       { id: "mugs", name: "kubki", source: "Kubki ceramiczne nieporcelanowe", room: "kitchen", layer: 3, share: 43.1, x: 49.0, y: 70.0, snap: "s" },
@@ -1493,10 +1511,10 @@
       { id: "bathroom-cabinet", name: "szafki", source: "Szafki łazienkowe drewniane", room: "bathroom", layer: 2, share: 17.7, x: 72.5, y: 58.5, snap: "e" },
       { id: "washing-machine", name: "pralka", source: "Pralka automatyczna do 10 kg", room: "bathroom", layer: 3, share: 45.0, x: 69.0, y: 56.8, snap: "w" },
       { id: "living-table", name: "stół w salonie", source: "Stoły drewniane", room: "salon", layer: 2, share: 17.7, x: 49.0, y: 66.3, snap: "s" },
-      { id: "parquet", name: "podłoga parkiet drewniany", source: "Drewniane panele parkietowe", room: "general", layer: 1, share: 97.1, x: 31.0, y: 52.8, snap: "s" },
+      { id: "parquet", name: "podłoga parkiet drewniany", source: "Drewniane panele parkietowe", room: "general", layer: 1, share: 97.1, x: 23.6, y: 50.0, snap: "s" },
       { id: "living-table-chairs", name: "stół i krzesła w salonie", source: "Stół w salonie drewniany", room: "salon", layer: 2, share: 17.7, x: 55.8, y: 48.8, snap: "n" },
       { id: "tv", name: "telewizor", source: "Telewizor kolorowy", room: "salon", layer: 3, share: 3.9, x: 44.5, y: 70.5, snap: "w" },
-      { id: "sofa", name: "sofa / fotel tapicerowany", source: "Meble tapicerowane z drewnianą ramą", room: "salon", layer: 2, share: 40.9, x: 56.9, y: 66.0, snap: "e" },
+      { id: "sofa", name: "sofa / fotel tapicerowany", source: "Meble tapicerowane z drewnianą ramą", room: "salon", layer: 2, share: 40.9, x: 55.0, y: 63.0, snap: "e" },
       { id: "speaker", name: "głośnik", source: "Głośnik pojedynczy", room: "salon", layer: 3, share: 20.1, x: 65.7, y: 72.5, snap: "e" },
       { id: "pv", name: "panele fotowoltaiczne", source: "z tekstu", room: "roof", layer: 1, share: 95.0, x: 55.0, y: 10.4, snap: "s" },
       { id: "boiler", name: "bojler", source: "Nieelektryczne gazowe podgrzewacze wody", room: "storage", layer: 1, share: 12.1, x: 75.0, y: 39.8, snap: "e" },
@@ -1511,15 +1529,16 @@
     const roomFocus = {
       top: { left: 0, top: 0, width: 100, height: 100, zoom: 0.94, mobileZoom: 1 },
       overview: { left: 17, top: 17, width: 72, height: 65, zoom: 1.12, mobileZoom: 1.28 },
-      "front yard": { left: 0, top: 42, width: 31, height: 45, zoom: 1.85, mobileZoom: 2.25 },
-      bathroom: { left: 62, top: 38, width: 22, height: 33, zoom: 2.1, mobileZoom: 2.45 },
-      salon: { left: 37, top: 49, width: 33, height: 32, zoom: 1.75, mobileZoom: 2.05 },
-      roof: { left: 37, top: 0, width: 38, height: 20, zoom: 1.95, mobileZoom: 2.35 },
+      "front yard": { left: 3, top: 42, width: 31, height: 45, zoom: 1.85, mobileZoom: 2.25 },
+	      bathroom: { left: 62, top: 38, width: 22, height: 33, zoom: 2.1, mobileZoom: 2.45 },
+	      salon: { left: 37, top: 49, width: 33, height: 32, zoom: 1.75, mobileZoom: 2.05 },
+	      salonTableTop: { left: 36, top: 55, width: 34, height: 34, zoom: 2.05, mobileZoom: 2.35 },
+	      roof: { left: 37, top: 0, width: 38, height: 20, zoom: 1.95, mobileZoom: 2.35 },
       storage: { left: 70, top: 25, width: 26, height: 35, zoom: 1.95, mobileZoom: 2.35 },
       kitchen: { left: 41, top: 25, width: 30, height: 34, zoom: 1.95, mobileZoom: 2.35 },
       kitchenClose: { left: 44, top: 28, width: 25, height: 26, zoom: 2.45, mobileZoom: 2.85 },
       bedroom: { left: 20, top: 27, width: 25, height: 30, zoom: 2.05, mobileZoom: 2.45 },
-      bedroomFloor: { left: 22, top: 42, width: 21, height: 19, zoom: 2.65, mobileZoom: 3.05 },
+      bedroomFloor: { left: 22, top: 42, width: 21, height: 19, zoom: 2.00, mobileZoom: 2.05 },
       office: { left: 55, top: 66, width: 28, height: 27, zoom: 2.05, mobileZoom: 2.45 },
       all: { left: 2, top: 8, width: 96, height: 84, zoom: 0.98, mobileZoom: 1.15 }
     };
@@ -1594,9 +1613,9 @@
       `).join("");
     }
 
-    function productMatchesStep(product, step) {
-      if (step.dataset.showPins === "false") return false;
-      if (step.dataset.panel === "article" || step.dataset.panel === "title") return false;
+	    function productMatchesStep(product, step) {
+	      if (step.dataset.showPins === "false") return false;
+	      if (step.dataset.panel === "article" || step.dataset.panel === "title") return false;
 
       const productNames = parseList(step.dataset.products);
       if (productNames.length) {
@@ -1608,23 +1627,41 @@
       if (!roomMatches) return false;
 
       const layers = parseList(step.dataset.layers);
-      if (!layers.length) return true;
-      return layers.includes(String(product.layer));
-    }
+	      if (!layers.length) return true;
+	      return layers.includes(String(product.layer));
+	    }
 
-    function setVisualMode(step) {
-      const panel = step.dataset.panel || "card";
-      const legend = step.dataset.legend || "right";
-      const roomValue = step.dataset.room || "top";
-      stickyVisual.dataset.currentRoom = roomValue;
-      stickyVisual.classList.toggle("is-panel-title", panel === "title");
-      stickyVisual.classList.toggle("is-panel-red", panel === "redslide");
-      stickyVisual.classList.toggle("is-panel-article", panel === "article");
-      stickyVisual.classList.toggle("is-image-blurred", panel === "article" || panel === "redslide" || step.dataset.blur === "true");
-      stickyVisual.classList.toggle("legend-hidden", legend === "none");
-      stickyVisual.classList.toggle("legend-left", legend === "left");
-      stickyVisual.classList.toggle("legend-right", legend !== "left");
-    }
+	    function articleTextNeedsBackground() {
+	      const activationY = window.innerHeight * 0.56;
+	      return steps.some((step) => {
+	        if (step.dataset.panel !== "article") return false;
+	        const textCard = step.querySelector(".step-card");
+	        if (!textCard) return false;
+	        const rect = textCard.getBoundingClientRect();
+	        return rect.bottom > 0 && rect.top <= activationY;
+	      });
+	    }
+
+	    function updateTextBackgroundState(step) {
+	      if (!step) return;
+	      const panel = step.dataset.panel || "card";
+	      const keepArticleBackground = articleTextNeedsBackground();
+	      stickyVisual.classList.toggle("is-panel-article", keepArticleBackground);
+	      stickyVisual.classList.toggle("is-image-blurred", keepArticleBackground || panel === "redslide" || step.dataset.blur === "true");
+	    }
+
+	    function setVisualMode(step) {
+	      const panel = step.dataset.panel || "card";
+	      const legend = step.dataset.legend || "right";
+	      const roomValue = step.dataset.room || "top";
+	      stickyVisual.dataset.currentRoom = roomValue;
+	      stickyVisual.classList.toggle("is-panel-title", panel === "title");
+	      stickyVisual.classList.toggle("is-panel-red", panel === "redslide");
+	      updateTextBackgroundState(step);
+	      stickyVisual.classList.toggle("legend-hidden", legend === "none");
+	      stickyVisual.classList.toggle("legend-left", legend === "left");
+	      stickyVisual.classList.toggle("legend-right", legend !== "left");
+	    }
 
     function setImageLayer(step) {
       let layer = step.dataset.imageLayer || "0";
@@ -1814,12 +1851,13 @@
       stickyVisual.classList.toggle("is-title-covered", rect.top <= threshold);
     }
 
-    function updateStepFromScroll() {
-      scrollTicking = false;
-      activateStep(getStepAtActivationLine());
-      updateTitleCover();
-      updateScrollProgress();
-    }
+	    function updateStepFromScroll() {
+	      scrollTicking = false;
+	      activateStep(getStepAtActivationLine());
+	      updateTextBackgroundState(activeStep);
+	      updateTitleCover();
+	      updateScrollProgress();
+	    }
 
     function requestStepUpdate() {
       if (scrollTicking) return;
