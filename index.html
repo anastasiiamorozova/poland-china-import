@@ -19,14 +19,16 @@
       --line: rgba(23, 23, 23, 0.15);
       --scale-1: #ffd200;
       --scale-2: #fba60b;
-      --scale-3: #f87916;
-      --scale-4: #f44d20;
-      --scale-5: #f0202b;
-      --shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
-      color: var(--ink);
-      font-family: Georgia, "Times New Roman", serif;
-      background: var(--paper);
-    }
+	      --scale-3: #f87916;
+	      --scale-4: #f44d20;
+		      --scale-5: #f0202b;
+		      --shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+		      --site-header-height: 120px;
+		      --visual-safe-height: calc(100vh - var(--site-header-height));
+		      color: var(--ink);
+	      font-family: Georgia, "Times New Roman", serif;
+	      background: var(--paper);
+	    }
 
     * {
       box-sizing: border-box;
@@ -219,29 +221,30 @@
       overflow-anchor: none;
     }
 
-    .sticky-visual {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      background: #f7f5ee;
+	    .sticky-visual {
+	      position: sticky;
+	      top: 0;
+	      height: 100vh;
+	      display: grid;
+	      place-items: center;
+	      overflow: hidden;
+	      background: #f7f5ee;
       overflow-anchor: none;
     }
 
-    .house-wrap {
-      position: relative;
-      width: min(98vw, calc(92vh * 1.792), 1900px);
-      aspect-ratio: 5504 / 3072;
-      isolation: isolate;
-      --base-pan-x: 0px;
-      --pan-x: 0px;
-      --pan-y: 0px;
-      --zoom: 1;
-      --label-scale: 1;
-      --label-pop-scale: 0.96;
-      transform: translate3d(calc(var(--base-pan-x) + var(--pan-x)), var(--pan-y), 0) scale(var(--zoom));
+	    .house-wrap {
+	      position: relative;
+	      width: min(98vw, calc(var(--visual-safe-height) * 1.68), 1900px);
+	      aspect-ratio: 5504 / 3072;
+	      isolation: isolate;
+	      --base-pan-x: 0px;
+	      --base-pan-y: -64px;
+	      --pan-x: 0px;
+	      --pan-y: 0px;
+	      --zoom: 1;
+	      --label-scale: 1;
+	      --label-pop-scale: 0.96;
+	      transform: translate3d(calc(var(--base-pan-x) + var(--pan-x)), calc(var(--base-pan-y) + var(--pan-y)), 0) scale(var(--zoom));
       transform-origin: center center;
       transition: filter 180ms ease;
       will-change: transform;
@@ -343,6 +346,7 @@
     }
 
     .pin-dot {
+      position: relative;
       width: 34px;
       height: 34px;
       border-radius: 50%;
@@ -354,6 +358,22 @@
       color: #111;
       font: 700 11px/1 "Fira Sans", sans-serif;
       letter-spacing: 0;
+      padding: 0;
+      appearance: none;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .pin-dot:focus-visible {
+      outline: 2px solid #111;
+      outline-offset: 2px;
+    }
+
+    .pin-dot::before {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
     }
 
 	    .sticky-visual[data-current-room="kitchen"] .pin-dot,
@@ -398,11 +418,16 @@
     }
 
     .pin.is-visible.is-label-visible .pin-card,
-    .pin.is-visible:hover .pin-card,
+    .pin.is-visible.is-label-tapped .pin-card,
+    .pin.is-visible .pin-dot:hover + .pin-card,
     .pin.is-visible:focus-within .pin-card {
       opacity: 1;
       visibility: visible;
       transform: translate(var(--label-shift-x), var(--label-shift-y)) scale(var(--label-scale));
+    }
+
+    .pin.is-label-tapped {
+      z-index: 8;
     }
 
     .pin[data-snap="w"] .pin-card {
@@ -674,12 +699,12 @@
       .hero-scroll-arrow { animation: none; }
     }
 
-    .steps {
-      position: relative;
-      margin-top: -100vh;
-      z-index: 9;
-      pointer-events: none;
-    }
+	    .steps {
+	      position: relative;
+	      margin-top: -100vh;
+	      z-index: 9;
+	      pointer-events: none;
+	    }
 
     .step {
       min-height: 108vh;
@@ -756,9 +781,10 @@
 
     .step[data-panel="article"] .step-card {
       width: min(720px, calc(100vw - 44px));
-      padding: 0;
-      background: transparent;
-      border: 0;
+      padding: 22px 24px 24px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(23, 23, 23, 0.13);
+      border-radius: 8px;
       box-shadow: none;
       backdrop-filter: none;
     }
@@ -848,15 +874,16 @@
     }
 
     @media (max-width: 760px) {
-      .sticky-visual {
-        align-items: start;
-        padding-top: 7vh;
-      }
+	      .sticky-visual {
+	        align-items: start;
+	        padding-top: 7vh;
+	      }
 
-      .house-wrap {
-        width: min(142vw, calc(77vh * 1.792));
-        --base-pan-x: -10vw;
-      }
+	      .house-wrap {
+	        width: min(142vw, calc(var(--visual-safe-height) * 1.5));
+	        --base-pan-x: -10vw;
+	        --base-pan-y: -24px;
+	      }
 
       .legend {
         top: max(12px, 2vh);
@@ -905,7 +932,11 @@
       }
 
       .pin-card {
-        display: none;
+        display: block;
+        width: min(178px, 58vw);
+        padding: 7px 8px 8px;
+        font-size: 11.5px;
+        line-height: 1.18;
       }
 
       .title-lockup {
@@ -1224,7 +1255,7 @@
           <img class="house-image" data-image-layer="2" data-src="https://ocdn.eu/pulscms/MDA_/fcff00a9c86254e63874b87fb291a050.png" alt="" aria-hidden="true">
           <img class="house-image" data-image-layer="3" data-src="https://ocdn.eu/pulscms/MDA_/3884479c7dfc6fe0183b12adc4cf650c.png" alt="" aria-hidden="true">
           <div class="image-dim" aria-hidden="true"></div>
-          <div class="pin-layer" id="pinLayer" aria-hidden="true"></div>
+          <div class="pin-layer" id="pinLayer" aria-label="Etykiety produktów na ilustracji"></div>
         </div>
         <div class="title-lockup" aria-hidden="true">
           <img class="hero-tytul" data-src="tytul.png" data-fetchpriority="high" alt="Dom z Chin. Od drzwi po śrubkę — Onet">
@@ -1258,19 +1289,19 @@
 
         <section class="step step-red" data-panel="redslide" data-room="top" data-legend="none">
           <div class="step-card">
-            <p>Państwo Środka wprowadziło się do naszych domów na dobre. Pytanie nie brzmi już „czy”, ale jak bardzo jesteśmy od niego uzależnieni. Nasi analitycy przeanalizowali dane importowe dotyczące przedmiotów, z których korzystamy na co dzień. Zobacz, czy jesteś w stanie urządzić swoje mieszkanie bez produktów z Chin i z jakimi konsekwencjami się to wiąże.</p>
+            <p>Państwo Środka wprowadziło się do naszych domów na dobre. Pytanie nie brzmi już „czy”, ale jak bardzo jesteśmy uzależnieni od chińskich produktów. Nasi analitycy przeanalizowali dane importowe dotyczące przedmiotów, z których korzystamy na co dzień. Zobacz, czy jesteś w stanie urządzić swoje mieszkanie bez produktów z Chin i z jakimi konsekwencjami się to wiąże.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="top" data-legend="none" data-side="center" data-blur="true" data-image-layer="0">
           <div class="step-card">
-            <p>Zapraszamy na spacer po naszym wirtualnym domu. Zobaczmy, skąd najprawdopodobniej pochodzą przedmioty, które do niego kupiliśmy.</p>
+            <p>Zapraszamy na spacer po naszym wirtualnym domu. Zobaczmy, jaka jest szansa, że przedmioty, które do niego kupiliśmy, będą pochodzić z Chin.</p>
           </div>
         </section>
 
         <section class="step" id="frontYardStep" data-panel="card" data-room="front yard" data-layers="1" data-side="right" data-legend="right" data-image-layer="1">
           <div class="step-card">
-            <p>Już przed budynkiem możemy zobaczyć sprowadzany z Chin <mark class="product-highlight">sprzęt ogrodowy</mark>. W produkcji tego typu dóbr wyspecjalizowały się zakłady z dwóch najbogatszych prowincji: Guangdong oraz Zhejiang. Chińczycy oferują nam wszystko: od <mark class="product-highlight">grilli</mark> i <mark class="product-highlight">hamaków</mark>, przez <mark class="product-highlight">meble ogrodowe</mark>, <mark class="product-highlight">systemy kompostowania odpadów</mark>, <mark class="product-highlight">sprzęt do zraszania roślin</mark>, <mark class="product-highlight">solarne oświetlenie ogrodowe</mark>, po duże i małe <mark class="product-highlight">zabawki dziecięce</mark>, które stoją na trawnikach czy leżą w piaskownicach.</p>
+            <p>Przed budynkiem możemy zobaczyć <mark class="product-highlight">sprzęt ogrodowy</mark>. Jeżeli zdecydujemy się na zakup importowanego produktu, mamy blisko 50 proc. szans, że będzie on pochodził z Chin. W produkcji tego typu dóbr wyspecjalizowały się zakłady z dwóch najbogatszych prowincji: Guangdong oraz Zhejiang. Chińczycy oferują nam wszystko: od <mark class="product-highlight">grilli</mark> i <mark class="product-highlight">hamaków</mark>, przez <mark class="product-highlight">meble ogrodowe</mark>, <mark class="product-highlight">systemy kompostowania odpadów</mark>, <mark class="product-highlight">sprzęt do zraszania roślin</mark>, <mark class="product-highlight">solarne oświetlenie ogrodowe</mark>, po duże i małe <mark class="product-highlight">zabawki dziecięce</mark>, które stoją na trawnikach czy leżą w piaskownicach.</p>
           </div>
         </section>
 
@@ -1279,7 +1310,7 @@
         <section class="step" data-panel="card" data-room="overview" data-products="drzwi wewnętrzne drewniane" data-side="right" data-legend="right">
           <div class="step-card">
             <p>Wchodząc do środka domu, możemy dosłownie zderzyć się z kolejnym chińskim produktem. <mark class="product-highlight">Drzwi wejściowe</mark>. Od kilku lat wzrasta liczba importowanych z Państwa Środka <mark class="product-highlight">drzwi stalowych</mark>. W 2023 roku co piąty importowany produkt tego typu pochodził z Chin. W 2024 roku do Polski trafiło ich blisko 105 tysięcy sztuk. Import w stosunku do roku 2023 wzrósł o ponad 15 tysięcy egzemplarzy, jak donosi portal forumbranzowe.com.</p>
-            <p>Ale z Chin importujemy także <mark class="product-highlight">drzwi wewnętrzne</mark>, <mark class="product-highlight">drzwi przesuwne</mark>, a także <mark class="product-highlight">okna</mark>. Chińskie są nawet te, które noszą nazwę „francuskie”. Okna w naszym domu zapewne są przesłonięte chińskimi <mark class="product-highlight">roletami elastycznymi</mark>, czyli wewnętrznymi, albo <mark class="product-highlight">zasłonami</mark> wyprodukowanymi w Państwie Środka.</p>
+            <p>Ale z Chin importujemy także <mark class="product-highlight">drzwi wewnętrzne</mark>, <mark class="product-highlight">drzwi przesuwne</mark>, a także <mark class="product-highlight">okna</mark>. Chińskie są nawet te, które noszą nazwę „francuskie”, czyli sięgające od podłogi aż po sufit. Okna w naszym domu zapewne są przesłonięte chińskimi <mark class="product-highlight">roletami elastycznymi</mark>, czyli wewnętrznymi, albo <mark class="product-highlight">zasłonami</mark> wyprodukowanymi w Państwie Środka.</p>
           </div>
         </section>
 
@@ -1291,14 +1322,14 @@
 
         <section class="step" data-panel="article" data-room="overview" data-legend="none">
           <div class="step-card">
-            <p>Użytkownicy serwisu społecznościowego Reddit zdecydowanie potwierdzają konkurencyjność pod względem ceny. Jeden z nich zastanawiał się, czy nie warto sprowadzić z Chin przesuwanych drzwi. Producenci z USA proponowali mu pięć sztuk za 12 tys. dolarów, a podobne drzwi sprowadzone z Chin kosztowałyby dosłownie jedną dziesiątą tej kwoty. Tylko czy warto?</p>
-            <p>Na to pytanie odpowiedział użytkownik o pseudonimie Guangzhouagent, który, jak twierdził, prowadzi biuro w Foshan, gdzie kupuje aluminiowe okna i drzwi na zlecenie deweloperów oraz architektów wnętrz z innych państw. Produkty chińskie ocenił dobrze, ale radził, aby najpierw dokładnie sprawdzać rozmiary profili aluminiowych, z których będą wykonane drzwi. Chińczycy lubią oszczędzać na grubości, tym samym skracając żywotność produktu.</p>
+            <p>Użytkownicy serwisu społecznościowego Reddit, dzieląc się doświadczeniami z remontów na grupie „HomeImprovement”, zdecydowanie potwierdzają konkurencyjność pod względem ceny. Jeden z nich zastanawiał się, czy nie warto sprowadzić z Chin przesuwanych drzwi. Producenci z USA proponowali mu pięć sztuk za 12 tys. dolarów, a podobne drzwi sprowadzone z Chin kosztowałyby dosłownie jedną dziesiątą tej kwoty. Tylko czy warto?</p>
+            <p>Na to pytanie odpowiedział inny użytkownik, który, jak twierdził, prowadzi biuro w Foshan, gdzie kupuje aluminiowe okna i drzwi na zlecenie deweloperów oraz architektów wnętrz z innych państw. Produkty chińskie ocenił dobrze, ale radził, aby najpierw dokładnie sprawdzać rozmiary profili aluminiowych, z których będą wykonane drzwi. Chińczycy lubią oszczędzać na grubości, tym samym skracając żywotność produktu.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="overview" data-legend="none">
           <div class="step-card">
-            <p>Sugerował także, aby unikać tamtejszych okuć, zawiasów oraz klamek, ponieważ te mają słabszą jakość. Radził, aby zamawiając drzwi czy okna, prosić o użycie części importowanych. Problemem może okazać się także samo wykończenie, bo jak zaznaczył, „chińskie standardy izolacji i wykończenia znacznie różnią się od zachodnich”.</p>
+            <p>Sugerował także, aby unikać tamtejszych okuć, zawiasów oraz klamek, ponieważ te mają słabszą jakość. Radził, aby zamawiając drzwi czy okna, prosić o użycie w nich części importowanych. Problemem może okazać się także samo wykończenie okien czy drzwi, bo jak zaznaczył, „chińskie standardy izolacji i wykończenia znacznie różnią się od zachodnich”.</p>
             <p>Dodał: „Ogólnie rzecz biorąc, ceny chińskich aluminiowych okien i drzwi są bardzo przystępne. Współpracując z najlepszym dostawcą, można uzyskać niesamowitą jakość, ale cena to odzwierciedli”. A zatem lepsza jakość oznacza wyższą cenę produktu. To odnosi się nie tylko do okien i drzwi, ale do większości towarów zamawianych w Chinach.</p>
           </div>
         </section>
@@ -1307,20 +1338,20 @@
           <div class="step-card">
             <p>W zależności od kwoty, jaką jesteśmy gotowi zapłacić, możemy uzyskać produkt o skrajnie różnej jakości: od najniższej do najwyższej. Wystarczy zaznaczyć zapotrzebowanie przy składaniu zamówienia, a producent użyje innych materiałów lub podzespołów do produkcji tego samego przedmiotu.</p>
             <p>Co ciekawe, bazując na doświadczeniu użytkowników Reddita, nawet przy produktach wyższej jakości, a więc droższych, nadal opłaca się złożyć zamówienie w Chinach. Za cenę jednych drzwi w USA można kupić tam kilka par.</p>
-            <p>Co więcej, Chińczycy przekonują, że są w stanie dostarczyć produkt szybciej niż zakłady w Polsce. U nas po złożeniu zamówienia przeciętnie czeka się około dwóch, trzech tygodni, a w sezonie nawet dłużej. Na produkt z Państwa Środka, jak obiecują strony internetowe producentów, trzeba czekać od 10 do 15 dni od momentu ustalenia szczegółów i wykonania przelewu, czyli oszczędza się około jedną trzecią czasu.</p>
+            <p>Co więcej, Chińczycy przekonują, że są w stanie dostarczyć produkt szybciej niż zakłady w Polsce. U nas po złożeniu zamówienia przeciętnie czeka się około dwóch, trzech tygodni, a w sezonie nawet dłużej. Na produkt z Państwa Środka, jak obiecują strony internetowe producentów, trzeba czekać od 10 do 15 dni od momentu ustalenia szczegółów i wykonania przelewu, czyli oszczędza się jedną trzecią czasu.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="bathroom" data-side="right" data-legend="right" data-show-pins="false">
           <div class="step-card">
-            <p>Po przekroczeniu progu domu otoczą nas przedmioty z Chin. I nie jest to przenośnia, bo <mark class="product-highlight">podłogi</mark> i <mark class="product-highlight">ściany</mark> często są wykonane ze sprowadzanych z Państwa Środka <mark class="product-highlight">płytek</mark>. Skoro Chiny od wieków słyną z ceramiki, to nic dziwnego, że są liderem w jej eksporcie. I nie chodzi o naczynia, a o <mark class="product-highlight">płytki gresowe</mark>, <mark class="product-highlight">terakotowe</mark> i <mark class="product-highlight">porcelanowe</mark>.</p>
-            <p>Importowane <mark class="product-highlight">wyroby ceramiczne</mark> są nawet o jedną czwartą tańsze niż te produkowane w Polsce. Jednak w 2008 roku, jak informowała Gazeta Prawna, jedna z partii sprowadzona na prywatne zlecenie zagrażała życiu i zdrowiu użytkowników. Wykryte promieniowanie potasu 40, radu 226 i toru 228, pierwiastków badanych sumarycznie, było nawet dwukrotnie większe od dopuszczalnego.</p>
+            <p>Wróćmy do naszego domu i wejdźmy do środka. <mark class="product-highlight">Podłogi</mark> i <mark class="product-highlight">ściany</mark> też mogą być wykonane ze sprowadzanych z Państwa Środka <mark class="product-highlight">płytek</mark>. Importowane <mark class="product-highlight">wyroby ceramiczne</mark> są nawet o jedną czwartą tańsze niż te produkowane w Polsce.</p>
+            <p>Jednak w 2008 roku, jak informowała Gazeta Prawna, jedna z partii sprowadzona na prywatne zlecenie zagrażała życiu i zdrowiu użytkowników. Wykryte promieniowanie potasu 40, radu 226 i toru 228, pierwiastków badanych sumarycznie, było nawet dwukrotnie większe od dopuszczalnego.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="bedroomFloor" data-products="podłoga parkiet drewniany" data-side="right" data-legend="right">
           <div class="step-card">
-            <p>Jeśli ktoś nie decydował się na ceramikę, może chodzić po <mark class="product-highlight">parkietach drewnianych</mark>, również sprowadzanych z Chin.</p>
+            <p>Jeśli ktoś nie zdecydował się na ceramikę, może chodzić po <mark class="product-highlight">parkietach drewnianych</mark>, również sprowadzanych z Chin.</p>
           </div>
         </section>
 
@@ -1332,27 +1363,27 @@
 
         <section class="step" data-panel="card" data-room="storage" data-layers="1" data-side="left" data-legend="left" data-image-layer="3">
           <div class="step-card">
-            <p>Zajrzyjmy na chwilę do pomieszczenia gospodarczego. Żeby korzystać z prądu produkowanego przez panele, potrzebne są <mark class="product-highlight">falowniki</mark>. Według portalu Wysokie Napięcie w 2024 roku aż 80 proc. nowo instalowanych <mark class="product-highlight">falowników</mark> w Europie pochodziło z Chin. Choć to może się niedługo zmienić, ponieważ Komisja Europejska chce ograniczyć liczbę chińskich <mark class="product-highlight">inwerterów</mark>. Powodem jest bezpieczeństwo europejskich sieci energetycznych.</p>
+            <p>Zajrzyjmy na chwilę do pomieszczenia gospodarczego. Żeby korzystać z prądu produkowanego przez panele, potrzebne są <mark class="product-highlight">falowniki</mark>. Według portalu Wysokie Napięcie w 2024 roku aż 80 proc. nowo instalowanych <mark class="product-highlight">falowników</mark> w Europie pochodziło z Chin. Choć to może się niedługo zmienić, ponieważ Komisja Europejska chce ograniczyć import tych urządzeń. Powodem jest bezpieczeństwo europejskich sieci energetycznych.</p>
             <p>Stojące w pomieszczeniu <mark class="product-highlight">bojlery</mark> czy <mark class="product-highlight">podgrzewacze wody</mark> również mogą być wyprodukowane w Chinach. Stamtąd sprowadzamy również <mark class="product-highlight">grzejniki</mark>.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="all" data-rooms="bedroom,kitchen,bathroom,salon,storage" data-layers="2" data-side="right" data-legend="right" data-image-layer="3">
           <div class="step-card">
-            <p>Wszystkie <mark class="product-highlight">meble</mark>, takie jak <mark class="product-highlight">szafa w przedpokoju</mark>, <mark class="product-highlight">stół w salonie</mark>, <mark class="product-highlight">krzesła</mark>, <mark class="product-highlight">wyposażenie garderoby</mark>, <mark class="product-highlight">łóżka w sypialni</mark>, <mark class="product-highlight">szafki w kuchni</mark> oraz <mark class="product-highlight">szafki w łazience</mark>, to wszystko z wysokim prawdopodobieństwem pochodzi z Chin.</p>
+            <p>Wszystkie <mark class="product-highlight">meble</mark>, takie jak <mark class="product-highlight">szafa w przedpokoju</mark>, <mark class="product-highlight">stół w salonie</mark>, <mark class="product-highlight">krzesła</mark>, <mark class="product-highlight">wyposażenie garderoby</mark>, <mark class="product-highlight">łóżka w sypialni</mark>, <mark class="product-highlight">szafki w kuchni</mark> oraz <mark class="product-highlight">szafki w łazience</mark> - to wszystko z wysokim prawdopodobieństwem pochodzi z Chin.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
             <p>Według raportu Departamentu Analiz Ekonomicznych banku PKO BP w 2024 roku niemal co drugi importowany do Polski mebel, dokładnie 41,6 proc., pochodził z Chin. Produkuje się tam wszystko: stoły, krzesła, łóżka, szafy, meble tapicerowane, dziecięce, ogrodowe, kuchenne, regały garażowe i inne. Na specjalne zamówienie można również dostać reprodukcje mebli zabytkowych lub stylizowanych na zabytkowe.</p>
-            <p>Chcesz mieć meble à la Ludwik XIV czy XVI? Zrobią je chińscy robotnicy, którzy nie mają pojęcia, gdzie dokładnie leży Francja, nie znają historii jej władców i nie wiedzą, czym są barok, rokoko i klasycyzm.</p>
+            <p>Chcesz mieć meble à la Ludwik XIV czy XVI? Zrobią je chińscy robotnicy.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
-            <p>Do niedawna była pewna szansa, że w tym produkcie jest polski element. Jeszcze dwa lata temu prawie jedna piąta eksportowanego z Polski drewna trafiała do Chin. W trzech pierwszych kwartałach zeszłego roku ta liczba spadła o połowę, a tym samym szansa, że nasze drewno wróci akurat do Polski w formie mebla, jest już znikoma.</p>
+            <p>Do niedawna była pewna szansa, że w tych meblach jest pewien polski element. Jeszcze dwa lata temu prawie jedna piąta eksportowanego z Polski drewna trafiała do Chin. W trzech pierwszych kwartałach zeszłego roku ta liczba spadła o połowę, a tym samym szansa, że nasze drewno wróci akurat do Polski w formie mebla, jest już znikoma.</p>
             <p>Cena? Znowu zależy od jakości, ale może być nawet o połowę niższa niż u krajowych czy europejskich producentów.</p>
           </div>
         </section>
@@ -1365,20 +1396,20 @@
 
         <section class="step" data-panel="card" data-room="bedroom" data-layers="2" data-side="left" data-legend="left">
           <div class="step-card">
-            <p>Przejdźmy do sypialni. Zaglądając do środka naszych chińskich <mark class="product-highlight">mebli</mark>, znajdziemy tam chińskie <mark class="product-highlight">tekstylia domowe</mark>: <mark class="product-highlight">ręczniki</mark>, <mark class="product-highlight">prześcieradła</mark>, <mark class="product-highlight">pościel</mark>, <mark class="product-highlight">koce</mark>. To jedne z produktów o najwyższym procencie importu.</p>
+            <p>Przejdźmy do sypialni. Znajdziemy tam chińskie <mark class="product-highlight">tekstylia domowe</mark>: <mark class="product-highlight">ręczniki</mark>, <mark class="product-highlight">prześcieradła</mark>, <mark class="product-highlight">pościel</mark>, <mark class="product-highlight">koce</mark>. To jedne z produktów o najwyższym procencie importu.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="kitchen" data-legend="none">
           <div class="step-card">
-            <p>A jak jest z jakością chińskich mebli? Tym razem użytkownicy zwracają uwagę, że zależy to nie tylko od ceny, ale i odrobiny szczęścia. Na forum Reddit z Australii konsumenci omawiający chińskie meble kuchenne robione na zamówienie informowali, że mogą pojawiać się problemy z serwisem w razie wad produktu.</p>
+            <p>A jak jest z jakością chińskich mebli? Tym razem użytkownicy zwracają uwagę, że zależy to nie tylko od ceny, ale i odrobiny szczęścia. Na grupie „AusRenovation” w serwisie Reddit, skupiającej się wokół wymiany doświadczeń z remontów, konsumenci z Australii omawiali chińskie meble kuchenne robione na zamówienie. Informowali, że mogą pojawiać się problemy z serwisem w razie wad produktu.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="kitchen" data-legend="none">
           <div class="step-card">
-            <p>Użytkownik russellFIXA, który importował do Australii z Chin różne towary, ostrzegał: „Jeśli wystąpi wada, Chińczycy najpierw spróbują zwrócić ci pieniądze tylko za tę uszkodzoną część. A potem obciążą cię kosztami transportu za odesłanie tej części do naprawy. (...) Nie lubią też robić pojedynczych, małych części, za które nie dostają zapłaty, więc czas oczekiwania na naprawę może być długi”.</p>
-            <p>Ponadto użytkownik GruffCassquatch, pracujący w firmie zajmującej się załatwianiem spraw celnych przy imporcie towarów z Chin, ostrzegał, że meble kuchenne z Państwa Środka dość często przekraczają normy chemikaliów, w tym trującego formaldehydu służącego do klejenia płyt meblowych czy używanego do impregnacji drewna difluorku amonu. Jak twierdził, w chińskich meblach kuchennych bywa wykorzystywany także rakotwórczy azbest.</p>
+            <p>Jeden z użytkowników ostrzegał: „Jeśli wystąpi wada, Chińczycy najpierw spróbują zwrócić ci pieniądze tylko za tę uszkodzoną część. A potem obciążą cię kosztami transportu za odesłanie tej części do naprawy. (...) Nie lubią też robić pojedynczych, małych części, za które nie dostają zapłaty, więc czas oczekiwania na naprawę może być długi”.</p>
+            <p>Inny użytkownik, pracujący w firmie zajmującej się załatwianiem spraw celnych przy imporcie towarów z Chin, ostrzegał, że meble kuchenne z Państwa Środka dość często przekraczają normy chemikaliów, w tym trującego formaldehydu służącego do klejenia płyt meblowych czy używanego do impregnacji drewna difluorku amonu. Jak twierdził, w chińskich meblach kuchennych bywa wykorzystywany także rakotwórczy azbest.</p>
           </div>
         </section>
 
@@ -1392,20 +1423,20 @@
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
-            <p>Dodatkowo proces wsparła globalizacja. Przykładem jest słoweńska marka AGD Gorenje, która produkuje blisko jedną czwartą sprzętu w Europie. Osiem lat temu przeszła w ręce Chińczyków i obecnie należy do koncernu Hisense Group z siedzibą w Qingdao, w prowincji Szantung, znanego producenta telewizorów, już pod oryginalnym logo.</p>
+            <p>Dodatkowo proces wsparła globalizacja. Przykładem jest słoweńska marka AGD Gorenje, która produkuje blisko jedną czwartą sprzętu w Europie. Osiem lat temu przeszła w ręce Chińczyków i obecnie należy do koncernu Hisense Group z siedzibą w Qingdao (prowincja Szantung), znanego producenta telewizorów, już pod oryginalnym logo.</p>
             <p>Przebojem weszła do Europy i tu stworzyła swoje fabryki chińska firma Haier, również mająca główną siedzibę w Qingdao. Firma kiedyś kupowała licencje od niemieckiego producenta lodówek, potem go wykupiła, aż w końcu zdobyła szturmem świat. Ma swoje fabryki nie tylko w Europie. W 2011 roku wykupiła od przeżywającej kłopoty firmy Panasonic markę Sanyo, w tym jej zakłady produkcyjne oraz centra badawcze.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="office" data-side="right" data-legend="right" data-show-pins="false">
           <div class="step-card">
-            <p>Zerknijmy jeszcze na <mark class="product-highlight">telefon</mark> i <mark class="product-highlight">tablet</mark> leżący na naszym chińskim <mark class="product-highlight">biurku</mark>. Załóżmy, że chcemy uniknąć typowo chińskiego produktu jak <mark class="product-highlight">Xiaomi</mark> albo <mark class="product-highlight">Huawei</mark>, kupując nowy <mark class="product-highlight">smartfon Motoroli</mark>, czyli amerykańskiego pioniera technologii telekomunikacji bezprzewodowej. Tymczasem od kilku lat firma i jej logo są w posiadaniu Chińczyków. Tak samo jak odkupiona od IBM marka notebooków <mark class="product-highlight">ThinkPad</mark>.</p>
+            <p>Zerknijmy jeszcze na <mark class="product-highlight">telefon</mark> i <mark class="product-highlight">tablet</mark> leżący na naszym chińskim <mark class="product-highlight">biurku</mark>. Załóżmy, że chcemy uniknąć typowo chińskiego produktu jak <mark class="product-highlight">Xiaomi</mark> albo <mark class="product-highlight">HUAWEI</mark>, kupując nowy <mark class="product-highlight">smartfon Motoroli</mark>, czyli amerykańskiego pioniera technologii telekomunikacji bezprzewodowej. Tymczasem od kilku lat firma i jej logo są w posiadaniu Chińczyków. Tak samo jak odkupiona od IBM marka notebooków <mark class="product-highlight">ThinkPad</mark>.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="kitchenClose" data-products="garnki stalowe,patelnie,deski do krojenia" data-side="right" data-legend="right">
           <div class="step-card">
-            <p>Z wrażenia w kuchni chcesz napić się <mark class="product-highlight">szklanki</mark> zimnej wody. Uważaj, w rękach możesz trzymać produkt z Chin. Z Państwa Środka importujemy nie tylko <mark class="product-highlight">naczynia emaliowane</mark>, z których jeszcze niedawno słynął nasz przemysł. Sprowadzamy także <mark class="product-highlight">garnki stalowe</mark>, <mark class="product-highlight">patelnie</mark>, <mark class="product-highlight">deski do krojenia</mark>, <mark class="product-highlight">sztućce</mark>, <mark class="product-highlight">talerze</mark>, <mark class="product-highlight">kubki</mark> i <mark class="product-highlight">szklanki</mark>.</p>
+            <p>Gdybyś chciał teraz sięgnąć po wodę, z dużym prawdopodobieństwem nalejesz jej do <mark class="product-highlight">szklanki</mark> z Chin. Ale z Państwa Środka importujemy nie tylko <mark class="product-highlight">naczynia emaliowane</mark>, z których jeszcze niedawno słynął nasz przemysł. Sprowadzamy także <mark class="product-highlight">garnki stalowe</mark>, <mark class="product-highlight">patelnie</mark>, <mark class="product-highlight">deski do krojenia</mark>, <mark class="product-highlight">sztućce</mark>, <mark class="product-highlight">talerze</mark>, <mark class="product-highlight">kubki</mark> i <mark class="product-highlight">szklanki</mark>.</p>
           </div>
         </section>
 
@@ -1423,7 +1454,7 @@
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
-            <p>Radosław Pyffel, ekspert do spraw Azji i Chin, komentuje dla Onetu: „Chiny jako kraj, w którym tanio produkuje się słabszej jakości dobra, nie odchodzą całkiem do przeszłości. Jednak już w poprzednich planach pięcioletnich władze postawiły na rozwój technologiczny, tworzenie samochodów elektrycznych, AI, robotyki oraz samowystarczalność technologiczną i surowcową. To oznacza, że wzrasta jakość produkowanych przez nich towarów, ich miejsce w łańcuchu dostaw również, zwłaszcza że zwracają się ku nowym rynkom tak zwanego globalnego południa, gdzie powstaje nowa klasa średnia, która będzie ich klientem”.</p>
+            <p>Radosław Pyffel, ekspert do spraw Azji i Chin, komentuje dla Onetu: „Chiny jako kraj, w którym produkuje się tanio, nie odchodzą całkiem do przeszłości. Jednak już w poprzednich planach pięcioletnich władze postawiły na rozwój technologiczny, tworzenie samochodów elektrycznych, AI, robotyki oraz samowystarczalność technologiczną i surowcową. To oznacza, że wzrasta jakość produkowanych przez nich towarów, ich miejsce w łańcuchu dostaw również, zwłaszcza że zwracają się ku nowym rynkom tak zwanego globalnego południa, gdzie powstaje nowa klasa średnia, która będzie ich klientem”.</p>
             <p>„Powodem obecnej pozycji Chin jest paradoksalnie między innymi chciwość koncernów zarówno amerykańskich, jak i europejskich. Jest takie chińskie przysłowie: dobry królik ma trzy nory. Koncerny amerykańskie i europejskie w pogoni za zyskiem z marży z taniej produkcji w pewnym momencie praktycznie zrezygnowały z dywersyfikacji źródeł wytwarzania dóbr. Korporacje przez dekady kierowały się wyłącznie kwestią zysku tu i teraz. Nie budowano kolejnych nor. W efekcie Chiny mają w niektórych strategicznych sektorach monopol lub prawie monopol. Teraz, żeby nadrobić stracony czas, zachodnie gospodarki będą potrzebować około 15 lat na rozwój nowych fabryk, technologii, komponentów i surowców do nich, a w tym czasie Chińczycy będą parli do przodu” - dodaje Pyffel.</p>
           </div>
         </section>
@@ -1523,22 +1554,24 @@
       { id: "storage-cabinet", name: "szafka", source: "Szafa w przedpokoju drewniana", room: "storage", layer: 2, share: 17.7, x: 88.8, y: 39.6, snap: "w" }
     ];
 
-    // Camera controls:
-    // Edit left/top/width/height to move the framed image area, measured in % of the image.
-    // Edit zoom for desktop scale and mobileZoom for small-screen scale.
+	    // Camera controls:
+	    // The fixed page header is ignored by scroll activation with --site-header-height in :root above.
+	    // To hide more/less of the image top under the page header, edit --base-pan-y in .house-wrap above: negative moves the image up.
+	    // Edit left/top/width/height to move the framed image area, measured in % of the image.
+	    // Edit zoom for desktop scale and mobileZoom for small-screen scale.
     const roomFocus = {
       top: { left: 0, top: 0, width: 100, height: 100, zoom: 0.94, mobileZoom: 1 },
       overview: { left: 17, top: 17, width: 72, height: 65, zoom: 1.12, mobileZoom: 1.28 },
       "front yard": { left: 3, top: 42, width: 31, height: 45, zoom: 1.85, mobileZoom: 2.25 },
-	      bathroom: { left: 62, top: 38, width: 22, height: 33, zoom: 2.1, mobileZoom: 2.45 },
+	      bathroom: { left: 60, top: 37, width: 28, height: 39, zoom: 1.72, mobileZoom: 2.45 },
 	      salon: { left: 37, top: 49, width: 33, height: 32, zoom: 1.75, mobileZoom: 2.05 },
 	      salonTableTop: { left: 36, top: 55, width: 34, height: 34, zoom: 2.05, mobileZoom: 2.35 },
-	      roof: { left: 37, top: 0, width: 38, height: 20, zoom: 1.95, mobileZoom: 2.35 },
+		      roof: { left: 37, top: 0, width: 38, height: 20, zoom: 1.7, mobileZoom: 2.35 },
       storage: { left: 70, top: 25, width: 26, height: 35, zoom: 1.95, mobileZoom: 2.35 },
       kitchen: { left: 41, top: 25, width: 30, height: 34, zoom: 1.95, mobileZoom: 2.35 },
       kitchenClose: { left: 44, top: 28, width: 25, height: 26, zoom: 2.45, mobileZoom: 2.85 },
       bedroom: { left: 20, top: 27, width: 25, height: 30, zoom: 2.05, mobileZoom: 2.45 },
-      bedroomFloor: { left: 22, top: 42, width: 21, height: 19, zoom: 2.00, mobileZoom: 2.05 },
+	      bedroomFloor: { left: 22, top: 42, width: 21, height: 19, zoom: 1.75, mobileZoom: 2.05 },
       office: { left: 55, top: 66, width: 28, height: 27, zoom: 2.05, mobileZoom: 2.45 },
       all: { left: 2, top: 8, width: 96, height: 84, zoom: 0.98, mobileZoom: 1.15 }
     };
@@ -1554,15 +1587,19 @@
       storage: "Pomieszczenie techniczne"
     };
 
-    const stickyVisual = document.getElementById("stickyVisual");
-    const houseWrap = document.getElementById("houseWrap");
-    const houseImages = [...document.querySelectorAll(".house-image")];
-    const pinLayer = document.getElementById("pinLayer");
-    const mobileQuery = window.matchMedia("(max-width: 760px)");
-    let activeStep = null;
-    let labelTimer = null;
-    let labelPulseId = 0;
-    let lastCameraState = "";
+	    const stickyVisual = document.getElementById("stickyVisual");
+	    const houseWrap = document.getElementById("houseWrap");
+	    const houseImages = [...document.querySelectorAll(".house-image")];
+	    const pinLayer = document.getElementById("pinLayer");
+	    const mobileQuery = window.matchMedia("(max-width: 760px)");
+	    let activeStep = null;
+	    let labelRevealTimer = null;
+	    let labelHideTimer = null;
+	    let labelPulseId = 0;
+	    let lastCameraState = "";
+	    let visiblePinSignature = null;
+	    const LABEL_REVEAL_DELAY_MS = 900;
+	    const LABEL_VISIBLE_MS = 7000;
 
     function colorForShare(share) {
       if (share >= 65) return "#f0202b";
@@ -1586,6 +1623,14 @@
       return text.charAt(0).toLocaleUpperCase("pl-PL") + text.slice(1);
     }
 
+    function escapeAttribute(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
     function metricLabel(product) {
       const marker = normalize(product.metric || product.sourceDocument || product.sourceFile || product.source || "");
       const isMarketShare = marker.includes("polskim rynku") || marker.includes("market");
@@ -1593,25 +1638,42 @@
       return `${formatShare(product.share, 1)} importu do Polski pochodzi z Chin`;
     }
 
-    function parseList(value) {
-      return String(value || "")
-        .split(",")
-        .map((item) => normalize(item))
-        .filter(Boolean);
-    }
+	    function parseList(value) {
+	      return String(value || "")
+	        .split(",")
+	        .map((item) => normalize(item))
+	        .filter(Boolean);
+	    }
 
-	    function renderPins() {
-	      pinLayer.innerHTML = products.map((product) => `
-	        <!-- Percentage circle position comes from product.x and product.y in the products array above. -->
-	        <div class="pin" data-id="${product.id}" data-room="${product.room}" data-snap="${product.snap}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
-          <div class="pin-dot">${formatShare(product.share)}</div>
-          <div class="pin-card">
-            <span class="pin-name">${capitalizeFirst(product.name)}</span>
-            <span class="pin-kicker">${metricLabel(product)}</span>
+	    function getSiteHeaderHeight() {
+	      const value = getComputedStyle(document.documentElement).getPropertyValue("--site-header-height");
+	      return Number.parseFloat(value) || 0;
+	    }
+
+	    function getActivationY() {
+	      const headerHeight = getSiteHeaderHeight();
+	      return headerHeight + (window.innerHeight - headerHeight) * 0.56;
+	    }
+
+		    function renderPins() {
+		      pinLayer.innerHTML = products.map((product) => {
+		        const productName = capitalizeFirst(product.name);
+		        const metricText = metricLabel(product);
+		        const cardId = `pin-card-${product.id}`;
+		        const buttonLabel = `Pokaż opis: ${productName}. ${metricText}.`;
+
+		        return `
+		          <!-- Percentage circle position comes from product.x and product.y in the products array above. -->
+		          <div class="pin" data-id="${escapeAttribute(product.id)}" data-room="${escapeAttribute(product.room)}" data-snap="${escapeAttribute(product.snap)}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
+            <button type="button" class="pin-dot" aria-expanded="false" aria-controls="${escapeAttribute(cardId)}" aria-label="${escapeAttribute(buttonLabel)}">${formatShare(product.share)}</button>
+            <div class="pin-card" id="${escapeAttribute(cardId)}">
+              <span class="pin-name">${productName}</span>
+              <span class="pin-kicker">${metricText}</span>
+            </div>
           </div>
-        </div>
-      `).join("");
-    }
+        `;
+		      }).join("");
+	    }
 
 	    function productMatchesStep(product, step) {
 	      if (step.dataset.showPins === "false") return false;
@@ -1631,8 +1693,16 @@
 	      return layers.includes(String(product.layer));
 	    }
 
+	    function getVisibleProductsForStep(step) {
+	      return products.filter((product) => productMatchesStep(product, step));
+	    }
+
+	    function getVisiblePinSignature(visibleProducts) {
+	      return visibleProducts.map((product) => product.id).sort().join("|");
+	    }
+
 	    function articleTextNeedsBackground() {
-	      const activationY = window.innerHeight * 0.56;
+	      const activationY = getActivationY();
 	      return steps.some((step) => {
 	        if (step.dataset.panel !== "article") return false;
 	        const textCard = step.querySelector(".step-card");
@@ -1685,12 +1755,12 @@
       moveCameraToFocus(focus);
     }
 
-    function moveCameraToFocus(focus) {
-      const zoom = mobileQuery.matches && focus.mobileZoom ? focus.mobileZoom : focus.zoom || 1;
-      const centerX = focus.left + focus.width / 2;
-      const centerY = focus.top + focus.height / 2;
-      const panX = -((centerX - 50) / 100) * houseWrap.offsetWidth * zoom;
-      const panY = -((centerY - 50) / 100) * houseWrap.offsetHeight * zoom;
+	    function moveCameraToFocus(focus) {
+	      const zoom = mobileQuery.matches && focus.mobileZoom ? focus.mobileZoom : focus.zoom || 1;
+	      const centerX = focus.left + focus.width / 2;
+	      const centerY = focus.top + focus.height / 2;
+	      const panX = -((centerX - 50) / 100) * houseWrap.offsetWidth * zoom;
+	      const panY = -((centerY - 50) / 100) * houseWrap.offsetHeight * zoom;
       const cameraState = `${zoom.toFixed(3)}|${panX.toFixed(1)}|${panY.toFixed(1)}`;
 
       if (cameraState === lastCameraState) return;
@@ -1703,47 +1773,94 @@
       houseWrap.style.setProperty("--label-pop-scale", (0.96 / zoom).toFixed(3));
     }
 
-    function clearLabels() {
-      labelPulseId += 1;
-      window.clearTimeout(labelTimer);
-      document.querySelectorAll(".pin.is-label-visible").forEach((pin) => {
-        pin.classList.remove("is-label-visible");
-      });
-    }
+		    function clearLabels() {
+		      labelPulseId += 1;
+		      window.clearTimeout(labelRevealTimer);
+		      window.clearTimeout(labelHideTimer);
+		      document.querySelectorAll(".pin.is-label-visible").forEach((pin) => {
+		        pin.classList.remove("is-label-visible");
+		      });
+		      closeTappedLabels();
+	    }
+
+	    function setTappedLabel(pin, isOpen) {
+	      pin.classList.toggle("is-label-tapped", isOpen);
+	      const button = pin.querySelector(".pin-dot");
+	      if (button) {
+	        button.setAttribute("aria-expanded", String(isOpen));
+	        if (!isOpen) button.blur();
+	      }
+	    }
+
+	    function closeTappedLabels(exceptPin = null) {
+	      document.querySelectorAll(".pin.is-label-tapped").forEach((pin) => {
+	        if (pin !== exceptPin) setTappedLabel(pin, false);
+	      });
+	    }
+
+	    function handlePinTap(event) {
+	      if (!mobileQuery.matches) return;
+	      const target = event.target;
+	      if (!(target instanceof Element)) return;
+
+	      const pin = target.closest(".pin");
+	      if (!pin || !pin.classList.contains("is-visible") || pin.classList.contains("is-muted")) return;
+
+	      event.preventDefault();
+	      event.stopPropagation();
+
+	      const shouldOpen = !pin.classList.contains("is-label-tapped");
+	      closeTappedLabels(pin);
+	      setTappedLabel(pin, shouldOpen);
+	    }
+
+	    function handleOutsideTap(event) {
+	      if (!mobileQuery.matches) return;
+	      const target = event.target;
+	      if (target instanceof Element && target.closest(".pin")) return;
+	      closeTappedLabels();
+	    }
 
     function pulseStepLabels(step) {
       clearLabels();
       if (step.dataset.panel === "article" || step.dataset.panel === "title" || mobileQuery.matches) return;
 
-      const pulseId = labelPulseId;
-      const visiblePins = [...document.querySelectorAll(".pin.is-visible:not(.is-muted)")];
-      window.requestAnimationFrame(() => {
-        if (pulseId !== labelPulseId) return;
-        visiblePins.forEach((pin) => pin.classList.add("is-label-visible"));
-        labelTimer = window.setTimeout(() => {
-          if (pulseId !== labelPulseId) return;
-          visiblePins.forEach((pin) => pin.classList.remove("is-label-visible"));
-        }, 2300);
-      });
-    }
+	      const pulseId = labelPulseId;
+	      const visiblePins = [...document.querySelectorAll(".pin.is-visible:not(.is-muted)")];
+	      window.requestAnimationFrame(() => {
+	        if (pulseId !== labelPulseId) return;
+	        labelRevealTimer = window.setTimeout(() => {
+	          if (pulseId !== labelPulseId) return;
+	          visiblePins.forEach((pin) => pin.classList.add("is-label-visible"));
+	          labelHideTimer = window.setTimeout(() => {
+	            if (pulseId !== labelPulseId) return;
+	            visiblePins.forEach((pin) => pin.classList.remove("is-label-visible"));
+	          }, LABEL_VISIBLE_MS);
+	        }, LABEL_REVEAL_DELAY_MS);
+	      });
+	    }
 
-    function activateStep(step) {
-      if (activeStep === step) return;
-      activeStep = step;
-      const roomValue = step.dataset.room || "top";
-      setVisualMode(step);
-      setImageLayer(step);
-      setFocus(roomValue);
-      steps.forEach((item) => item.classList.toggle("is-active", item === step));
-      document.querySelectorAll(".pin").forEach((pin) => {
-        const product = products.find((item) => item.id === pin.dataset.id);
-        const visible = productMatchesStep(product, step);
-        pin.classList.remove("is-label-visible");
-        pin.classList.toggle("is-visible", visible);
-        pin.classList.toggle("is-muted", false);
-      });
-      pulseStepLabels(step);
-      if (step.dataset.paywall === "gate") triggerPaywall("brama: przed 'Wchodząc do środka'");
+	    function activateStep(step) {
+	      if (activeStep === step) return;
+	      activeStep = step;
+	      const roomValue = step.dataset.room || "top";
+	      const visibleProducts = getVisibleProductsForStep(step);
+	      const nextVisiblePinSignature = getVisiblePinSignature(visibleProducts);
+	      const visiblePinsChanged = nextVisiblePinSignature !== visiblePinSignature;
+	      const visibleProductIds = new Set(visibleProducts.map((product) => product.id));
+	      visiblePinSignature = nextVisiblePinSignature;
+	      setVisualMode(step);
+	      setImageLayer(step);
+	      setFocus(roomValue);
+	      steps.forEach((item) => item.classList.toggle("is-active", item === step));
+	      document.querySelectorAll(".pin").forEach((pin) => {
+	        const visible = visibleProductIds.has(pin.dataset.id);
+	        if (visiblePinsChanged) pin.classList.remove("is-label-visible");
+	        pin.classList.toggle("is-visible", visible);
+	        pin.classList.toggle("is-muted", false);
+	      });
+	      if (visiblePinsChanged) pulseStepLabels(step);
+	      if (step.dataset.paywall === "gate") triggerPaywall("brama: przed 'Wchodząc do środka'");
       // Auto-zwiń legendę raz, po pierwszym slajdzie z punktami (front yard).
       if (!legendAutoCollapsed && frontYardStepIndex >= 0 && steps.indexOf(step) > frontYardStepIndex) {
         legendAutoCollapsed = true;
@@ -1802,16 +1919,26 @@
       embedSdkReady.then(() => triggerPaywall("?paywallTest"));
     }
 
-    renderPins();
+	    renderPins();
+	    pinLayer.addEventListener("click", handlePinTap);
+	    document.addEventListener("click", handleOutsideTap);
+	    document.addEventListener("keydown", (event) => {
+	      if (event.key === "Escape") closeTappedLabels();
+	    });
+	    if (mobileQuery.addEventListener) {
+	      mobileQuery.addEventListener("change", clearLabels);
+	    } else {
+	      mobileQuery.addListener(clearLabels);
+	    }
 
-    const steps = [...document.querySelectorAll(".step")];
+	    const steps = [...document.querySelectorAll(".step")];
     let scrollTicking = false;
     let legendAutoCollapsed = false;
     const frontYardStepIndex = steps.findIndex((s) => s.id === "frontYardStep");
 
-    function getStepAtActivationLine() {
-      const activationY = window.innerHeight * 0.56;
-      let nearestStep = steps[0];
+	    function getStepAtActivationLine() {
+	      const activationY = getActivationY();
+	      let nearestStep = steps[0];
       let nearestDistance = Infinity;
 
       for (const step of steps) {
