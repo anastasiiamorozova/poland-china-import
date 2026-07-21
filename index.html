@@ -242,7 +242,7 @@
 	      aspect-ratio: 5504 / 3072;
 	      isolation: isolate;
 	      --base-pan-x: 0px;
-	      --base-pan-y: -64px;
+	      --base-pan-y: -140px;
 	      --pan-x: 0px;
 	      --pan-y: 0px;
 	      --zoom: 1;
@@ -1712,12 +1712,22 @@
 
 	    function articleTextNeedsBackground() {
 	      const activationY = getActivationY();
-	      return steps.some((step) => {
+	      return steps.some((step, i) => {
 	        if (step.dataset.panel !== "article") return false;
 	        const textCard = step.querySelector(".step-card");
 	        if (!textCard) return false;
 	        const rect = textCard.getBoundingClientRect();
-	        return rect.bottom > 0 && rect.top <= activationY;
+	        // Podstawowy pas czytania tej karty.
+	        if (rect.bottom > 0 && rect.top <= activationY) return true;
+	        // Mostek: gdy ta karta wyszła już górą, a NASTĘPNY slajd też jest article
+	        // i jego karta dopiero nadchodzi (jeszcze poza pasem) — trzymaj tło włączone,
+	        // żeby blur + biała nakładka nie mrugnęły między kolejnymi slajdami treści.
+	        const next = steps[i + 1];
+	        if (rect.bottom <= 0 && next && next.dataset.panel === "article") {
+	          const nextCard = next.querySelector(".step-card");
+	          if (nextCard && nextCard.getBoundingClientRect().top > activationY) return true;
+	        }
+	        return false;
 	      });
 	    }
 
