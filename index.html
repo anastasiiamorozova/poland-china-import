@@ -314,7 +314,7 @@
     }
 
     .sticky-visual.is-panel-article::after {
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.78);
     }
 
     .pin-layer {
@@ -476,7 +476,7 @@
       --label-origin: right bottom;
     }
 
-    /* Tooltip pointer toward the pin — default (card to the right, points left) */
+    
     .pin-card::after {
       content: "";
       position: absolute;
@@ -550,9 +550,7 @@
       letter-spacing: 0;
     }
 
-    /* Mobilny dymek etykiety: position:fixed liczony ze współrzędnych ekranowych
-       pina (JS), żeby zawsze mieścił się w kadrze i był blisko punktu.
-       Pokazywany tylko na mobile (JS pod mobileQuery). */
+    
     .pin-tip {
       position: fixed;
       z-index: 40;
@@ -796,7 +794,7 @@
 
     .step-card p {
       margin: 0;
-      color: #242421;
+      color: #000;
       font-size: 18.5px;
       line-height: 1.45;
     }
@@ -825,7 +823,7 @@
     }
 
     .step[data-panel="article"] .step-card p {
-      color: #171717;
+      color: #000;
       font-size: 18.5px;
       line-height: 1.45;
     }
@@ -946,11 +944,25 @@
         padding: 8vh 20px;
       }
 
+      
+      .step[data-panel="article"]:has(+ .step[data-panel="article"]) {
+        min-height: 0;
+        padding-bottom: 0;
+      }
+
+      .step[data-panel="article"] + .step[data-panel="article"] {
+        min-height: 0;
+        padding-top: 0;
+        margin-top: 1.45em;
+      }
+
+      
+      .step[data-panel="article"] + .step[data-panel="card"] {
+        min-height: 150vh;
+      }
+
       .step[data-blur="true"] {
-        /* min-height: odstęp OD czerwonego slajdu do kafla (kafel jest przy dole
-           sekcji przez align-items:end). padding-bottom: odstęp POD kaflem, żeby
-           zdążył wyjechać z kadru, zanim frontYardStep odsłoni pierwsze piny
-           (linia aktywacji ~56% vp). */
+        
         min-height: 135vh;
         padding-bottom: 60vh;
       }
@@ -958,10 +970,15 @@
       .step-card,
       .step[data-panel="article"] .step-card {
         width: 100%;
-        /* Kafel (sam tekst) leży nad wizualizacją (.steps z-index:9 > pin-layer),
-           więc na mobile przechwytywał tapnięcia na piny pod spodem — przepuszczamy
-           je, żeby wszystkie kropki były klikalne. */
+        
         pointer-events: none;
+      }
+
+      
+      .step[data-panel="article"] .step-card {
+        border: none;
+        border-radius: 0;
+        background: transparent;
       }
 
       .step[data-panel="article"] .step-card p {
@@ -975,8 +992,7 @@
         font-size: 10px;
       }
 
-      /* Na mobile zamiast osadzonej karty (skalowanej/przycinanej w house-wrap)
-         używamy dymka #pinTip liczonego w px ekranu. */
+      
       .pin-card {
         display: none;
       }
@@ -1338,7 +1354,7 @@
 
         <section class="step step-red" data-panel="redslide" data-room="top" data-legend="none">
           <div class="step-card">
-            <p>Państwo Środka wprowadziło się do naszych domów na dobre. Pytanie nie brzmi już „czy”, ale jak bardzo jesteśmy uzależnieni od chińskich produktów. Nasi analitycy przeanalizowali dane importowe dotyczące przedmiotów, z których korzystamy na co dzień. Zobacz, czy jesteś w stanie urządzić swoje mieszkanie bez produktów z Chin i z jakimi konsekwencjami się to wiąże.</p>
+            <p>Państwo Środka wprowadziło się do naszych domów na dobre. Pytanie nie brzmi już "czy", ale jak bardzo jesteśmy uzależnieni od chińskich produktów. Nasi analitycy przeanalizowali dane importowe dotyczące przedmiotów, z których korzystamy na co dzień. Zobacz, czy jesteś w stanie urządzić swoje mieszkanie bez produktów z Chin i z jakimi konsekwencjami się to wiąże.</p>
           </div>
         </section>
 
@@ -1359,7 +1375,7 @@
         <section class="step" data-panel="card" data-room="overview" data-products="drzwi wewnętrzne drewniane" data-side="right" data-legend="right">
           <div class="step-card">
             <p>Wchodząc do środka domu, możemy dosłownie zderzyć się z kolejnym chińskim produktem. <mark class="product-highlight">Drzwi wejściowe</mark>. Od kilku lat wzrasta liczba importowanych z Państwa Środka <mark class="product-highlight">drzwi stalowych</mark>. W 2023 roku co piąty importowany produkt tego typu pochodził z Chin. W 2024 roku do Polski trafiło ich blisko 105 tysięcy sztuk. Import w stosunku do roku 2023 wzrósł o ponad 15 tysięcy egzemplarzy, jak donosi portal forumbranzowe.com.</p>
-            <p>Ale z Chin importujemy także <mark class="product-highlight">drzwi wewnętrzne</mark>, <mark class="product-highlight">drzwi przesuwne</mark>, a także <mark class="product-highlight">okna</mark>. Chińskie są nawet te, które noszą nazwę „francuskie”, czyli sięgające od podłogi aż po sufit. Okna w naszym domu zapewne są przesłonięte chińskimi <mark class="product-highlight">roletami elastycznymi</mark>, czyli wewnętrznymi, albo <mark class="product-highlight">zasłonami</mark> wyprodukowanymi w Państwie Środka.</p>
+            <p>Ale z Chin importujemy także <mark class="product-highlight">drzwi wewnętrzne</mark>, <mark class="product-highlight">drzwi przesuwne</mark>, a także <mark class="product-highlight">okna</mark>. Chińskie są nawet te, które noszą nazwę "francuskie", czyli sięgające od podłogi aż po sufit. Okna w naszym domu zapewne są przesłonięte chińskimi <mark class="product-highlight">roletami elastycznymi</mark>, czyli wewnętrznymi, albo <mark class="product-highlight">zasłonami</mark> wyprodukowanymi w Państwie Środka.</p>
           </div>
         </section>
 
@@ -1371,15 +1387,15 @@
 
         <section class="step" data-panel="article" data-room="overview" data-legend="none">
           <div class="step-card">
-            <p>Użytkownicy serwisu społecznościowego Reddit, dzieląc się doświadczeniami z remontów na grupie „HomeImprovement”, zdecydowanie potwierdzają konkurencyjność pod względem ceny. Jeden z nich zastanawiał się, czy nie warto sprowadzić z Chin przesuwanych drzwi. Producenci z USA proponowali mu pięć sztuk za 12 tys. dolarów, a podobne drzwi sprowadzone z Chin kosztowałyby dosłownie jedną dziesiątą tej kwoty. Tylko czy warto?</p>
+            <p>Użytkownicy serwisu społecznościowego Reddit, dzieląc się doświadczeniami z remontów na grupie "HomeImprovement", zdecydowanie potwierdzają konkurencyjność pod względem ceny. Jeden z nich zastanawiał się, czy nie warto sprowadzić z Chin przesuwanych drzwi. Producenci z USA proponowali mu pięć sztuk za 12 tys. dol., a podobne drzwi sprowadzone z Chin kosztowałyby dosłownie jedną dziesiątą tej kwoty. Tylko czy warto?</p>
             <p>Na to pytanie odpowiedział inny użytkownik, który, jak twierdził, prowadzi biuro w Foshan, gdzie kupuje aluminiowe okna i drzwi na zlecenie deweloperów oraz architektów wnętrz z innych państw. Produkty chińskie ocenił dobrze, ale radził, aby najpierw dokładnie sprawdzać rozmiary profili aluminiowych, z których będą wykonane drzwi. Chińczycy lubią oszczędzać na grubości, tym samym skracając żywotność produktu.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="overview" data-legend="none">
           <div class="step-card">
-            <p>Sugerował także, aby unikać tamtejszych okuć, zawiasów oraz klamek, ponieważ te mają słabszą jakość. Radził, aby zamawiając drzwi czy okna, prosić o użycie w nich części importowanych. Problemem może okazać się także samo wykończenie okien czy drzwi, bo jak zaznaczył, „chińskie standardy izolacji i wykończenia znacznie różnią się od zachodnich”.</p>
-            <p>Dodał: „Ogólnie rzecz biorąc, ceny chińskich aluminiowych okien i drzwi są bardzo przystępne. Współpracując z najlepszym dostawcą, można uzyskać niesamowitą jakość, ale cena to odzwierciedli”. A zatem lepsza jakość oznacza wyższą cenę produktu. To odnosi się nie tylko do okien i drzwi, ale do większości towarów zamawianych w Chinach.</p>
+            <p>Sugerował także, aby unikać tamtejszych okuć, zawiasów oraz klamek, ponieważ te mają słabszą jakość. Radził, aby zamawiając drzwi czy okna, prosić o użycie w nich części importowanych. Problemem może okazać się także samo wykończenie okien czy drzwi, bo jak zaznaczył, "chińskie standardy izolacji i wykończenia znacznie różnią się od zachodnich".</p>
+            <p>Dodał: "Ogólnie rzecz biorąc, ceny chińskich aluminiowych okien i drzwi są bardzo przystępne. Współpracując z najlepszym dostawcą, można uzyskać niesamowitą jakość, ale cena to odzwierciedli". A zatem lepsza jakość oznacza wyższą cenę produktu. To odnosi się nie tylko do okien i drzwi, ale do większości towarów zamawianych w Chinach.</p>
           </div>
         </section>
 
@@ -1394,7 +1410,7 @@
         <section class="step" data-panel="card" data-room="bathroom" data-side="right" data-legend="right" data-show-pins="false">
           <div class="step-card">
             <p>Wróćmy do naszego domu i wejdźmy do środka. <mark class="product-highlight">Podłogi</mark> i <mark class="product-highlight">ściany</mark> też mogą być wykonane ze sprowadzanych z Państwa Środka <mark class="product-highlight">płytek</mark>. Importowane <mark class="product-highlight">wyroby ceramiczne</mark> są nawet o jedną czwartą tańsze niż te produkowane w Polsce.</p>
-            <p>Jednak w 2008 roku, jak informowała Gazeta Prawna, jedna z partii sprowadzona na prywatne zlecenie zagrażała życiu i zdrowiu użytkowników. Wykryte promieniowanie potasu 40, radu 226 i toru 228, pierwiastków badanych sumarycznie, było nawet dwukrotnie większe od dopuszczalnego.</p>
+            <p>Jednak w 2008 r., jak informowała "Gazeta Prawna", jedna z partii sprowadzona na prywatne zlecenie zagrażała życiu i zdrowiu użytkowników. Wykryte promieniowanie potasu 40, radu 226 i toru 228, pierwiastków badanych sumarycznie, było nawet dwukrotnie większe od dopuszczalnego.</p>
           </div>
         </section>
 
@@ -1425,7 +1441,7 @@
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
-            <p>Według raportu Departamentu Analiz Ekonomicznych banku PKO BP w 2024 roku niemal co drugi importowany do Polski mebel, dokładnie 41,6 proc., pochodził z Chin. Produkuje się tam wszystko: stoły, krzesła, łóżka, szafy, meble tapicerowane, dziecięce, ogrodowe, kuchenne, regały garażowe i inne. Na specjalne zamówienie można również dostać reprodukcje mebli zabytkowych lub stylizowanych na zabytkowe.</p>
+            <p>Według raportu Departamentu Analiz Ekonomicznych banku PKO BP w 2024 r. niemal co drugi importowany do Polski mebel, dokładnie 41,6 proc., pochodził z Chin. Produkuje się tam wszystko: stoły, krzesła, łóżka, szafy, meble tapicerowane, dziecięce, ogrodowe, kuchenne, regały garażowe i inne. Na specjalne zamówienie można również dostać reprodukcje mebli zabytkowych lub stylizowanych na zabytkowe.</p>
             <p>Chcesz mieć meble à la Ludwik XIV czy XVI? Zrobią je chińscy robotnicy.</p>
           </div>
         </section>
@@ -1451,13 +1467,13 @@
 
         <section class="step" data-panel="article" data-room="kitchen" data-legend="none">
           <div class="step-card">
-            <p>A jak jest z jakością chińskich mebli? Tym razem użytkownicy zwracają uwagę, że zależy to nie tylko od ceny, ale i odrobiny szczęścia. Na grupie „AusRenovation” w serwisie Reddit, skupiającej się wokół wymiany doświadczeń z remontów, konsumenci z Australii omawiali chińskie meble kuchenne robione na zamówienie. Informowali, że mogą pojawiać się problemy z serwisem w razie wad produktu.</p>
+            <p>A jak jest z jakością chińskich mebli? Tym razem użytkownicy zwracają uwagę, że zależy to nie tylko od ceny, ale i odrobiny szczęścia. Na grupie "AusRenovation" w serwisie Reddit, skupiającej się wokół wymiany doświadczeń z remontów, konsumenci z Australii omawiali chińskie meble kuchenne robione na zamówienie. Informowali, że mogą pojawiać się problemy z serwisem w razie wad produktu.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="kitchen" data-legend="none">
           <div class="step-card">
-            <p>Jeden z użytkowników ostrzegał: „Jeśli wystąpi wada, Chińczycy najpierw spróbują zwrócić ci pieniądze tylko za tę uszkodzoną część. A potem obciążą cię kosztami transportu za odesłanie tej części do naprawy. (...) Nie lubią też robić pojedynczych, małych części, za które nie dostają zapłaty, więc czas oczekiwania na naprawę może być długi”.</p>
+            <p>Jeden z użytkowników ostrzegał: "Jeśli wystąpi wada, Chińczycy najpierw spróbują zwrócić ci pieniądze tylko za tę uszkodzoną część. A potem obciążą cię kosztami transportu za odesłanie tej części do naprawy. (...) Nie lubią też robić pojedynczych, małych części, za które nie dostają zapłaty, więc czas oczekiwania na naprawę może być długi".</p>
             <p>Inny użytkownik, pracujący w firmie zajmującej się załatwianiem spraw celnych przy imporcie towarów z Chin, ostrzegał, że meble kuchenne z Państwa Środka dość często przekraczają normy chemikaliów, w tym trującego formaldehydu służącego do klejenia płyt meblowych czy używanego do impregnacji drewna difluorku amonu. Jak twierdził, w chińskich meblach kuchennych bywa wykorzystywany także rakotwórczy azbest.</p>
           </div>
         </section>
@@ -1466,14 +1482,14 @@
 
         <section class="step" data-panel="card" data-room="all" data-products="lodówka,zamrażarka,kuchenka,telewizor,głośnik" data-side="right" data-legend="right" data-image-layer="3">
           <div class="step-card">
-            <p>Przyjrzyjmy się teraz AGD. W naszym otoczeniu jest znacznie więcej chińskich produktów tej kategorii, niż się spodziewamy. Nieświadomie taki towar można też kupić od naszych rodzimych firm, ukryty pod ich marką. W Polsce w ten sposób działa kilku producentów. Zasada jest następująca: w kraju tworzy się logo, projektuje opakowanie, a produkty z wymalowaną na nich nazwą zamawia się w Chinach. Jedynie wnikliwi zobaczą napisane na spodzie małymi literkami „made in China”.</p>
+            <p>Przyjrzyjmy się teraz AGD. W naszym otoczeniu jest znacznie więcej chińskich produktów tej kategorii, niż się spodziewamy. Nieświadomie taki towar można też kupić od naszych rodzimych firm, ukryty pod ich marką. W Polsce w ten sposób działa kilku producentów. Zasada jest następująca: w kraju tworzy się logo, projektuje opakowanie, a produkty z wymalowaną na nich nazwą zamawia się w Chinach. Jedynie wnikliwi zobaczą napisane na spodzie małymi literkami "made in China".</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
             <p>Dodatkowo proces wsparła globalizacja. Przykładem jest słoweńska marka AGD Gorenje, która produkuje blisko jedną czwartą sprzętu w Europie. Osiem lat temu przeszła w ręce Chińczyków i obecnie należy do koncernu Hisense Group z siedzibą w Qingdao (prowincja Szantung), znanego producenta telewizorów, już pod oryginalnym logo.</p>
-            <p>Przebojem weszła do Europy i tu stworzyła swoje fabryki chińska firma Haier, również mająca główną siedzibę w Qingdao. Firma kiedyś kupowała licencje od niemieckiego producenta lodówek, potem go wykupiła, aż w końcu zdobyła szturmem świat. Ma swoje fabryki nie tylko w Europie. W 2011 roku wykupiła od przeżywającej kłopoty firmy Panasonic markę Sanyo, w tym jej zakłady produkcyjne oraz centra badawcze.</p>
+            <p>Przebojem weszła do Europy i tu stworzyła swoje fabryki chińska firma Haier, również mająca główną siedzibę w Qingdao. Firma kiedyś kupowała licencje od niemieckiego producenta lodówek, potem go wykupiła, aż w końcu zdobyła szturmem świat. Ma swoje fabryki nie tylko w Europie. W 2011 r. wykupiła od przeżywającej kłopoty firmy Panasonic markę Sanyo, w tym jej zakłady produkcyjne oraz centra badawcze.</p>
           </div>
         </section>
 
@@ -1503,14 +1519,14 @@
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
-            <p>Radosław Pyffel, ekspert do spraw Azji i Chin, komentuje dla Onetu: „Chiny jako kraj, w którym produkuje się tanio, nie odchodzą całkiem do przeszłości. Jednak już w poprzednich planach pięcioletnich władze postawiły na rozwój technologiczny, tworzenie samochodów elektrycznych, AI, robotyki oraz samowystarczalność technologiczną i surowcową. To oznacza, że wzrasta jakość produkowanych przez nich towarów, ich miejsce w łańcuchu dostaw również, zwłaszcza że zwracają się ku nowym rynkom tak zwanego globalnego południa, gdzie powstaje nowa klasa średnia, która będzie ich klientem”.</p>
-            <p>„Powodem obecnej pozycji Chin jest paradoksalnie między innymi chciwość koncernów zarówno amerykańskich, jak i europejskich. Jest takie chińskie przysłowie: dobry królik ma trzy nory. Koncerny amerykańskie i europejskie w pogoni za zyskiem z marży z taniej produkcji w pewnym momencie praktycznie zrezygnowały z dywersyfikacji źródeł wytwarzania dóbr. Korporacje przez dekady kierowały się wyłącznie kwestią zysku tu i teraz. Nie budowano kolejnych nor. W efekcie Chiny mają w niektórych strategicznych sektorach monopol lub prawie monopol. Teraz, żeby nadrobić stracony czas, zachodnie gospodarki będą potrzebować około 15 lat na rozwój nowych fabryk, technologii, komponentów i surowców do nich, a w tym czasie Chińczycy będą parli do przodu” - dodaje Pyffel.</p>
+            <p>Radosław Pyffel, ekspert do spraw Azji i Chin, komentuje dla Onetu: "Chiny jako kraj, w którym produkuje się tanio, nie odchodzą całkiem do przeszłości. Jednak już w poprzednich planach pięcioletnich władze postawiły na rozwój technologiczny, tworzenie samochodów elektrycznych, AI, robotyki oraz samowystarczalność technologiczną i surowcową. To oznacza, że wzrasta jakość produkowanych przez nich towarów, ich miejsce w łańcuchu dostaw również, zwłaszcza że zwracają się ku nowym rynkom tak zwanego globalnego południa, gdzie powstaje nowa klasa średnia, która będzie ich klientem".</p>
+            <p>"Powodem obecnej pozycji Chin jest paradoksalnie między innymi chciwość koncernów zarówno amerykańskich, jak i europejskich. Jest takie chińskie przysłowie: dobry królik ma trzy nory. Koncerny amerykańskie i europejskie w pogoni za zyskiem z marży z taniej produkcji w pewnym momencie praktycznie zrezygnowały z dywersyfikacji źródeł wytwarzania dóbr. Korporacje przez dekady kierowały się wyłącznie kwestią zysku tu i teraz. Nie budowano kolejnych nor. W efekcie Chiny mają w niektórych strategicznych sektorach monopol lub prawie monopol. Teraz, żeby nadrobić stracony czas, zachodnie gospodarki będą potrzebować około 15 lat na rozwój nowych fabryk, technologii, komponentów i surowców do nich, a w tym czasie Chińczycy będą parli do przodu" - dodaje Pyffel.</p>
           </div>
         </section>
 
         <section class="step" data-panel="article" data-room="all" data-legend="none">
           <div class="step-card">
-            <p>Zapytany przez Onet ekspert zwraca uwagę, że proces ulepszania jakości produktów, przez który przechodzą teraz Chiny, już się w światowej gospodarce wydarzył: „Elektronika z Japonii po II wojnie światowej była synonimem słabej jakości. Potem Japończycy rozwinęli swój przemysł i wysuwali się na pozycję lidera. Ten proces zatrzymali Amerykanie. Chiny idą dokładnie tą samą drogą, od sprzętu słabej jakości do hi-tech. Ale różnica polega na tym, że nie dają się zatrzymać Amerykanom, mimo że takie próby były podejmowane. Rozwijają się dalej i wysuwają na światową czołówkę technologiczną” - ocenia Pyffel.</p>
+            <p>Zapytany przez Onet ekspert zwraca uwagę, że proces ulepszania jakości produktów, przez który przechodzą teraz Chiny, już się w światowej gospodarce wydarzył: "Elektronika z Japonii po II wojnie światowej była synonimem słabej jakości. Potem Japończycy rozwinęli swój przemysł i wysuwali się na pozycję lidera. Ten proces zatrzymali Amerykanie. Chiny idą dokładnie tą samą drogą, od sprzętu słabej jakości do hi-tech. Ale różnica polega na tym, że nie dają się zatrzymać Amerykanom, mimo że takie próby były podejmowane. Rozwijają się dalej i wysuwają na światową czołówkę technologiczną" - ocenia Pyffel.</p>
           </div>
         </section>
 
@@ -1560,11 +1576,11 @@
   </main>
 
 	  <script>
-	    // Percentage circle positions:
-	    // Edit x and y below to move each circle on the image.
-	    // x is the horizontal position from the left edge, y is the vertical position from the top edge, both in %.
-	    // Example: x: 50, y: 50 places the circle in the middle of the image.
-	    // snap changes where the small hover label opens, but does not move the percentage circle itself.
+	    
+	    
+	    
+	    
+	    
 	    const products = [
       { id: "bed", name: "łóżko", source: "Łóżko drewniane w sypialni", room: "bedroom", layer: 2, share: 21.1, x: 33.6, y: 44.6, snap: "s" },
       { id: "bedding", name: "pościel", source: "Bawełniana pościel", room: "bedroom", layer: 3, share: 3.6, x: 33.8, y: 45.8, snap: "s" },
@@ -1602,11 +1618,11 @@
       { id: "storage-cabinet", name: "szafka", source: "Szafa w przedpokoju drewniana", room: "storage", layer: 2, share: 17.7, x: 88.8, y: 39.6, snap: "w" }
     ];
 
-	    // Camera controls:
-	    // The fixed page header is ignored by scroll activation with --site-header-height in :root above.
-	    // To hide more/less of the image top under the page header, edit --base-pan-y in .house-wrap above: negative moves the image up.
-	    // Edit left/top/width/height to move the framed image area, measured in % of the image.
-	    // Edit zoom for desktop scale and mobileZoom for small-screen scale.
+	    
+	    
+	    
+	    
+	    
     const roomFocus = {
       top: { left: 0, top: 0, width: 100, height: 100, zoom: 0.94, mobileZoom: 1 },
       overview: { left: 17, top: 17, width: 72, height: 65, zoom: 1.12, mobileZoom: 1.28 },
@@ -1712,7 +1728,7 @@
 		        const buttonLabel = `Pokaż opis: ${productName}. ${metricText}.`;
 
 		        return `
-		          <!-- Percentage circle position comes from product.x and product.y in the products array above. -->
+		          
 		          <div class="pin" data-id="${escapeAttribute(product.id)}" data-room="${escapeAttribute(product.room)}" data-snap="${escapeAttribute(product.snap)}" style="--x:${product.x}%; --y:${product.y}%; --pin-color:${colorForShare(product.share)}">
             <button type="button" class="pin-dot" aria-expanded="false" aria-controls="${escapeAttribute(cardId)}" aria-label="${escapeAttribute(buttonLabel)}">${formatShare(product.share)}</button>
             <div class="pin-card" id="${escapeAttribute(cardId)}">
@@ -1757,11 +1773,11 @@
 	        const textCard = step.querySelector(".step-card");
 	        if (!textCard) return false;
 	        const rect = textCard.getBoundingClientRect();
-	        // Podstawowy pas czytania tej karty.
+	        
 	        if (rect.bottom > 0 && rect.top <= activationY) return true;
-	        // Mostek: gdy ta karta wyszła już górą, a NASTĘPNY slajd też jest article
-	        // i jego karta dopiero nadchodzi (jeszcze poza pasem) — trzymaj tło włączone,
-	        // żeby blur + biała nakładka nie mrugnęły między kolejnymi slajdami treści.
+	        
+	        
+	        
 	        const next = steps[i + 1];
 	        if (rect.bottom <= 0 && next && next.dataset.panel === "article") {
 	          const nextCard = next.querySelector(".step-card");
@@ -1846,8 +1862,8 @@
 	      if (pinTip) pinTip.classList.remove("is-visible");
 	    }
 
-	    // Dymek etykiety na mobile — liczony ze współrzędnych ekranowych pina,
-	    // więc zawsze mieści się w kadrze i trzyma stały, mały odstęp od punktu.
+	    
+	    
 	    function showPinTip(pin) {
 	      if (!pinTip) return;
 	      const dot = pin.querySelector(".pin-dot");
@@ -1861,8 +1877,8 @@
 	      const gap = 10;
 	      let left = dotRect.left + dotRect.width / 2 - tipRect.width / 2;
 	      left = Math.max(margin, Math.min(left, window.innerWidth - tipRect.width - margin));
-	      let top = dotRect.top - gap - tipRect.height; // domyślnie nad punktem
-	      if (top < margin) top = dotRect.bottom + gap; // gdy brak miejsca — pod punktem
+	      let top = dotRect.top - gap - tipRect.height; 
+	      if (top < margin) top = dotRect.bottom + gap; 
 	      top = Math.max(margin, Math.min(top, window.innerHeight - tipRect.height - margin));
 	      pinTip.style.left = `${Math.round(left)}px`;
 	      pinTip.style.top = `${Math.round(top)}px`;
@@ -1893,9 +1909,9 @@
 	      const clickedPin = target.closest(".pin");
 	      if (!clickedPin) return;
 
-	      // Piny skalują się z zoomem kadru i mają rozszerzone pole trafienia (::before),
-	      // więc sąsiednie kropki potrafią na siebie nachodzić — górny w DOM przechwytuje
-	      // wtedy tap sąsiada. Wybierz pin, którego ŚRODEK jest najbliżej dotknięcia.
+	      
+	      
+	      
 	      let pin = clickedPin;
 	      let best = Infinity;
 	      pinLayer.querySelectorAll(".pin.is-visible:not(.is-muted)").forEach((candidate) => {
@@ -1905,7 +1921,7 @@
 	        const cx = r.left + r.width / 2;
 	        const cy = r.top + r.height / 2;
 	        const dist = Math.hypot(event.clientX - cx, event.clientY - cy);
-	        const reach = r.width / 2 + 16; // promień kropki (na ekranie) + margines
+	        const reach = r.width / 2 + 16; 
 	        if (dist <= reach && dist < best) {
 	          best = dist;
 	          pin = candidate;
@@ -1969,7 +1985,7 @@
 	      });
 	      if (visiblePinsChanged) pulseStepLabels(step);
 	      if (step.dataset.paywall === "gate") triggerPaywall("brama: przed 'Wchodząc do środka'");
-      // Auto-zwiń legendę raz, po pierwszym slajdzie z punktami (front yard).
+      
       if (!legendAutoCollapsed && frontYardStepIndex >= 0 && steps.indexOf(step) > frontYardStepIndex) {
         legendAutoCollapsed = true;
         const lg = document.getElementById("legend");
@@ -1984,10 +2000,10 @@
       }
     }
 
-    // --- Paywall (Embed SDK) ---
-    // Cała integracja siedzi w embedzie (iframe). showOfferModal jest spustem;
-    // matka bluruje wizualnie, ale NIE blokuje wewn. scrolla — dlatego sami
-    // dokładamy html.paywall-locked (overflow:hidden).
+    
+    
+    
+    
     let paywallFired = false;
 
     function getEmbedSdk() {
@@ -2081,8 +2097,8 @@
       const titleEl = document.querySelector(".title-lockup");
       const threshold = titleEl ? titleEl.getBoundingClientRect().top : window.innerHeight / 2;
       const rect = redSlide.getBoundingClientRect();
-      // Hide the title once the red slide's top has risen above the title
-      // (i.e. it is covering it) and keep it hidden afterwards.
+      
+      
       stickyVisual.classList.toggle("is-title-covered", rect.top <= threshold);
     }
 
