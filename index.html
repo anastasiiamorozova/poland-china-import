@@ -550,6 +550,37 @@
       letter-spacing: 0;
     }
 
+    /* Mobilny dymek etykiety: position:fixed liczony ze współrzędnych ekranowych
+       pina (JS), żeby zawsze mieścił się w kadrze i był blisko punktu.
+       Pokazywany tylko na mobile (JS pod mobileQuery). */
+    .pin-tip {
+      position: fixed;
+      z-index: 40;
+      max-width: 60vw;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(0, 0, 0, 0.13);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+      font-family: "Fira Sans", sans-serif;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 700;
+      color: #111;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(2px);
+      transition: opacity 160ms ease, visibility 160ms ease, transform 160ms ease;
+    }
+
+    .pin-tip.is-visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
     .legend {
       position: absolute;
       top: max(16px, 2.5vh);
@@ -916,12 +947,21 @@
       }
 
       .step[data-blur="true"] {
-        min-height: 90vh;
+        /* min-height: odstęp OD czerwonego slajdu do kafla (kafel jest przy dole
+           sekcji przez align-items:end). padding-bottom: odstęp POD kaflem, żeby
+           zdążył wyjechać z kadru, zanim frontYardStep odsłoni pierwsze piny
+           (linia aktywacji ~56% vp). */
+        min-height: 135vh;
+        padding-bottom: 60vh;
       }
 
       .step-card,
       .step[data-panel="article"] .step-card {
         width: 100%;
+        /* Kafel (sam tekst) leży nad wizualizacją (.steps z-index:9 > pin-layer),
+           więc na mobile przechwytywał tapnięcia na piny pod spodem — przepuszczamy
+           je, żeby wszystkie kropki były klikalne. */
+        pointer-events: none;
       }
 
       .step[data-panel="article"] .step-card p {
@@ -935,12 +975,10 @@
         font-size: 10px;
       }
 
+      /* Na mobile zamiast osadzonej karty (skalowanej/przycinanej w house-wrap)
+         używamy dymka #pinTip liczonego w px ekranu. */
       .pin-card {
-        display: block;
-        width: min(178px, 58vw);
-        padding: 7px 8px 8px;
-        font-size: 11.5px;
-        line-height: 1.18;
+        display: none;
       }
 
       .title-lockup {
@@ -1255,6 +1293,7 @@
     </svg>
   </div>
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <div class="pin-tip" id="pinTip" aria-hidden="true"></div>
   <main>
     <section class="scrolly" aria-label="Dom z Chin">
       <div class="sticky-visual legend-right" id="stickyVisual">
@@ -1600,6 +1639,7 @@
 	    const houseWrap = document.getElementById("houseWrap");
 	    const houseImages = [...document.querySelectorAll(".house-image")];
 	    const pinLayer = document.getElementById("pinLayer");
+	    const pinTip = document.getElementById("pinTip");
 	    const mobileQuery = window.matchMedia("(max-width: 760px)");
 	    let activeStep = null;
 	    let labelRevealTimer = null;
@@ -1802,6 +1842,32 @@
 		      closeTappedLabels();
 	    }
 
+	    function hidePinTip() {
+	      if (pinTip) pinTip.classList.remove("is-visible");
+	    }
+
+	    // Dymek etykiety na mobile — liczony ze współrzędnych ekranowych pina,
+	    // więc zawsze mieści się w kadrze i trzyma stały, mały odstęp od punktu.
+	    function showPinTip(pin) {
+	      if (!pinTip) return;
+	      const dot = pin.querySelector(".pin-dot");
+	      const nameEl = pin.querySelector(".pin-name");
+	      if (!dot || !nameEl) return;
+	      pinTip.textContent = nameEl.textContent;
+	      pinTip.classList.add("is-visible");
+	      const dotRect = dot.getBoundingClientRect();
+	      const tipRect = pinTip.getBoundingClientRect();
+	      const margin = 8;
+	      const gap = 10;
+	      let left = dotRect.left + dotRect.width / 2 - tipRect.width / 2;
+	      left = Math.max(margin, Math.min(left, window.innerWidth - tipRect.width - margin));
+	      let top = dotRect.top - gap - tipRect.height; // domyślnie nad punktem
+	      if (top < margin) top = dotRect.bottom + gap; // gdy brak miejsca — pod punktem
+	      top = Math.max(margin, Math.min(top, window.innerHeight - tipRect.height - margin));
+	      pinTip.style.left = `${Math.round(left)}px`;
+	      pinTip.style.top = `${Math.round(top)}px`;
+	    }
+
 	    function setTappedLabel(pin, isOpen) {
 	      pin.classList.toggle("is-label-tapped", isOpen);
 	      const button = pin.querySelector(".pin-dot");
@@ -1809,6 +1875,8 @@
 	        button.setAttribute("aria-expanded", String(isOpen));
 	        if (!isOpen) button.blur();
 	      }
+	      if (mobileQuery.matches && isOpen) showPinTip(pin);
+	      else hidePinTip();
 	    }
 
 	    function closeTappedLabels(exceptPin = null) {
@@ -1822,8 +1890,29 @@
 	      const target = event.target;
 	      if (!(target instanceof Element)) return;
 
-	      const pin = target.closest(".pin");
-	      if (!pin || !pin.classList.contains("is-visible") || pin.classList.contains("is-muted")) return;
+	      const clickedPin = target.closest(".pin");
+	      if (!clickedPin) return;
+
+	      // Piny skalują się z zoomem kadru i mają rozszerzone pole trafienia (::before),
+	      // więc sąsiednie kropki potrafią na siebie nachodzić — górny w DOM przechwytuje
+	      // wtedy tap sąsiada. Wybierz pin, którego ŚRODEK jest najbliżej dotknięcia.
+	      let pin = clickedPin;
+	      let best = Infinity;
+	      pinLayer.querySelectorAll(".pin.is-visible:not(.is-muted)").forEach((candidate) => {
+	        const dot = candidate.querySelector(".pin-dot");
+	        if (!dot) return;
+	        const r = dot.getBoundingClientRect();
+	        const cx = r.left + r.width / 2;
+	        const cy = r.top + r.height / 2;
+	        const dist = Math.hypot(event.clientX - cx, event.clientY - cy);
+	        const reach = r.width / 2 + 16; // promień kropki (na ekranie) + margines
+	        if (dist <= reach && dist < best) {
+	          best = dist;
+	          pin = candidate;
+	        }
+	      });
+
+	      if (!pin.classList.contains("is-visible") || pin.classList.contains("is-muted")) return;
 
 	      event.preventDefault();
 	      event.stopPropagation();
@@ -1999,6 +2088,7 @@
 
 	    function updateStepFromScroll() {
 	      scrollTicking = false;
+	      if (mobileQuery.matches) closeTappedLabels();
 	      activateStep(getStepAtActivationLine());
 	      updateTextBackgroundState(activeStep);
 	      updateTitleCover();
