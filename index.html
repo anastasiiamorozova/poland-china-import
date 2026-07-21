@@ -93,6 +93,8 @@
     html.app-loading,
     html.app-loading body {
       overflow: hidden;
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
     html.paywall-locked,
@@ -114,6 +116,8 @@
       background: #f0202b;
       transition: opacity 0.7s ease;
       will-change: opacity;
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
     .app-loader.is-hidden {
@@ -1068,6 +1072,10 @@
 
       document.documentElement.classList.add("app-loading");
 
+      function blockLoaderScroll(e) { e.preventDefault(); }
+      loader.addEventListener("touchmove", blockLoaderScroll, { passive: false });
+      loader.addEventListener("wheel", blockLoaderScroll, { passive: false });
+
       window.mainVisualLoadingLocked = true;
 
       var requiredSlideImages = [
@@ -1195,6 +1203,8 @@
         loader.classList.add("is-hidden");
         window.setTimeout(function () {
           document.documentElement.classList.remove("app-loading");
+          loader.removeEventListener("touchmove", blockLoaderScroll, { passive: false });
+          loader.removeEventListener("wheel", blockLoaderScroll, { passive: false });
           loader.style.display = "none";
           if (banner) banner.style.display = "none";
           loadPaywallBootScript();
@@ -1499,8 +1509,7 @@
           </a>
         </div>
         <div class="profile">
-          <!-- TODO: podmień src na URL zdjęcia Jana Osieckiego -->
-          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='%23d9d9d9'/%3E%3C/svg%3E" alt="Jan Osiecki">
+          <img src="https://ocdn.eu/pulscms/MDA_/a3a7a644451f824d111cf1c25a86470c.png" alt="Jan Osiecki" loading="lazy" decoding="async">
           <div class="name"><span>Jan</span><span>Osiecki</span></div>
         </div>
       </div>
