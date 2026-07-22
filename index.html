@@ -349,6 +349,15 @@
       z-index: 1;
     }
 
+    /* Aktywny pin (z widocznym popupem) na wierzch, żeby żaden inny punkt
+       nie zasłaniał jego dymka. */
+    .pin.is-visible:hover,
+    .pin.is-visible:focus-within,
+    .pin.is-visible.is-label-visible,
+    .pin.is-visible.is-label-tapped {
+      z-index: 20;
+    }
+
     .pin-dot {
       position: relative;
       width: 34px;
@@ -380,25 +389,22 @@
       border-radius: 50%;
     }
 
-	    .sticky-visual[data-current-room="kitchen"] .pin-dot,
-	    .sticky-visual[data-current-room="kitchenClose"] .pin-dot {
-	      width: 17px;
-	      height: 17px;
-	      display: flex;
-	      align-items: center;
-	      justify-content: center;
-	      padding: 0;
-	      border-width: 1.5px;
-	      font: 700 6px/1 "Fira Sans", sans-serif;
-	      text-align: center;
-	      letter-spacing: 0;
-	    }
+    /* Kuchnia jest zatłoczona pinami — kropki pośredniej wielkości (między
+       domyślnymi 34px a wcześniejszymi 17px), żeby mniej się nakładały. */
+    .sticky-visual[data-current-room="kitchen"] .pin-dot,
+    .sticky-visual[data-current-room="kitchenClose"] .pin-dot {
+      width: 24px;
+      height: 24px;
+      font-size: 8px;
+      border-width: 1.5px;
+    }
 
     .pin-card {
       position: absolute;
       left: 42px;
       top: 50%;
-      width: 168px;
+      width: max-content;
+      max-width: 200px;
       --label-shift-x: 0;
       --label-shift-y: -50%;
       --label-origin: left center;
@@ -540,14 +546,11 @@
     .pin-name {
       display: block;
       font-weight: 700;
-      margin-bottom: 3px;
+      margin-bottom: 0;
     }
 
     .pin-kicker {
-      display: block;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 0;
+      display: none;
     }
 
     
@@ -1442,15 +1445,15 @@
           </div>
         </section>
 
-        <section class="step" data-panel="card" data-room="salonTableTop" data-products="serwetki" data-side="left" data-legend="left" data-image-layer="3">
+        <section class="step" data-panel="card" data-room="salonTableTop" data-products="obrus" data-side="left" data-legend="left" data-image-layer="3">
           <div class="step-card">
-            <p><mark class="product-highlight">Stoły</mark> w salonie czy w jadalni są przykryte zapewne <mark class="product-highlight">obrusami</mark> z Chin. Poza nimi z Państwa Środka importujemy także <mark class="product-highlight">serwetki</mark>, <mark class="product-highlight">bieżniki na stół</mark> i temu podobne produkty.</p>
+            <p><mark class="product-highlight">Stoły</mark> w salonie czy w jadalni są przykryte zapewne <mark class="product-highlight">obrusami</mark> z Chin. Poza nimi z Państwa Środka importujemy także <mark class="product-highlight">serwetki</mark> czy <mark class="product-highlight">bieżniki na stół</mark>.</p>
           </div>
         </section>
 
         <section class="step" data-panel="card" data-room="bedroom" data-layers="2" data-side="left" data-legend="left">
           <div class="step-card">
-            <p>Przejdźmy do sypialni. Znajdziemy tam chińskie <mark class="product-highlight">tekstylia domowe</mark>: <mark class="product-highlight">ręczniki</mark>, <mark class="product-highlight">prześcieradła</mark>, <mark class="product-highlight">pościel</mark>, <mark class="product-highlight">koce</mark>. To jedne z produktów o najwyższym procencie importu.</p>
+            <p>Przejdźmy do sypialni. Chiny są kluczowym eksporterem <mark class="product-highlight">mebli drewnianych</mark> do Polski. Znajdziemy tam też często chińskie <mark class="product-highlight">tekstylia domowe</mark>: <mark class="product-highlight">ręczniki</mark>, <mark class="product-highlight">prześcieradła</mark>, <mark class="product-highlight">pościel</mark>, <mark class="product-highlight">koce</mark>.</p>
           </div>
         </section>
 
@@ -1575,7 +1578,7 @@
       { id: "pillows", name: "poduszki dekoracyjne", source: "Pokrowce dekoracyjne i meblowe z włókien syntetycznych", room: "bedroom", layer: 3, share: 46.2, x: 32.1, y: 44.0, snap: "n" },
       { id: "bedroom-wardrobe", name: "szafa drewniana", source: "Szafy drewniane sypialniane", room: "bedroom", layer: 2, share: 21.1, x: 26.3, y: 37.6, snap: "w" },
       { id: "kitchen-cabinets", name: "szafki", source: "Szafki kuchenne drewniane", room: "kitchen", layer: 2, share: 6.1, x: 54.0, y: 36.8, snap: "n" },
-      { id: "napkins", name: "serwetki", source: "Bawełniane obrusy i serwety", room: "salon", layer: 3, share: 8.0, x: 49.0, y: 66.3, snap: "s" },
+      { id: "napkins", name: "obrus", source: "Bawełniane obrusy i serwety", room: "salon", layer: 3, share: 8.0, x: 49.0, y: 66.3, snap: "s" },
       { id: "fridge", name: "lodówka", source: "Lodówka domowa sprężarkowa", room: "kitchen", layer: 3, share: 47.0, x: 45.4, y: 38.5, snap: "w" },
       { id: "freezer", name: "zamrażarka", source: "Zamrażarka szafowa", room: "kitchen", layer: 3, share: 43.2, x: 46.2, y: 43.0, snap: "w" },
       { id: "hob", name: "płyta indukcyjna", source: "Płyta indukcyjna", room: "kitchen", layer: 3, share: 18.2, x: 50.9, y: 39.0, snap: "n" },
@@ -1591,19 +1594,17 @@
       { id: "garden-furniture", name: "meble ogrodowe", source: "Meble ogrodowe metalowe", room: "front yard", layer: 1, share: 47.1, x: 18.2, y: 59.5, snap: "e" },
       { id: "bathroom-door", name: "drzwi wewnętrzne drewniane", source: "Drewniane drzwi i ramy", room: "bathroom", layer: 1, share: 5.8, x: 66.9, y: 51.2, snap: "w" },
       { id: "screws", name: "śruby", source: "Śruby z żelaza lub stali", room: "general", layer: 1, share: 10.9, x: 78.0, y: 42.0, snap: "e" },
-      { id: "bathroom-cabinet", name: "szafki", source: "Szafki łazienkowe drewniane", room: "bathroom", layer: 2, share: 17.7, x: 72.5, y: 58.5, snap: "e" },
       { id: "washing-machine", name: "pralka", source: "Pralka automatyczna do 10 kg", room: "bathroom", layer: 3, share: 45.0, x: 69.0, y: 56.8, snap: "w" },
       { id: "living-table", name: "stół w salonie", source: "Stoły drewniane", room: "salon", layer: 2, share: 17.7, x: 49.0, y: 66.3, snap: "s" },
       { id: "parquet", name: "podłoga parkiet drewniany", source: "Drewniane panele parkietowe", room: "general", layer: 1, share: 97.1, x: 23.6, y: 50.0, snap: "s" },
-      { id: "living-table-chairs", name: "stół i krzesła w salonie", source: "Stół w salonie drewniany", room: "salon", layer: 2, share: 17.7, x: 55.8, y: 48.8, snap: "n" },
       { id: "tv", name: "telewizor", source: "Telewizor kolorowy", room: "salon", layer: 3, share: 3.9, x: 44.5, y: 70.5, snap: "w" },
       { id: "sofa", name: "sofa / fotel tapicerowany", source: "Meble tapicerowane z drewnianą ramą", room: "salon", layer: 2, share: 40.9, x: 55.0, y: 63.0, snap: "e" },
       { id: "speaker", name: "głośnik", source: "Głośnik pojedynczy", room: "salon", layer: 3, share: 20.1, x: 65.7, y: 72.5, snap: "e" },
       { id: "pv", name: "panele fotowoltaiczne", source: "z tekstu", room: "roof", layer: 1, share: 95.0, x: 55.0, y: 10.4, snap: "s" },
       { id: "boiler", name: "bojler", source: "Nieelektryczne gazowe podgrzewacze wody", room: "storage", layer: 1, share: 12.1, x: 75.0, y: 39.8, snap: "e" },
-      { id: "radiator", name: "grzejnik stalowy", source: "Grzejniki centralnego ogrzewania stalowe", room: "storage", layer: 1, share: 13.1, x: 70.0, y: 49.1, snap: "w" },
+      { id: "radiator", name: "grzejnik stalowy", source: "Grzejniki centralnego ogrzewania stalowe", room: "storage", layer: 1, share: 13.1, x: 68.8, y: 46.3, snap: "w" },
       { id: "metal-shelf", name: "metalowy regał", source: "Regały garażowe metalowe", room: "storage", layer: 1, share: 47.1, x: 89.2, y: 46.8, snap: "w" },
-      { id: "storage-cabinet", name: "szafka", source: "Szafa w przedpokoju drewniana", room: "storage", layer: 2, share: 17.7, x: 88.8, y: 39.6, snap: "w" }
+      { id: "storage-cabinet", name: "metalowy regał", source: "Regały garażowe metalowe", room: "storage", layer: 2, share: 47.1, x: 88.8, y: 39.6, snap: "w" }
     ];
 
 	    
